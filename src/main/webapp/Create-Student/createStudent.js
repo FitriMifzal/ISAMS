@@ -1,73 +1,95 @@
-/* ============================================================
-   CREATESTUDENT.JS — Page-specific logic
-   User profile initialization handled by Sidebar.js
-   ============================================================ */
+// CREATESTUDENT.JS
+// User profile init handled by Sidebar.js
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
+    // check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/Create-Account.html";
         return;
     }
+
+    loadClassDropdown();
 });
 
-/* ────────────────────────────────────────────────────────
-   SAVE STUDENT FUNCTION
-────────────────────────────────────────────────────────── */
+// load classes into the Class dropdown
+function loadClassDropdown() {
+    const clsSelect = document.getElementById("cls");
 
+    fetch("../ClassroomController?action=list")
+        .then(response => response.json())
+        .then(classes => {
+            classes.forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.classId;
+                option.textContent = c.classCode + " - " + c.className;
+                clsSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading classes:", error);
+            alert("Failed to load class list. Please refresh the page.");
+        });
+}
+
+// save student - called by Save Profile button
 function saveStudent() {
     const name = document.getElementById("name").value.trim();
     const ic = document.getElementById("ic").value.trim();
-    const cls = document.getElementById("cls").value.trim();
+    const cls = document.getElementById("cls").value;
+    const studentType = document.getElementById("studentType").value;
     const address = document.getElementById("address").value.trim();
     const contactNo = document.getElementById("No").value.trim();
 
-    // Validation - check if all fields filled
-    if (!name || !ic || !cls || !address || !contactNo) {
+    // check if all fields filled
+    if (!name || !ic || !cls || !studentType || !address || !contactNo) {
         alert("Error: Please fill in all student details before saving.");
         return;
     }
 
-    // Validation - IC Number must be 12 digits
+    // IC Number must be 12 digits
     if (ic.length !== 12 || isNaN(ic)) {
         alert("Error: IC Number must contain exactly 12 digits.");
         return;
     }
 
-    // Validation - Contact No should be valid
+    // Contact No should be valid
     if (isNaN(contactNo) || contactNo.length < 10) {
         alert("Error: Contact number must contain at least 10 digits.");
         return;
     }
 
-    // Get existing students array
-    let students = JSON.parse(localStorage.getItem("students")) || [];
+    // build form data to send to controller
+    const formData = new URLSearchParams();
+    formData.append("stuName", name);
+    formData.append("stuIC", ic);
+    formData.append("classId", cls);
+    formData.append("studentType", studentType);
+    formData.append("stuAdd", address);
+    formData.append("stuPhoneNum", contactNo);
 
-    // Create new student object
-    const newStudent = {
-        name: name,
-        ic: ic,
-        cls: cls,
-        address: address,
-        No: contactNo
-    };
-
-    // Add to array
-    students.push(newStudent);
-
-    // Save to localStorage
-    localStorage.setItem("students", JSON.stringify(students));
-
-    alert("Student profile created successfully!");
-    
-    // Redirect to student list
-    window.location.href = "../Student-List/StudentList.html";
+    fetch("../StudentController?action=create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("Student profile created successfully!");
+            window.location.href = "../Student-List/StudentList.html";
+        } else {
+            alert("Something went wrong: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to connect to server. Please try again.");
+    });
 }
 
-/* ────────────────────────────────────────────────────────
-   UTILITY FUNCTIONS
-────────────────────────────────────────────────────────── */
-
+// utility functions
 function toggleProfile() {
     var profileSection = document.getElementById('profile-section');
     var welcomeCard = document.getElementById('welcome-card');

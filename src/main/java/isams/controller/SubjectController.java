@@ -1,0 +1,175 @@
+package isams.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import isams.dao.SubjectDAO;
+import isams.model.Subject;
+
+/**
+ * Author: [YOUR NAME HERE]
+ * Student ID: [YOUR STUDENT ID HERE]
+ * Date: July 2026
+ * Purpose: ISAMS - Handles all Subject actions from frontend.
+ *
+ * GET  ?action=list          -> return all subjects
+ * GET  ?action=get&id=5      -> return one subject
+ * POST action=create         -> insert a new subject (PI only, no teacher assigned yet)
+ * POST action=update         -> update subject name/credit hours (PI only)
+ * POST action=enroll         -> a teacher claims a subject (sets t_id)
+ */
+
+@WebServlet("/SubjectController")
+public class SubjectController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+
+        if ("list".equals(action)) {
+            handleList(out);
+        } else if ("get".equals(action)) {
+            handleGet(request, out);
+        } else {
+            out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
+        }
+
+        out.flush();
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+
+        if ("create".equals(action)) {
+            handleCreate(request, out);
+        } else if ("update".equals(action)) {
+            handleUpdate(request, out);
+        } else if ("enroll".equals(action)) {
+            handleEnroll(request, out);
+        } else {
+            out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
+        }
+
+        out.flush();
+    }
+
+    // return all subjects
+    private void handleList(PrintWriter out) {
+        List<Subject> subjects = SubjectDAO.getSubjects();
+
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        for (int i = 0; i < subjects.size(); i++) {
+            json.append(toJson(subjects.get(i)));
+            if (i < subjects.size() - 1) {
+                json.append(",");
+            }
+        }
+        json.append("]");
+
+        out.print(json.toString());
+    }
+
+    // return one subject by id
+    private void handleGet(HttpServletRequest request, PrintWriter out) {
+        String idParam = request.getParameter("id");
+
+        if (idParam == null || idParam.isEmpty()) {
+            out.print("{\"status\":\"error\", \"message\":\"Missing id parameter\"}");
+            return;
+        }
+
+        try {
+            int subId = Integer.parseInt(idParam);
+            Subject subject = SubjectDAO.getSubject(subId);
+
+            if (subject == null) {
+                out.print("{\"status\":\"error\", \"message\":\"Subject not found\"}");
+            } else {
+                out.print(toJson(subject));
+            }
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid id parameter\"}");
+        }
+    }
+
+    // insert a new subject
+    private void handleCreate(HttpServletRequest request, PrintWriter out) {
+        try {
+            Subject subject = new Subject();
+            subject.setSubName(request.getParameter("subName"));
+            subject.setCreditHours(Integer.parseInt(request.getParameter("creditHours")));
+
+            SubjectDAO.addSubject(subject);
+
+            out.print("{\"status\":\"success\", \"message\":\"Subject created successfully\"}");
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid credit hours\"}");
+        }
+    }
+
+    // update an existing subject
+    private void handleUpdate(HttpServletRequest request, PrintWriter out) {
+        try {
+            Subject subject = new Subject();
+            subject.setSubId(Integer.parseInt(request.getParameter("subId")));
+            subject.setSubName(request.getParameter("subName"));
+            subject.setCreditHours(Integer.parseInt(request.getParameter("creditHours")));
+
+            SubjectDAO.updateSubject(subject);
+
+            out.print("{\"status\":\"success\", \"message\":\"Subject updated successfully\"}");
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid id or credit hours\"}");
+        }
+    }
+
+    // a teacher enrolls (claims) a subject
+    private void handleEnroll(HttpServletRequest request, PrintWriter out) {
+        try {
+            int subId = Integer.parseInt(request.getParameter("subId"));
+            int tId = Integer.parseInt(request.getParameter("tId"));
+
+            SubjectDAO.enrollSubject(subId, tId);
+
+            out.print("{\"status\":\"success\", \"message\":\"Subject enrolled successfully\"}");
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid id\"}");
+        }
+    }
+
+    // convert a Subject object to a JSON string
+    private String toJson(Subject s) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("\"subId\":").append(s.getSubId()).append(",");
+        json.append("\"subName\":\"").append(escapeJson(s.getSubName())).append("\",");
+        json.append("\"creditHours\":").append(s.getCreditHours()).append(",");
+        json.append("\"tId\":").append(s.getTId() == null ? "null" : s.getTId()).append(",");
+        json.append("\"teacherName\":\"").append(escapeJson(s.getTeacherName())).append("\"");
+        json.append("}");
+        return json.toString();
+    }
+
+    private String escapeJson(String value) {
+        if (value == null) return "";
+        return value.replace("\\", "\\\\").replace("\"", "\\\"");
+    }
+}

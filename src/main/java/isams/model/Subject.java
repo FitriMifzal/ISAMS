@@ -3,12 +3,15 @@ package isams.model;
 import java.io.Serializable;
 
 public class Subject implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private int subId;
+    private static final long serialVersionUID = 1L;
+
+    private int subId;
     private String subName;
     private int creditHours;
-    private int tId;
+    private Integer tId; // nullable - subject may not have a teacher assigned yet
+
+    // display-only field, populated via JOIN in DAO - not stored directly on this table
+    private String teacherName;
 
     public Subject() {
     }
@@ -37,11 +40,19 @@ public class Subject implements Serializable {
         this.creditHours = creditHours;
     }
 
-    public int getTId() {
+    public Integer getTId() {
         return tId;
     }
 
-    public void setTId(int tId) {
+    public void setTId(Integer tId) {
         this.tId = tId;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 }

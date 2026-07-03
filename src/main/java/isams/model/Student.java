@@ -3,14 +3,19 @@ package isams.model;
 import java.io.Serializable;
 
 public class Student implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private int stuId;
+    private static final long serialVersionUID = 1L;
+
+    private int stuId;
     private String stuName;
     private String stuIC;
     private String stuAdd;
     private String stuPhoneNum;
     private int classId;
+    private String studentType; // "SVM" or "DVM"
+
+    // display-only fields, populated via JOIN in DAO - not stored directly on this table
+    private String classCode;
+    private String className;
 
     public Student() {
     }
@@ -61,5 +66,29 @@ public class Student implements Serializable {
 
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+
+    public String getStudentType() {
+        return studentType;
+    }
+
+    public void setStudentType(String studentType) {
+        this.studentType = studentType;
+    }
+
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

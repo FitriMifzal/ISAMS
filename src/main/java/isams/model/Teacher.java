@@ -3,8 +3,8 @@ package isams.model;
 import java.io.Serializable;
 
 public class Teacher implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     private int tId;
     private String tName;
     private String tIC;
@@ -12,6 +12,7 @@ public class Teacher implements Serializable {
     private String tEmail;
     private String tPass;
     private Integer piId;
+    private String status;
 
     public Teacher() {
     }
@@ -70,5 +71,13 @@ public class Teacher implements Serializable {
 
     public void setPiId(Integer piId) {
         this.piId = piId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

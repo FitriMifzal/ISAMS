@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="Subject.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
+    <!-- SIDEBAR -->
     <div id="sidebar">
     <div class="logo-container">
         <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
@@ -53,18 +51,14 @@
     </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-         MAIN CONTENT AREA
-         ════════════════════════════════════════════════════════ -->
+    <!-- MAIN CONTENT AREA -->
     <div id="main-wrapper">
-        <!-- HEADER -->
         <header id="header">
             <button class="header-title" onclick="toggleSidebar()">
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
 
-            <!-- USER PROFILE AREA (icon + name) -->
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
@@ -84,9 +78,8 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>Subject Code</th>
-                                <th>Name</th>
-                                <th>Credits</th>
+                                <th>Subject Name</th>
+                                <th>Credit Hours</th>
                                 <th>Lecturer</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -105,21 +98,12 @@
                     <input type="hidden" id="editIdx">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Subject Code</label>
-                            <input type="text" id="subId" class="form-control" placeholder="e.g., SSD3013">
-                            <div id="idError" class="error-msg hidden">Code must start with 'SSD'</div>
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label fw-bold">Subject Name</label>
                             <input type="text" id="subName" class="form-control">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Credit Hours</label>
                             <input type="number" id="subCredit" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Assigned Lecturer</label>
-                            <input type="text" id="subTeacher" class="form-control">
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-top d-flex gap-2">
@@ -141,11 +125,7 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         MODALS
-         ════════════════════════════════════════════════════════ -->
-
-    <!-- View Subject Modal -->
+    <!-- MODALS -->
     <div class="modal fade" id="viewModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -161,7 +141,6 @@
         </div>
     </div>
 
-    <!-- Enrollment Confirmation Modal -->
     <div class="modal fade" id="enrollModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -179,16 +158,9 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCRIPTS
-         ════════════════════════════════════════════════════════ -->
-    <!-- Bootstrap JS -->
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
-    <!-- Page JS SELEPAS -->
     <script src="Subject.js"></script>
 </body>
 </html>

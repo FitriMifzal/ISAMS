@@ -44,7 +44,7 @@
             <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
         </div>
         
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <a href="../Create-Account/CreateAccount" onclick="logoutUser()" class="nav-item logout">Logout</a>
     </div>
 
     <!-- ════════════════════════════════════════════════════════
@@ -73,61 +73,9 @@
                 <h2>TEACHER ACCOUNTS</h2>
                 <p style="text-align: center; color: #666; font-size: 14px;">Select account to archive or manage.</p>
 
-                <!-- Account List Groups -->
+                <!-- Account List - populated dynamically from database -->
                 <div id="accountList">
-                    <div class="account-item" onclick="showArchiveModal('KVD001', 'Arissa Amiely')">
-                        <div class="avatar-initial">A</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Arissa Amiely binti Mohammad Syahir<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD001 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
-
-                    <div class="account-item" onclick="showArchiveModal('KVD002', 'Ahmad Zaki')">
-                        <div class="avatar-initial">A</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Ahmad Zaki bin Md Nor<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD002 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
-
-                    <div class="account-item" onclick="showArchiveModal('KVD003', 'Ainnur Mardiah')">
-                        <div class="avatar-initial">A</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Ainnur Mardiah binti Amiruddin<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD003 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
-
-                    <div class="account-item" onclick="showArchiveModal('KVD004', 'Muhammad Syamel')">
-                        <div class="avatar-initial">M</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Muhammad Syamel bin Kamarulzaman<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD004 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
-
-                    <div class="account-item" onclick="showArchiveModal('KVD005', 'Nur Syahirah')">
-                        <div class="avatar-initial">N</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Nur Syahirah binti Samsudin<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD005 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
-
-                    <div class="account-item" onclick="showArchiveModal('KVD006', 'Ahmad Amirulddin')">
-                        <div class="avatar-initial">A</div>
-                        <div class="acc-info">
-                            <div class="acc-name">Ahmad Amirulddin bin Khairulman<span class="badge-archived">ARCHIVED</span></div>
-                            <div class="acc-id">ID: KVD006 | Subject Teacher</div>
-                        </div>
-                        <i class="fa-solid fa-box-archive"></i>
-                    </div>
+                    <p style="text-align:center; color:#999;">Loading...</p>
                 </div>
             </div>
         </main>

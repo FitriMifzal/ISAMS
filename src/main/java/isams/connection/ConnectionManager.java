@@ -1,7 +1,4 @@
 package isams.connection;
-/*
- * Author: [Your Name] (JULY 2026)
- */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,7 +9,7 @@ public class ConnectionManager {
 	private static final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String DB_CONNECTION = "jdbc:oracle:thin:@//localhost:1521/freepdb1";
 	private static final String DB_USER = "MIFZAL_ISAMS";
-	private static final String DB_PASSWORD = "yourpassword";
+	private static final String DB_PASSWORD = "oracle";
 	
 	public static Connection getConnection() {
 		try {

@@ -1,66 +1,66 @@
-/* ============================================================
-   STUDENTLIST.JS — Page-specific logic
-   User profile initialization handled by Sidebar.js
-   ============================================================ */
+// STUDENTLIST.JS
+// User profile init handled by Sidebar.js
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
+    // check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/Create-Account.html";
         return;
     }
 
-    // Load students into table
     loadStudents();
 });
 
-/* ────────────────────────────────────────────────────────
-   LOAD STUDENTS FROM LOCALSTORAGE
-────────────────────────────────────────────────────────── */
-
+// load students from database
 function loadStudents() {
-    const students = JSON.parse(localStorage.getItem("students")) || [];
     const tableBody = document.getElementById("studentTableBody");
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
 
-    if (students.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="5" class="no-data">No students found. <a href="../Create-Student/createStudent.html" style="color: var(--kv-orange); text-decoration: none; font-weight: 600;">Create one</a></td>
-            </tr>
-        `;
-        return;
-    }
+    fetch("../StudentController?action=list")
+        .then(response => response.json())
+        .then(students => {
+            tableBody.innerHTML = "";
 
-    students.forEach((student, index) => {
-        const row = document.createElement("tr");
+            if (students.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="no-data">No students found. <a href="../Create-Student/createStudent.html" style="color: var(--kv-orange); text-decoration: none; font-weight: 600;">Create one</a></td>
+                    </tr>
+                `;
+                return;
+            }
 
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${student.name}</td>
-            <td>${student.ic}</td>
-            <td>${student.cls}</td>
-            <td>
-                <button class="btn-action btn-view" onclick="viewStudent('${student.ic}')">
-                    View
-                </button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
+            students.forEach((student, index) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${student.stuName}</td>
+                    <td>${student.stuIC}</td>
+                    <td>${student.classCode}</td>
+                    <td>
+                        <button class="btn-action btn-view" onclick="viewStudent(${student.stuId})">
+                            View
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading students:", error);
+            tableBody.innerHTML = `<tr><td colspan="5">Failed to load students. Please try again.</td></tr>`;
+        });
 }
 
-/* ────────────────────────────────────────────────────────
-   SEARCH FUNCTIONALITY
-────────────────────────────────────────────────────────── */
-
+// filter table rows based on search input
 function searchTable() {
     const input = document.getElementById("searchInput");
     const filter = input.value.toUpperCase();
     const table = document.querySelector("table");
     const rows = table.getElementsByTagName("tr");
 
-    // Skip header row (index 0)
+    // skip header row (index 0)
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
         if (cells.length === 0) continue;
@@ -77,25 +77,12 @@ function searchTable() {
     }
 }
 
-/* ────────────────────────────────────────────────────────
-   VIEW STUDENT DETAILS
-────────────────────────────────────────────────────────── */
-
-function viewStudent(ic) {
-    // Store selected student IC in sessionStorage
-    sessionStorage.setItem('selectedStudentIC', ic);
-    
-    // Redirect to student detail page (if exists)
-    // window.location.href = 'studentDetail.html?ic=' + ic;
-    
-    // For now, show alert
-    alert("View details for student IC: " + ic);
+// go to the View Student page for the selected student
+function viewStudent(stuId) {
+    window.location.href = "../View-Student/viewStudent.html?id=" + stuId;
 }
 
-/* ────────────────────────────────────────────────────────
-   UTILITY FUNCTIONS
-────────────────────────────────────────────────────────── */
-
+// utility functions
 function toggleProfile() {
     var profileSection = document.getElementById('profile-section');
     var welcomeCard = document.getElementById('welcome-card');

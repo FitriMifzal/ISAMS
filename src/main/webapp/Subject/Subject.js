@@ -1,118 +1,99 @@
-/* ============================================================
-   SUBJECT.JS — Page-specific logic
-   User profile initialization handled by Sidebar.js
-   ============================================================ */
+// SUBJECT.JS
+// User profile init handled by Sidebar.js
 
-// ══════════════════════════════════════════════════════════════
-// DATA & STATE
-// ══════════════════════════════════════════════════════════════
-
-let subjects = [
-    { id: "SSD3013", name: "System Analysis & Design", credit: 3, teacher: "En. Azman", enrolled: false },
-    { id: "SSD3023", name: "Database Management", credit: 3, teacher: "Pn. Maria", enrolled: false },
-    { id: "SSD3033", name: "Web Development", credit: 3, teacher: "Cik Sarah", enrolled: false },
-    { id: "SSD3042", name: "Computer Networking", credit: 2, teacher: "En. Zaki", enrolled: false },
-    { id: "SSD4013", name: "Mobile App Development", credit: 3, teacher: "Pn. Hajar", enrolled: false },
-    { id: "SSD4022", name: "Cyber Security Basics", credit: 2, teacher: "En. Firdaus", enrolled: false },
-    { id: "SSD4033", name: "Final Year Project I", credit: 3, teacher: "Dr. Khairul", enrolled: false },
-    { id: "SSD4042", name: "Entrepreneurship", credit: 2, teacher: "Pn. Aishah", enrolled: false }
-];
-
+let subjects = [];      // holds the last-fetched list, used by view/enroll modals
 let currentUserRole = "";
-let activeIdx = null;
-
-// ══════════════════════════════════════════════════════════════
-// PAGE INITIALIZATION
-// ══════════════════════════════════════════════════════════════
+let activeSubId = null; // subject currently targeted for enroll
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
+    // check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/Create-Account.html";
         return;
     }
 
-    // Get user role from localStorage
-    const savedRole = localStorage.getItem('reg_role') || 'Subject Teacher';
-    currentUserRole = savedRole;
+    currentUserRole = localStorage.getItem('active_role') || 'Subject Teacher';
 
-    // Adjust UI based on user role
-    if (savedRole === "Penyelaras Intervensi") {
-        document.getElementById('btnCreate').style.display = 'block';
+    // adjust UI based on user role
+    const btnCreate = document.getElementById('btnCreate');
+    if (currentUserRole === "Penyelaras Intervensi") {
+        btnCreate.style.display = 'block';
     } else {
-        document.getElementById('btnCreate').style.display = 'none';
+        btnCreate.style.display = 'none';
     }
 
-    // Render initial table
-    renderTable();
+    loadSubjects();
 });
 
-// ══════════════════════════════════════════════════════════════
-// TABLE MANAGEMENT
-// ══════════════════════════════════════════════════════════════
+// load subjects from database
+function loadSubjects() {
+    fetch("../SubjectController?action=list")
+        .then(response => response.json())
+        .then(data => {
+            subjects = data;
+            renderTable();
+        })
+        .catch(error => {
+            console.error("Error loading subjects:", error);
+            document.getElementById('subjectTableBody').innerHTML =
+                `<tr><td colspan="4" class="text-center">Failed to load subjects.</td></tr>`;
+        });
+}
 
-/**
- * Render subject table based on user role
- */
+// render subject table based on user role
 function renderTable() {
     const body = document.getElementById('subjectTableBody');
     body.innerHTML = '';
 
-    subjects.forEach((s, i) => {
-        let btns = `<button class="btn btn-view btn-sm" onclick="viewSub(${i})">View</button>`;
+    const myTId = parseInt(localStorage.getItem('active_tId'));
+
+    subjects.forEach((s) => {
+        let btns = `<button class="btn btn-view btn-sm" onclick="viewSub(${s.subId})">View</button>`;
 
         if (currentUserRole === "Penyelaras Intervensi") {
-            btns += `<button class="btn btn-update btn-sm" onclick="showForm(${i})">Update</button>`;
+            btns += `<button class="btn btn-update btn-sm" onclick="showForm(${s.subId})">Update</button>`;
         } else if (currentUserRole === "Subject Teacher") {
-            btns += s.enrolled
-                ? `<button class="btn btn-secondary btn-sm disabled"><i class="bi bi-check-circle"></i> Enrolled</button>`
-                : `<button class="btn btn-save btn-sm" onclick="openEnroll(${i})">Enroll</button>`;
+            if (s.tId !== null && s.tId === myTId) {
+                btns += `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-check-circle"></i> Enrolled</button>`;
+            } else if (s.tId === null) {
+                btns += `<button class="btn btn-save btn-sm" onclick="openEnroll(${s.subId})">Enroll</button>`;
+            } else {
+                btns += `<button class="btn btn-secondary btn-sm" disabled>Assigned</button>`;
+            }
         }
 
+        const lecturer = s.tId === null ? '<span class="text-muted">Unassigned</span>' : s.teacherName;
+
         body.innerHTML += `<tr>
-            <td><strong>${s.id}</strong></td>
-            <td>${s.name}</td>
-            <td>${s.credit}</td>
-            <td>${s.teacher}</td>
+            <td>${s.subName}</td>
+            <td>${s.creditHours}</td>
+            <td>${lecturer}</td>
             <td><div class="action-gap">${btns}</div></td>
         </tr>`;
     });
 }
 
-// ══════════════════════════════════════════════════════════════
-// PAGE NAVIGATION
-// ══════════════════════════════════════════════════════════════
-
-/**
- * Show subject list page
- */
+// show subject list page
 function showList() {
     document.getElementById('subjectListPage').classList.remove('hidden');
     document.getElementById('formPage').classList.add('hidden');
     document.getElementById('successPage').classList.add('hidden');
-    renderTable();
+    loadSubjects();
 }
 
-/**
- * Show form page for create/update
- */
-function showForm(i = null) {
+// show form page for create/update
+function showForm(subId) {
     document.getElementById('subjectForm').reset();
     document.getElementById('globalError').classList.add('hidden');
-    document.getElementById('idError').classList.add('hidden');
 
-    if (i !== null) {
-        const s = subjects[i];
+    if (subId !== undefined) {
+        const s = subjects.find(sub => sub.subId === subId);
         document.getElementById('formTitle').innerText = "Update Subject Information";
-        document.getElementById('subId').value = s.id;
-        document.getElementById('subId').readOnly = true;
-        document.getElementById('subName').value = s.name;
-        document.getElementById('subCredit').value = s.credit;
-        document.getElementById('subTeacher').value = s.teacher;
-        document.getElementById('editIdx').value = i;
+        document.getElementById('subName').value = s.subName;
+        document.getElementById('subCredit').value = s.creditHours;
+        document.getElementById('editIdx').value = subId;
     } else {
         document.getElementById('formTitle').innerText = "Subject Registration Form";
-        document.getElementById('subId').readOnly = false;
         document.getElementById('editIdx').value = "";
     }
 
@@ -120,104 +101,119 @@ function showForm(i = null) {
     document.getElementById('formPage').classList.remove('hidden');
 }
 
-// ══════════════════════════════════════════════════════════════
-// FORM OPERATIONS
-// ══════════════════════════════════════════════════════════════
-
-/**
- * Save subject (create or update)
- */
+// save subject - create or update
 function saveData() {
-    const id = document.getElementById('subId').value.trim();
     const name = document.getElementById('subName').value.trim();
     const credit = document.getElementById('subCredit').value.trim();
-    const teacher = document.getElementById('subTeacher').value.trim();
-    const idx = document.getElementById('editIdx').value;
+    const subId = document.getElementById('editIdx').value;
 
     document.getElementById('globalError').classList.add('hidden');
-    document.getElementById('idError').classList.add('hidden');
 
-    // Validation
-    if (!id || !name || !credit || !teacher) {
+    if (!name || !credit) {
         document.getElementById('globalError').classList.remove('hidden');
-        document.getElementById('globalError').innerText = "Please fill in all text fields!";
+        document.getElementById('globalError').innerText = "Please fill in all fields!";
         return;
     }
 
-    if (idx === "") {
-        // Create new subject
-        const isDuplicate = subjects.some(s => s.id.toUpperCase() === id.toUpperCase());
-        if (isDuplicate) {
-            document.getElementById('globalError').classList.remove('hidden');
-            document.getElementById('globalError').innerText = "Error: Subject Code '" + id + "' already exists!";
-            return;
-        }
+    const formData = new URLSearchParams();
+    formData.append("subName", name);
+    formData.append("creditHours", credit);
 
-        if (!id.toUpperCase().startsWith("SSD")) {
-            document.getElementById('idError').classList.remove('hidden');
-            return;
-        }
+    let url, successTitle, successMsg;
 
-        subjects.push({ id, name, credit, teacher, enrolled: false });
-        document.getElementById('resTitle').innerText = "Registration Successful!";
-        document.getElementById('resMsg').innerText = "New subject added.";
+    if (subId === "") {
+        url = "../SubjectController?action=create";
+        successTitle = "Registration Successful!";
+        successMsg = "New subject added.";
     } else {
-        // Update existing subject
-        subjects[idx].name = name;
-        subjects[idx].credit = credit;
-        subjects[idx].teacher = teacher;
-        document.getElementById('resTitle').innerText = "Update Successful!";
-        document.getElementById('resMsg').innerText = "Subject updated.";
+        formData.append("subId", subId);
+        url = "../SubjectController?action=update";
+        successTitle = "Update Successful!";
+        successMsg = "Subject updated.";
     }
 
-    document.getElementById('formPage').classList.add('hidden');
-    document.getElementById('successPage').classList.remove('hidden');
+    fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            document.getElementById('resTitle').innerText = successTitle;
+            document.getElementById('resMsg').innerText = successMsg;
+            document.getElementById('formPage').classList.add('hidden');
+            document.getElementById('successPage').classList.remove('hidden');
+        } else {
+            document.getElementById('globalError').classList.remove('hidden');
+            document.getElementById('globalError').innerText = data.message;
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById('globalError').classList.remove('hidden');
+        document.getElementById('globalError').innerText = "Failed to connect to server.";
+    });
 }
 
-// ══════════════════════════════════════════════════════════════
-// VIEW & ENROLLMENT
-// ══════════════════════════════════════════════════════════════
+// view subject details in modal
+function viewSub(subId) {
+    const s = subjects.find(sub => sub.subId === subId);
+    const lecturer = s.tId === null
+        ? '<span class="text-muted">Not Assigned</span>'
+        : `<span class="text-success fw-bold">${s.teacherName}</span>`;
 
-/**
- * View subject details in modal
- */
-function viewSub(i) {
-    const s = subjects[i];
     document.getElementById('viewDetailBody').innerHTML = `
-        <div class="mb-2"><strong>Subject ID:</strong> ${s.id}</div>
-        <div class="mb-2"><strong>Subject Name:</strong> ${s.name}</div>
-        <div class="mb-2"><strong>Credit Hours:</strong> ${s.credit}</div>
-        <div class="mb-2"><strong>Lecturer:</strong> ${s.teacher}</div>
-        <div><strong>Enrollment Status:</strong> ${s.enrolled ? '<span class="text-success fw-bold">Enrolled</span>' : '<span class="text-muted">Not Enrolled</span>'}</div>
+        <div class="mb-2"><strong>Subject Name:</strong> ${s.subName}</div>
+        <div class="mb-2"><strong>Credit Hours:</strong> ${s.creditHours}</div>
+        <div><strong>Lecturer:</strong> ${lecturer}</div>
     `;
     new bootstrap.Modal(document.getElementById('viewModal')).show();
 }
 
-/**
- * Open enrollment confirmation modal
- */
-function openEnroll(i) {
-    activeIdx = i;
-    document.getElementById('targetSub').innerText = subjects[i].name;
+// open enrollment confirmation modal
+function openEnroll(subId) {
+    activeSubId = subId;
+    const s = subjects.find(sub => sub.subId === subId);
+    document.getElementById('targetSub').innerText = s.subName;
     new bootstrap.Modal(document.getElementById('enrollModal')).show();
 }
 
-/**
- * Execute enrollment
- */
+// execute enrollment - claims the subject for the logged-in teacher
 function executeEnroll() {
-    subjects[activeIdx].enrolled = true;
-    bootstrap.Modal.getInstance(document.getElementById('enrollModal')).hide();
-    document.getElementById('resTitle').innerText = "Enrollment Successful!";
-    document.getElementById('resMsg').innerText = "You registered for " + subjects[activeIdx].name;
-    document.getElementById('subjectListPage').classList.add('hidden');
-    document.getElementById('successPage').classList.remove('hidden');
+    const tId = localStorage.getItem('active_tId');
+
+    const formData = new URLSearchParams();
+    formData.append("subId", activeSubId);
+    formData.append("tId", tId);
+
+    fetch("../SubjectController?action=enroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        bootstrap.Modal.getInstance(document.getElementById('enrollModal')).hide();
+
+        if (data.status === "success") {
+            const s = subjects.find(sub => sub.subId === activeSubId);
+            document.getElementById('resTitle').innerText = "Enrollment Successful!";
+            document.getElementById('resMsg').innerText = "You registered for " + s.subName;
+            document.getElementById('subjectListPage').classList.add('hidden');
+            document.getElementById('successPage').classList.remove('hidden');
+        } else {
+            alert("Something went wrong: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        bootstrap.Modal.getInstance(document.getElementById('enrollModal')).hide();
+        alert("Failed to connect to server. Please try again.");
+    });
 }
 
-// ══════════════════════════════════════════════════════════════
-// UTILITY FUNCTIONS
-// ══════════════════════════════════════════════════════════════
-
+// utility functions
 function toggleProfile() {
     var profileSection = document.getElementById('profile-section');
     var welcomeCard = document.getElementById('welcome-card');
