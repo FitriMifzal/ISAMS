@@ -1,0 +1,309 @@
+/* ============================================================
+   CALCULATE-ABSENT-PERCENTAGE.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 30px 30px 30px 0px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* ── CARD STYLING ── */
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 26px 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-left: 15px;
+}
+
+.card h2 {
+    color: var(--kv-primary);
+    margin: 0 0 10px 0;
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.card-sub {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-bottom: 22px;
+}
+
+/* ── SEARCH INPUT ── */
+.search-input {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-family: var(--font-family-main);
+    outline: none;
+    flex: 1;
+}
+
+.search-input:focus {
+    border-color: var(--kv-orange);
+}
+
+/* ── FORM INPUTS ── */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--kv-orange);
+}
+
+/* ── CONFIG INPUT LAYOUT ── */
+.config-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.config-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+/* ── BUTTONS ── */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-family-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-save {
+    background: var(--kv-primary);
+    color: white;
+}
+
+.btn-save:hover {
+    background: #001224;
+}
+
+.btn-export {
+    background: #334155;
+    color: white;
+}
+
+.btn-export:hover {
+    background: #1e293b;
+}
+
+/* ── TABLE STYLING ── */
+.sheet-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin-left: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    padding: 12px 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    font-size: 11.5px;
+    color: #475569;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: var(--font-family-main);
+}
+
+tbody td {
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    font-size: 13px;
+    color: #334155;
+    font-family: var(--font-family-main);
+}
+
+tbody tr {
+    transition: 0.2s;
+}
+
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* ── STATUS BADGES ── */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-present {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.badge-absent {
+    background: #fce8e6;
+    color: #c5221f;
+}
+
+/* ── ACTION BUTTONS FOR LETTERS ── */
+.letter-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-letter {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+    font-family: var(--font-family-main);
+    transition: opacity 0.3s ease;
+}
+
+.btn-warning {
+    background-color: #f59e0b;
+    color: #000;
+}
+
+.btn-intervention {
+    background-color: #2b6cb0;
+    color: white;
+}
+
+.btn-letter:hover {
+    opacity: 0.85;
+}
+
+.txt-disabled {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .card {
+        padding: 15px;
+        margin-left: 0;
+    }
+
+    .sheet-table-wrapper {
+        margin-left: 0;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .letter-actions {
+        flex-direction: column;
+    }
+
+    .btn-letter {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search-input {
+        max-width: 100% !important;
+    }
+}

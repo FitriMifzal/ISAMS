@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance | KV Student Management</title>
+    
+    <!-- Sidebar CSS DULU (defines all variables) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Page CSS SELEPAS -->
+    <link rel="stylesheet" href="Create-Student-Attendance.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+        <div class="logo-container">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div class="role-badge">Subject Teacher</div>
+
+        <div class="nav-menu">
+            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
+            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+            
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+            </div>
+            
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item active">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+        </div>
+        
+        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <div class="card">
+                <h2 class="card-title">Student Attendance Spreadsheet Matrix</h2>
+                <p class="card-sub">File Context Reference: <strong style="color:#334155;">TRC501-PHM2453B1B2.xlsx</strong></p>
+
+                <!-- Legend -->
+                <div class="legend-row">
+                    <span style="font-weight:600; color:#334155;">Legend:</span>
+                    <div class="legend-item">
+                        <div class="legend-dot badge-present">✓</div>
+                        <span>Present (Hadir)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot badge-absent">✗</div>
+                        <span>Absent (Tidak Hadir)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot badge-reason">O</div>
+                        <span>Absent with Reason (MC/Surat)</span>
+                    </div>
+                    <div class="legend-item" style="margin-left:auto; background:#fffbeb; border:1px solid #fcd34d; padding:5px 12px; border-radius:5px; color:#92400e; font-weight:600;">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Only today's column is editable
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar-panel">
+                    <input type="text" id="gridSearch" class="search-input" oninput="filterGrid()" placeholder="Search student by name or ID...">
+                    <div class="btn-group-actions">
+                        <button class="btn btn-save" onclick="saveGrid()">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Save Changes
+                        </button>
+                        <button class="btn btn-export" onclick="exportGridCSV()">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export CSV
+                        </button>
+                        <button class="btn btn-reset" onclick="resetGrid()">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="sheet-table-wrapper">
+                    <table id="attendanceGrid">
+                        <thead id="gridHead"></thead>
+                        <tbody id="gridBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Page JS SELEPAS -->
+    <script src="Create-Student-Attendance.js"></script>
+</body>
+</html>

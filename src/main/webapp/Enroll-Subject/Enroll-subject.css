@@ -1,0 +1,413 @@
+/* ============================================================
+   ENROLL-SUBJECT.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f7f6;
+    display: flex;
+    min-height: 100vh;
+    font-family: var(--font-family-main);
+    color: #1a2340;
+}
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 40px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f4f7f6;
+}
+
+/* ── PAGE TITLE ── */
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1a2340;
+    font-family: var(--font-family-main);
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #6b7a99;
+    margin-bottom: 24px;
+    font-family: var(--font-family-main);
+}
+
+/* ── ENROLLMENT LAYOUT ── */
+.enrollment-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+/* ── CARDS ── */
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    border: 1px solid #e2e7f0;
+    overflow: hidden;
+    font-family: var(--font-family-main);
+}
+
+.card-header {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e7f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.card-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2340;
+    font-family: var(--font-family-main);
+}
+
+.card-body {
+    padding: 0;
+}
+
+/* ── SUBJECT SELECTOR ── */
+.subject-selector {
+    margin-bottom: 18px;
+}
+
+.subject-selector label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7a99;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-family: var(--font-family-main);
+}
+
+.subject-selector select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e7f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    background: #fff;
+    color: #1a2340;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.subject-selector select:focus {
+    border-color: var(--kv-primary);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+/* ── STUDENT LISTS ── */
+.student-pool,
+.enrolled-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.enrolled-list {
+    margin-bottom: 18px;
+}
+
+.student-row,
+.enrolled-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #e2e7f0;
+    border-radius: 8px;
+    background: #fafbfd;
+    transition: border-color 0.15s;
+    font-family: var(--font-family-main);
+}
+
+.student-row:hover {
+    border-color: var(--kv-primary);
+}
+
+.student-row.already-enrolled {
+    opacity: 0.45;
+    pointer-events: none;
+    background: #f1f3f7;
+}
+
+/* ── STUDENT INFO ── */
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.student-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #eef3f9;
+    color: var(--kv-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: var(--font-family-main);
+}
+
+.student-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2340;
+    font-family: var(--font-family-main);
+}
+
+.student-class {
+    font-size: 12px;
+    color: #6b7a99;
+    font-family: var(--font-family-main);
+}
+
+/* ── TAGS & BUTTONS ── */
+.enrolled-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    background: var(--kv-primary);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: var(--font-family-main);
+}
+
+.btn-enroll {
+    padding: 8px 16px;
+    background: var(--kv-primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-enroll:hover {
+    background: #002244;
+    transform: translateY(-1px);
+}
+
+.enrolled-row {
+    border: 1px solid #22c55e;
+    background: #f0fdf4;
+}
+
+.enrolled-row .student-avatar {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.btn-undo {
+    padding: 6px 14px;
+    background: #fffbeb;
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-undo:hover {
+    background: #fef3c7;
+    transform: translateY(-1px);
+}
+
+.btn-save {
+    width: 100%;
+    padding: 12px;
+    background: var(--kv-orange);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-family-main);
+}
+
+.btn-save:hover {
+    background: #d44318;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 87, 41, 0.3);
+}
+
+.btn-save:disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── SUMMARY CARD ── */
+.summary-card {
+    background: #e6f0fa;
+    border: 1px solid #b3d1ff;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+    font-family: var(--font-family-main);
+}
+
+.summary-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--kv-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    font-family: var(--font-family-main);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.summary-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    border: 1px solid #e2e7f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    font-family: var(--font-family-main);
+}
+
+.summary-item .subj-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--kv-primary);
+    font-family: var(--font-family-main);
+}
+
+.summary-item .subj-count {
+    font-size: 12px;
+    color: #6b7a99;
+    margin-top: 4px;
+    font-family: var(--font-family-main);
+}
+
+/* ── TOAST NOTIFICATION ── */
+#toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--kv-primary);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+    z-index: 999;
+    font-family: var(--font-family-main);
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+    .enrollment-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .student-pool,
+    .enrolled-list {
+        max-height: 300px;
+    }
+
+    .btn-save,
+    .btn-enroll,
+    .btn-undo {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

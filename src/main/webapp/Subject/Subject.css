@@ -1,0 +1,377 @@
+/* ============================================================
+   SUBJECT.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content-area {
+    padding: 40px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f4f7f6;
+}
+
+/* ── CONTAINER BOX ── */
+.container-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-family: var(--font-family-main);
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+    margin-bottom: 15px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1e293b;
+    margin: 0;
+    font-family: var(--font-family-main);
+}
+
+/* ── ORANGE BAR ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 5px 0 10px 0;
+}
+
+/* ── CUSTOM BUTTON STYLES ── */
+.btn-create {
+    background-color: var(--kv-orange);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-create:hover {
+    background-color: #e04d24;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 87, 41, 0.3);
+}
+
+.btn-update {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-update:hover {
+    background-color: #0056B3;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-view {
+    background-color: #6C757D;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-view:hover {
+    background-color: #5A6268;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-cancel {
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-cancel:hover {
+    background-color: #B02A37;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-save {
+    background-color: #28A745;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-save:hover {
+    background-color: #218838;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* ── TABLE STYLES ── */
+.table {
+    font-family: var(--font-family-main);
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-weight: 700;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table tbody td {
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    text-align: center;
+    color: #334155;
+    font-family: var(--font-family-main);
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc !important;
+}
+
+.table-light {
+    background-color: #f1f5f9 !important;
+}
+
+/* ── ACTION GAP ── */
+.action-gap {
+    gap: 8px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ── FORM LABELS & INPUTS ── */
+.form-label {
+    color: #475569;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+}
+
+.form-control {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--font-family-main);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--kv-orange);
+    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.1);
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+/* ── ERROR MESSAGE ── */
+.error-msg {
+    color: #DC3545;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 5px;
+    font-family: var(--font-family-main);
+}
+
+.alert {
+    border-radius: 8px;
+    font-family: var(--font-family-main);
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.alert-success {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+/* ── MODAL STYLES ── */
+.modal-content {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-family-main);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-body {
+    color: #334155;
+    font-family: var(--font-family-main);
+}
+
+.modal-footer {
+    border-top: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+/* ── UTILITY CLASSES ── */
+.hidden {
+    display: none !important;
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-success {
+    color: #16a34a;
+}
+
+.text-muted {
+    color: #6b7a99;
+}
+
+.gap-2 {
+    gap: 12px;
+}
+
+.mt-4 {
+    margin-top: 24px;
+}
+
+.pt-3 {
+    padding-top: 16px;
+}
+
+.border-top {
+    border-top: 1px solid #e2e8f0;
+}
+
+.py-5 {
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.px-4 {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.px-5 {
+    padding-left: 48px;
+    padding-right: 48px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mt-3 {
+    margin-top: 16px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content-area {
+        padding: 15px;
+    }
+
+    .container-box {
+        padding: 15px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .btn-create {
+        width: 100%;
+    }
+
+    .table {
+        font-size: 12px;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 8px 6px;
+    }
+
+    .action-gap {
+        flex-direction: column;
+    }
+
+    .btn-update,
+    .btn-view,
+    .btn-cancel,
+    .btn-save {
+        width: 100%;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .row.g-3 {
+        gap: 12px;
+    }
+
+    .col-md-6 {
+        flex: 0 0 100%;
+    }
+}

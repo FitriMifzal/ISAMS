@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Management | KV Student Management</title>
+    
+    <!-- Bootstrap (for modals) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Sidebar CSS DULU (defines all variables) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Page CSS SELEPAS -->
+    <link rel="stylesheet" href="Subject.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+    <div class="logo-container">
+        <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+    </div>
+
+    <div class="role-badge">Subject Teacher</div>
+
+    <div class="nav-menu">
+        <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+        <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
+        <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+        <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+        <a href="../Subject/Subject.html" class="nav-item">Subject</a>
+
+        <button class="nav-item" data-submenu>
+            Subject
+            <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+            <a class="sub-nav-item active" href="../Subject/Subject.html">Subject Details</a>
+            <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+        </div>
+
+        <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
+        <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+    </div>
+
+    <div class="logout-section">
+        <a href="#" onclick="logoutUser()" class="nav-item logout">
+            Logout
+        </a>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <div id="content-area">
+            <!-- SUBJECT LIST PAGE -->
+            <div id="subjectListPage" class="container-box">
+                <div class="d-flex justify-content-between align-items-center page-header">
+                    <h1 class="page-title">Subject</h1>
+                    <button id="btnCreate" class="btn btn-create px-4 fw-bold" onclick="showForm()">Create New</button>
+                </div>
+                <div class="orange-bar"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Subject Code</th>
+                                <th>Name</th>
+                                <th>Credits</th>
+                                <th>Lecturer</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FORM PAGE -->
+            <div id="formPage" class="container-box hidden">
+                <h2 class="page-title" id="formTitle">Subject Registration Form</h2>
+                <div class="orange-bar"></div>
+                <div id="globalError" class="alert alert-danger hidden"></div>
+                <form id="subjectForm">
+                    <input type="hidden" id="editIdx">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Subject Code</label>
+                            <input type="text" id="subId" class="form-control" placeholder="e.g., SSD3013">
+                            <div id="idError" class="error-msg hidden">Code must start with 'SSD'</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Subject Name</label>
+                            <input type="text" id="subName" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Credit Hours</label>
+                            <input type="number" id="subCredit" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Assigned Lecturer</label>
+                            <input type="text" id="subTeacher" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-top d-flex gap-2">
+                        <button type="button" class="btn btn-save px-5 fw-bold" onclick="saveData()">Save</button>
+                        <button type="button" class="btn btn-cancel px-4" onclick="showList()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SUCCESS PAGE -->
+            <div id="successPage" class="container-box hidden text-center py-5">
+                <div class="alert alert-success d-inline-block px-5">
+                    <h4 id="resTitle">Operation Successful!</h4>
+                    <p id="resMsg">The database has been updated accordingly.</p>
+                </div>
+                <br>
+                <button class="btn btn-dark px-4 mt-3" onclick="showList()">Back to Subject List</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MODALS
+         ════════════════════════════════════════════════════════ -->
+
+    <!-- View Subject Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title">Subject Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div id="viewDetailBody" class="modal-body p-4"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrollment Confirmation Modal -->
+    <div class="modal fade" id="enrollModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Enrollment Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to enroll in <strong><span id="targetSub"></span></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-save" onclick="executeEnroll()">Yes</button>
+                    <button class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Page JS SELEPAS -->
+    <script src="Subject.js"></script>
+</body>
+</html>

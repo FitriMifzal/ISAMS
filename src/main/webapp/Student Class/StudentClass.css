@@ -1,0 +1,195 @@
+/* ============================================================
+   STUDENTCLASS.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 30px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f4f7f6;
+}
+
+/* ── CONTENT CARD ── */
+.content-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* ── HEADER ROW ── */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1e293b;
+    margin: 0;
+    font-family: var(--font-family-main);
+}
+
+/* ── ORANGE BAR ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 0 0 20px 0;
+}
+
+/* ── CREATE BUTTON ── */
+.btn-create {
+    background: var(--kv-orange);
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-create:hover {
+    background: #e04d24;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 87, 41, 0.3);
+}
+
+.btn-create:disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── TABLE STYLES ── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 1px solid #bbb;
+    font-family: var(--font-family-main);
+}
+
+thead th {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #bbb;
+    background: #e0e0e0;
+    color: #1e293b;
+    font-weight: 700;
+    font-family: var(--font-family-main);
+}
+
+tbody td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #bbb;
+    color: #475569;
+    font-family: var(--font-family-main);
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* ── UPDATE BUTTON ── */
+.btn-update {
+    background: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-update:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
+}
+
+/* ── NO DATA MESSAGE ── */
+tbody tr td[colspan] {
+    color: #9ca3af;
+    font-style: italic;
+    padding: 20px 12px;
+    text-align: center;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .content-card {
+        padding: 15px;
+    }
+
+    .header-row {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .btn-create {
+        width: 100%;
+        padding: 10px 16px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 8px 6px;
+    }
+
+    .btn-update {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}

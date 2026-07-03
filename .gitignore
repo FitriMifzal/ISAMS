@@ -1,0 +1,20 @@
+# Eclipse build output
+/build/
+/bin/
+
+# Compiled class files
+*.class
+
+# Eclipse workspace metadata (never commit this)
+.metadata/
+
+# Server runtime / Tomcat deployment temp files
+tmp0/
+wtpwebapps/
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log

@@ -1,0 +1,192 @@
+/* ============================================================
+   CREATESTUDENT.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 40px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f8fafc;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 650px;
+}
+
+.form-card h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: var(--kv-primary);
+    font-size: 1.75rem;
+    font-weight: 700;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+    font-family: var(--font-family-main);
+}
+
+/* ── FORM GROUP ── */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+    font-family: var(--font-family-main);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #334155;
+    background-color: #f8fafc;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    font-family: var(--font-family-main);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--kv-orange);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(245, 87, 41, 0.1);
+}
+
+.form-group textarea {
+    height: 110px;
+    resize: vertical;
+}
+
+/* ── FORM ACTIONS ── */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.submit-btn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+    text-align: center;
+    font-family: var(--font-family-main);
+}
+
+.submit-btn:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -1px rgba(16, 185, 129, 0.3);
+}
+
+.cancel-btn {
+    background-color: #64748b;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: var(--font-family-main);
+}
+
+.cancel-btn:hover {
+    background-color: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -1px rgba(100, 116, 139, 0.3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .form-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .form-card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-group textarea {
+        height: 100px;
+    }
+}

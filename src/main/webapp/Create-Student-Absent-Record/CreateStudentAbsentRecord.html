@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Absent Percentage | KV Student Management</title>
+
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Sidebar CSS DULU (defines all variables) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Page CSS SELEPAS -->
+    <link rel="stylesheet" href="CreateStudentAbsentRecord.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+        <div class="logo-container">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div class="role-badge">Subject Teacher</div>
+
+        <div class="nav-menu">
+            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
+            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+            
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+            </div>
+            
+            <a href="../Create-Student-Attendance/CreateStudentAttendance.html" class="nav-item">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item active">Calculate Percentage</a>
+        </div>
+        
+        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <!-- Create / Update Record Form -->
+            <div class="card" id="bktsForm" style="display: none;">
+                <h2 id="bkts-title">Create Student Absent Record</h2>
+                <p id="target-student-info"></p>
+                <div class="calc-grid">
+                    <div>
+                        <label>COURSE CODE (KOD KURSUS)</label>
+                        <input type="text" id="course-code" placeholder="e.g. KPD 2033">
+
+                        <label>HOURS ABSENT</label>
+                        <input type="number" id="absent-hrs" oninput="calculatePercentage()" placeholder="Enter hours">
+
+                        <label>TOTAL CONTACT HOURS</label>
+                        <input type="number" id="total-hrs" oninput="calculatePercentage()" placeholder="Enter total hours">
+
+                        <button class="btn btn-save" onclick="saveBKTS()">Save</button>
+                    </div>
+                    <div class="percent-box">
+                        <span style="font-weight: bold; color: #666; font-size: 0.8em;">ABSENT PERCENTAGE</span>
+                        <h2 id="percent-val" style="color: var(--kv-orange); font-size: 2.5em; margin: 10px 0;">0.00%</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Records Table -->
+            <div class="card">
+                <h2>Student Absent Records List</h2>
+                <p style="font-size: 0.8em; color: #666; margin-bottom: 10px;">Click on a row to reveal actions.</p>
+                <input type="text" id="studentSearch" class="search-input" onkeyup="filterTable()" placeholder="Search student by name or ID...">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>STUDENT NAME</th>
+                            <th>STUDENT ID</th>
+                            <th>COURSE CODE</th>
+                            <th>ABSENT %</th>
+                            <th>STATUS</th>
+                            <th id="action-header">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MODALS
+         ════════════════════════════════════════════════════════ -->
+
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <h2>Update Student Status</h2>
+            <p id="status-student-info"></p>
+            <p>Current Percentage: <span id="status-percent-display"></span></p>
+            <label>SELECT NEW STATUS</label>
+            <select id="new-status-select">
+                <option value="Normal">Normal</option>
+                <option value="Under Monitoring">Under Monitoring</option>
+                <option value="Warning Sent">Warning Sent</option>
+                <option value="Intervention Required">Intervention Required</option>
+            </select>
+            <button class="btn btn-save" onclick="saveStatusUpdate()">Update</button>
+            <button class="btn btn-cancel" onclick="closeModal('statusModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Upload Letter Modal -->
+    <div id="letterModal" class="modal">
+        <div class="modal-content">
+            <h2>Upload Absent Letter</h2>
+            <p id="letter-student-name"></p>
+            <label>DATE OF ABSENCE</label>
+            <input type="date" id="absent-date" onchange="checkDateValidity()">
+            <label>FILE ATTACHMENT (Medical/Reason Letter)</label>
+            <input type="file" id="absent-file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFilePreview()">
+            <button id="view-file-btn" class="btn btn-view" onclick="viewUploadedFile()" style="display: none;">View Uploaded File</button>
+            <button class="btn btn-save" onclick="processUpload()">Upload</button>
+            <button class="btn btn-cancel" onclick="closeModal('letterModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 60px; color: #28a745; text-align: center;"><i class="fas fa-check-circle"></i></div>
+            <h2 style="text-align: center;">Success</h2>
+            <p id="success-msg" style="text-align: center;"></p>
+            <button class="btn btn-save" onclick="closeModal('successModal')" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 60px; color: var(--kv-orange); text-align: center;"><i class="fas fa-times-circle"></i></div>
+            <h2 style="text-align: center; color: var(--kv-orange);">Invalid Action</h2>
+            <p id="error-msg" style="text-align: center;"></p>
+            <button class="btn btn-cancel" onclick="closeModal('errorModal')" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <!-- Formal Letter Editor Modal -->
+    <div id="letterEditorModal" class="modal">
+        <div class="modal-content">
+            <h2>Review Formal Letter</h2>
+            <div id="formal-letter-body" class="letter-preview" contenteditable="true"></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-download" onclick="downloadFormalPDF()" style="flex: 1;">
+                    <i class="fas fa-file-download"></i> Download Official PDF
+                </button>
+                <button class="btn btn-cancel" onclick="closeModal('letterEditorModal')" style="flex: 1;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Page JS SELEPAS -->
+    <script src="CreateStudentAbsentRecord.js"></script>
+</body>
+</html>

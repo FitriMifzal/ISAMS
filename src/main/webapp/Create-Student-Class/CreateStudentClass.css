@@ -1,0 +1,181 @@
+/* ============================================================
+   CREATESTUDENTCLASS.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 30px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f4f7f6;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.form-card h2 {
+    margin: 0 0 10px 0;
+    color: var(--kv-primary);
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-family: var(--font-family-main);
+}
+
+/* ── ORANGE BAR ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 10px 0 30px 0;
+}
+
+/* ── FORM GROUP ── */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+    font-family: var(--font-family-main);
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: var(--kv-orange);
+    box-shadow: 0 0 0 4px rgba(245, 87, 41, 0.1);
+    background-color: #fafafa;
+}
+
+/* ── FORM ACTIONS ── */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* ── BUTTONS ── */
+.btn-submit {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(90, 98, 104, 0.3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .form-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .form-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}

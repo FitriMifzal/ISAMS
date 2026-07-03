@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account | KV Student Management</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sidebar CSS DULU (defines all variables) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Page CSS SELEPAS -->
+    <link rel="stylesheet" href="DeleteAccount.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+        <div class="logo-container">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div class="role-badge">Subject Teacher</div>
+
+        <div class="nav-menu">
+            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item active">Account</a>
+            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+            
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+            </div>
+            
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+        </div>
+        
+        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <div class="content-card">
+                <div id="successMsg"><strong>Success!</strong> Account has been archived.</div>
+                
+                <h2>TEACHER ACCOUNTS</h2>
+                <p style="text-align: center; color: #666; font-size: 14px;">Select account to archive or manage.</p>
+
+                <!-- Account List Groups -->
+                <div id="accountList">
+                    <div class="account-item" onclick="showArchiveModal('KVD001', 'Arissa Amiely')">
+                        <div class="avatar-initial">A</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Arissa Amiely binti Mohammad Syahir<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD001 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+
+                    <div class="account-item" onclick="showArchiveModal('KVD002', 'Ahmad Zaki')">
+                        <div class="avatar-initial">A</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Ahmad Zaki bin Md Nor<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD002 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+
+                    <div class="account-item" onclick="showArchiveModal('KVD003', 'Ainnur Mardiah')">
+                        <div class="avatar-initial">A</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Ainnur Mardiah binti Amiruddin<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD003 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+
+                    <div class="account-item" onclick="showArchiveModal('KVD004', 'Muhammad Syamel')">
+                        <div class="avatar-initial">M</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Muhammad Syamel bin Kamarulzaman<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD004 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+
+                    <div class="account-item" onclick="showArchiveModal('KVD005', 'Nur Syahirah')">
+                        <div class="avatar-initial">N</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Nur Syahirah binti Samsudin<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD005 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+
+                    <div class="account-item" onclick="showArchiveModal('KVD006', 'Ahmad Amirulddin')">
+                        <div class="avatar-initial">A</div>
+                        <div class="acc-info">
+                            <div class="acc-name">Ahmad Amirulddin bin Khairulman<span class="badge-archived">ARCHIVED</span></div>
+                            <div class="acc-id">ID: KVD006 | Subject Teacher</div>
+                        </div>
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         ARCHIVE MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div id="archiveModal" class="modal">
+        <div class="modal-content">
+            <div class="archive-icon-big">
+                <i class="fa-solid fa-box-archive"></i>
+            </div>
+            <h3>Archive Account?</h3>
+            <p>This will disable the teacher's access but keep their data in the system.</p>
+            <div style="font-size: 13px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 5px;" id="targetAccount">
+                Account Details: -
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn-confirm" onclick="executeArchive()">Confirm Archive</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Page JS SELEPAS -->
+    <script src="DeleteAccount.js"></script>
+</body>
+</html>

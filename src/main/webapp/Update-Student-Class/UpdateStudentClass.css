@@ -1,0 +1,196 @@
+/* ============================================================
+   UPDATESTUDENTCLASS.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 30px;
+    flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
+    background-color: #f4f7f6;
+}
+
+/* ── SHADOW BOX ── */
+.shadow-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    font-family: var(--font-family-main);
+}
+
+.shadow-box h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-family: var(--font-family-main);
+}
+
+/* ── ORANGE BAR ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 3px 0 15px 0;
+    border-radius: 2px;
+}
+
+/* ── FORM STYLING ── */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 15px;
+    font-weight: 700;
+    color: #333;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+}
+
+label:first-of-type {
+    margin-top: 0;
+}
+
+input {
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+    color: #333;
+}
+
+input:focus {
+    border-color: var(--kv-primary);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+    background-color: white;
+}
+
+input:disabled {
+    background-color: #f1f3f5;
+    cursor: not-allowed;
+    color: #666;
+}
+
+/* ── ACTION BUTTONS ── */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-submit {
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-submit:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel {
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(90, 98, 104, 0.3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .shadow-box {
+        padding: 20px;
+    }
+
+    .shadow-box h1 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    label {
+        margin-top: 12px;
+        font-size: 13px;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        padding: 10px 16px;
+    }
+}

@@ -1,0 +1,161 @@
+/* ============================================================
+   UPDATESTUDENT.CSS — Content area styling
+   Letakkan di <head> SELEPAS sidebar.css
+   ============================================================ */
+
+#main-wrapper,
+#main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+
+#main-wrapper.collapsed,
+#main-content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content,
+#content-area {
+    padding: 40px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f4f7f6;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-family: var(--font-family-main);
+}
+
+.form-card h2 {
+    color: var(--kv-primary);
+    text-align: center;
+    margin: 0 0 25px 0;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: var(--font-family-main);
+}
+
+/* ── FORM GROUP ── */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    outline: none;
+    transition: all 0.3s ease;
+    color: #334155;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--kv-orange);
+    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.1);
+    background-color: white;
+}
+
+.form-group textarea {
+    height: 110px;
+    resize: vertical;
+}
+
+/* ── SUBMIT BUTTON ── */
+.submit-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.submit-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    #main-wrapper,
+    #main-content {
+        padding-top: 70px;
+    }
+
+    #content,
+    #content-area {
+        padding: 15px;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
+
+    .form-card h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .submit-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}

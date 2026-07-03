@@ -1,0 +1,65 @@
+package isams.model;
+
+import java.io.Serializable;
+
+public class Student implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	private int stuId;
+    private String stuName;
+    private String stuIC;
+    private String stuAdd;
+    private String stuPhoneNum;
+    private int classId;
+
+    public Student() {
+    }
+
+    public int getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(int stuId) {
+        this.stuId = stuId;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    public String getStuIC() {
+        return stuIC;
+    }
+
+    public void setStuIC(String stuIC) {
+        this.stuIC = stuIC;
+    }
+
+    public String getStuAdd() {
+        return stuAdd;
+    }
+
+    public void setStuAdd(String stuAdd) {
+        this.stuAdd = stuAdd;
+    }
+
+    public String getStuPhoneNum() {
+        return stuPhoneNum;
+    }
+
+    public void setStuPhoneNum(String stuPhoneNum) {
+        this.stuPhoneNum = stuPhoneNum;
+    }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
+    }
+}

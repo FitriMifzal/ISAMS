@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KV Student Attendance System</title>
+    <link rel="stylesheet" href="CreateAccount.css">
+</head>
+<body>
+    <div class="login-container">
+        <a class="back-arrow" id="backBtn" onclick="showLogin()">&#10229;</a>
+        <div class="logo">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div id="login-section" style="max-width: 350px; margin: 0 auto;">
+            <h2>Login</h2>
+            <div class="role-selection">
+                <label class="role-option">
+                    <input type="radio" name="loginRole" value="Teacher" checked onchange="handleRoleChange()"> Teacher
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="loginRole" value="Penyelaras Intervensi" onchange="handleRoleChange()"> Penyelaras Intervensi
+                </label>
+            </div>
+            <div class="input-group">
+                <label id="loginIDLabel">IC Number</label>
+                <input type="text" id="loginID" placeholder="Enter your IC Number">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <div class="password-container">
+                    <input type="password" id="loginPass" placeholder="Enter password">
+                    <button type="button" class="toggle-password" id="toggleLoginPass" onclick="togglePasswordVisibility('loginPass', 'toggleLoginPass')">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <button class="btn-kv" onclick="checkLogin()">LOGIN</button>
+            <div class="link-reg">Don't have an account? <a href="javascript:void(0);" onclick="showRegistration()">Register here</a></div>
+        </div>
+
+        <div id="registration-section">
+            <h2>Teacher Registration</h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Teacher ID</label>
+                    <input type="text" id="regID" placeholder="ID">
+                </div>
+                <div class="input-group">
+                    <label>IC Number</label>
+                    <input type="text" id="regIC" placeholder="IC Number">
+                </div>
+                <div class="input-group full-width">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Enter Full Name">
+                </div>
+                <div class="input-group">
+                    <label>Phone</label>
+                    <input type="text" id="regPhone" placeholder="Phone No.">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="Email">
+                </div>
+                <div class="input-group full-width">
+                    <label>Password</label>
+                    <div class="password-container">
+                        <input type="password" id="regPass" placeholder="Create Password">
+                        <button type="button" class="toggle-password" id="toggleRegPass" onclick="togglePasswordVisibility('regPass', 'toggleRegPass')">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="full-width">
+                    <button class="btn-kv" onclick="askConfirmation()">CREATE ACCOUNT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: var(--kv-primary);">Confirm Creation?</h3>
+            <p>Do you want to proceed with creating this teacher account?</p>
+            <div class="modal-btns">
+                <button class="btn-confirm" onclick="processConfirm()">Confirm</button>
+                <button class="btn-cancel" onclick="processCancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="CreateAccount.js"></script>
+</body>
+</html>

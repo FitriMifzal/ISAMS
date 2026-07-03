@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KV Student Management</title>
+    
+    <!-- SIDEBAR CSS DULU (defines all variables & header styles) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- DASHBOARD CSS SELEPAS (reference variables dari sidebar.css) -->
+    <link rel="stylesheet" href="Dashboard.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+        <div class="logo-container">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div class="role-badge">Subject Teacher</div>
+
+        <div class="nav-menu">
+            <a href="../Dashboard/Dashboard.html" class="nav-item active">Dashboard</a>
+            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
+            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+            
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+            </div>
+            
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+        </div>
+        
+        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <!-- WELCOME CARD -->
+            <div class="card" id="welcome-card">
+                <h1 id="welcome-msg">Welcome!</h1>
+                <p>Status: <strong id="status-text">Teacher</strong></p>
+            </div>
+
+            <!-- PROFILE CARD -->
+            <div class="card" id="profile-section">
+                <h2 id="profile-title">My Profile Information</h2>
+                <hr>
+                <div class="profile-grid">
+                    <div class="input-group">
+                        <label>Teacher ID</label>
+                        <input type="text" id="profID" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>IC Number</label>
+                        <input type="text" id="profIC" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profName" class="profile-input" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="profEmail" class="profile-input" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="profPhone" class="profile-input" disabled>
+                    </div>
+                </div>
+                <div class="button-group" style="margin-top:20px;">
+                    <button id="btn-edit" class="btn btn-edit" onclick="enableEdit()">EDIT PROFILE</button>
+                    <button id="btn-back" class="btn btn-back" onclick="toggleProfile()">BACK</button>
+                    <button id="btn-save" class="btn btn-save" onclick="updateProfile()">SAVE CHANGES</button>
+                    <button id="id-cancel" class="btn btn-cancel" onclick="disableEdit()">CANCEL</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Dashboard.js SELEPAS (handle profile edit logic) -->
+    <script src="Dashboard.js"></script>
+</body>
+</html>

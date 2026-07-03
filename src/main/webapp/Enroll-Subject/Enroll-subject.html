@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Enrollment | KV Student Management</title>
+    
+    <!-- Sidebar CSS DULU (defines all variables) -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Page CSS SELEPAS -->
+    <link rel="stylesheet" href="Enroll-subject.css">
+</head>
+<body>
+    <!-- ════════════════════════════════════════════════════════
+         SIDEBAR (same structure untuk semua pages)
+         ════════════════════════════════════════════════════════ -->
+    <div id="sidebar">
+        <div class="logo-container">
+            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+        </div>
+
+        <div class="role-badge">Subject Teacher</div>
+
+        <div class="nav-menu">
+            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
+            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+            
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+                <a class="sub-nav-item active" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+            </div>
+            
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+        </div>
+        
+        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ════════════════════════════════════════════════════════ -->
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <div class="page-title">Subject Enrollment</div>
+            <div class="page-subtitle">Enroll students into the subjects taught by you.</div>
+
+            <!-- Summary Card -->
+            <div class="summary-card">
+                <h3>Saved Enrollment Summary</h3>
+                <div class="summary-grid" id="summary-grid">
+                    <div style="color:var(--text-secondary);font-size:13px;">No saved data available.</div>
+                </div>
+            </div>
+
+            <!-- Enrollment Layout -->
+            <div class="enrollment-layout">
+                <!-- Left: Available Students -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Available Students List</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="subject-selector">
+                            <label>Select Subject</label>
+                            <select id="subject-select" onchange="onSubjectChange()">
+                                <option value="">-- Select Subject --</option>
+                                <option value="BM">Malay Language (BM)</option>
+                                <option value="BI">English Language (BI)</option>
+                                <option value="MT">Mathematics (MT)</option>
+                                <option value="SC">Science (SC)</option>
+                                <option value="SEJ">History (SEJ)</option>
+                            </select>
+                        </div>
+                        <div class="student-pool" id="student-pool"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Enrolled Students -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Enrolled Students</h2>
+                        <span id="enrolled-subject-label" style="font-size:12px;color:var(--text-secondary);">—</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="enrolled-list" id="enrolled-list"></div>
+                        <button class="btn-save" id="btn-save" onclick="saveEnrollment()" disabled>
+                            Save &amp; Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"></div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SCRIPTS
+         ════════════════════════════════════════════════════════ -->
+    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    
+    <!-- Page JS SELEPAS -->
+    <script src="Enroll-subject.js"></script>
+</body>
+</html>
