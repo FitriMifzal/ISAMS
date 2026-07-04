@@ -4,7 +4,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = "../Create-Account/Create-Account.html";
+        window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 
@@ -79,7 +79,7 @@ function searchTable() {
 
 // go to the View Student page for the selected student
 function viewStudent(stuId) {
-    window.location.href = "../View-Student/viewStudent.html?id=" + stuId;
+    window.location.href = "../ViewStudentServlet?id=" + stuId;
 }
 
 // utility functions

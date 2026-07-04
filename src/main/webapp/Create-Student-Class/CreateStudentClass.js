@@ -4,7 +4,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = "../Create-Account/Create-Account.html";
+        window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 });

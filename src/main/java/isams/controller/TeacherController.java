@@ -11,16 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import isams.dao.TeacherDAO;
 import isams.model.Teacher;
 
-/**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Handles Teacher account creation, login, and lookups.
- *
- * GET  ?action=list           -> return all teachers
- * POST action=register        -> create a new teacher account
- * POST action=login           -> check credentials, return teacher info
- */
 
 @WebServlet("/TeacherController")
 public class TeacherController extends HttpServlet {
@@ -55,8 +45,6 @@ public class TeacherController extends HttpServlet {
 
         if ("register".equals(action)) {
             handleRegister(request, out);
-        } else if ("login".equals(action)) {
-            handleLogin(request, out);
         } else if ("archive".equals(action)) {
             handleArchive(request, out);
         } else {
@@ -106,27 +94,6 @@ public class TeacherController extends HttpServlet {
         TeacherDAO.addTeacher(teacher);
 
         out.print("{\"status\":\"success\", \"message\":\"Account created successfully\"}");
-    }
-
-    // check login credentials
-    private void handleLogin(HttpServletRequest request, PrintWriter out) {
-        String ic = request.getParameter("tIC");
-        String pass = request.getParameter("tPass");
-
-        Teacher teacher = TeacherDAO.login(ic, pass);
-
-        if (teacher == null) {
-            out.print("{\"status\":\"error\", \"message\":\"Invalid email or password\"}");
-        } else {
-            StringBuilder json = new StringBuilder();
-            json.append("{");
-            json.append("\"status\":\"success\",");
-            json.append("\"tId\":").append(teacher.getTId()).append(",");
-            json.append("\"tName\":\"").append(escapeJson(teacher.getTName())).append("\",");
-            json.append("\"tEmail\":\"").append(escapeJson(teacher.getTEmail())).append("\"");
-            json.append("}");
-            out.print(json.toString());
-        }
     }
 
     // archive a teacher account

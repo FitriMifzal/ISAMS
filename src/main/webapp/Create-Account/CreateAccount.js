@@ -121,7 +121,7 @@ function checkLogin() {
     formData.append("tIC", inputID);
     formData.append("tPass", inputPass);
 
-    fetch("../TeacherController?action=login", {
+    fetch("../LoginServlet", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"

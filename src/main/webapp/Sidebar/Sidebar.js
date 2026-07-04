@@ -30,17 +30,17 @@
     function initUserProfile() {
         var userNameEl = document.getElementById('user-fullname');
         var userInitialEl = document.getElementById('user-initial');
-        
+
         if (userNameEl && userInitialEl) {
             var userName = userNameEl.textContent.trim();
-            
+
             // Generate initials dari name
             var initials = userName
                 .split(' ')
                 .map(function(word) { return word.charAt(0).toUpperCase(); })
                 .join('')
                 .substring(0, 2);
-            
+
             // Set initial (fallback to ? jika empty)
             userInitialEl.textContent = initials || '?';
         }
@@ -73,15 +73,24 @@
     };
 
     /* ── LOGOUT ── */
+    /* Calls LogoutServlet first to invalidate the real server-side session,
+       then clears browser storage and redirects. Falls back to clearing
+       storage anyway even if the server call fails, so the user is never
+       stuck unable to log out. */
     window.logoutUser = function () {
-        if (confirm('Are you sure you want to logout?')) {
-            // Clear all storage
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // Redirect ke login page
-            window.location.href = "../Create-Account/Create-Account.html"; // Update path sesuai system
+        if (!confirm('Are you sure you want to logout?')) {
+            return;
         }
+
+        fetch("../LogoutServlet", { method: "POST" })
+            .catch(function (error) {
+                console.error("Logout request failed:", error);
+            })
+            .finally(function () {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = "../Create-Account/CreateAccount.html";
+            });
     };
 
     /* ── JALANKAN SELEPAS DOM SIAP ── */
