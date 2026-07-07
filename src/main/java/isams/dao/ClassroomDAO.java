@@ -22,7 +22,7 @@ public class ClassroomDAO {
             con = ConnectionManager.getConnection();
 
             // 3. create statement
-            sql = "INSERT INTO classroom(classCode, class_name) VALUES(?, ?)";
+            sql = "INSERT INTO classroom(classcode, class_name) VALUES(?, ?)";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, classRoom.getClassCode());
@@ -46,7 +46,7 @@ public class ClassroomDAO {
             con = ConnectionManager.getConnection();
 
             // 3. create statement
-            sql = "UPDATE classroom SET classCode=?, class_name=? WHERE class_id=?";
+            sql = "UPDATE classroom SET classcode=?, class_name=? WHERE class_id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, classRoom.getClassCode());

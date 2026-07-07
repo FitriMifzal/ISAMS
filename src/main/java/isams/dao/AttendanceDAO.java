@@ -61,21 +61,23 @@ public class AttendanceDAO {
         return classSessId;
     }
 
+    // students registered for this subject, AND belonging to the selected class
+    // (class comes from STUDENT.CLASS_ID, since REGISTER only tracks Sub_ID + Stu_ID)
     public List<Attendance> getStudentsForAttendance(int subId, int classId, String date) {
         List<Attendance> list = new ArrayList<>();
 
         int classSessId = getOrCreateSession(subId, classId, date);
 
         String sql =
-        	    "SELECT s.STUD_ID, s.STUD_NAME, s.STUD_IC, a.STUD_ID AS ABSENT_STUD_ID " +
-        	    "FROM REGISTER r " +
-        	    "JOIN STUDENT s ON r.STUD_ID = s.STUD_ID " +
-        	    "LEFT JOIN ATTENDANCE a " +
-        	    "ON s.STUD_ID = a.STUD_ID " +
-        	    "AND a.CLASS_SESS_ID = ? " +
-        	    "WHERE r.SUB_ID = ? " +
-        	    "AND r.CLASS_ID = ? " +
-        	    "ORDER BY s.STUD_NAME";
+            "SELECT s.STU_ID, s.STU_NAME, s.STU_IC, a.STU_ID AS ABSENT_STU_ID " +
+            "FROM REGISTER r " +
+            "JOIN STUDENT s ON r.STU_ID = s.STU_ID " +
+            "LEFT JOIN ATTENDANCE a " +
+            "ON s.STU_ID = a.STU_ID " +
+            "AND a.CLASS_SESS_ID = ? " +
+            "WHERE r.SUB_ID = ? " +
+            "AND s.CLASS_ID = ? " +
+            "ORDER BY s.STU_NAME";
 
         try {
             Connection con = ConnectionManager.getConnection();
@@ -91,10 +93,10 @@ public class AttendanceDAO {
                 Attendance a = new Attendance();
 
                 a.setClassSessId(classSessId);
-                a.setStudId(rs.getInt("STUD_ID"));
-                a.setStudName(rs.getString("STUD_NAME"));
-                a.setStudIC(rs.getString("STUD_IC"));
-                a.setAbsent(rs.getString("ABSENT_STUD_ID") != null);
+                a.setStudId(rs.getInt("STU_ID"));
+                a.setStudName(rs.getString("STU_NAME"));
+                a.setStudIC(rs.getString("STU_IC"));
+                a.setAbsent(rs.getString("ABSENT_STU_ID") != null);
 
                 list.add(a);
             }
@@ -107,8 +109,8 @@ public class AttendanceDAO {
 
         return list;
     }
-    
-    public boolean insertAbsent(String date, int tId, int classSessId, int classId, int studId, double hours) {
+
+    public boolean insertAbsent(String date, int classSessId, int studId, double hours) {
         boolean success = false;
 
         try {
@@ -116,34 +118,27 @@ public class AttendanceDAO {
 
             String sql =
                 "INSERT INTO ATTENDANCE " +
-                "(ATT_DATE, T_ID, CLASS_SESS_ID, CLASS_ID, STUD_ID, ATTENDANCERECORD) " +
-                "SELECT TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?, ? " + 
+                "(DATE_RECORDED, CLASS_SESS_ID, STU_ID, ATTENDANCERECORD, HOURS) " +
+                "SELECT TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ? " +
                 "FROM dual " +
                 "WHERE NOT EXISTS ( " +
                 "SELECT 1 FROM ATTENDANCE " +
-                "WHERE ATT_DATE = TO_DATE(?, 'YYYY-MM-DD') " +
-                "AND T_ID = ? " +
-                "AND CLASS_SESS_ID = ? " +
-                "AND STUD_ID = ? " +
+                "WHERE CLASS_SESS_ID = ? " +
+                "AND STU_ID = ? " +
                 ")";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, date);
-            ps.setInt(2, tId);
-            ps.setInt(3, classSessId);
-            ps.setInt(4, classId);
-            ps.setInt(5, studId);
-            ps.setDouble(6, hours);     
+            ps.setInt(2, classSessId);
+            ps.setInt(3, studId);
+            ps.setString(4, "Absent");
+            ps.setDouble(5, hours);
 
-            ps.setString(7, date);
-            ps.setInt(8, tId);
-            ps.setInt(9, classSessId);
-            ps.setInt(10, studId);
+            ps.setInt(6, classSessId);
+            ps.setInt(7, studId);
 
             int row = ps.executeUpdate();
-            System.out.println("ATTENDANCE INSERT ROW = " + row);
-
             success = row > 0;
 
             con.close();
@@ -155,22 +150,21 @@ public class AttendanceDAO {
         return success;
     }
 
-    public void deleteAbsent(String date, int tId, int classSessId, int studId) {
+    public void deleteAbsent(int classSessId, int studId) {
         try {
             Connection con = ConnectionManager.getConnection();
 
             String sql =
                 "DELETE FROM ATTENDANCE " +
                 "WHERE CLASS_SESS_ID = ? " +
-                "AND STUD_ID = ?";
+                "AND STU_ID = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, classSessId);
             ps.setInt(2, studId);
 
-            int row = ps.executeUpdate();
-            System.out.println("ATTENDANCE DELETE ROW = " + row);
+            ps.executeUpdate();
 
             con.close();
 

@@ -11,17 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import isams.dao.ClassroomDAO;
 import isams.model.Classroom;
 
-/**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Classroom Controller
- *
- * GET  ?action=list          -> return all classrooms
- * GET  ?action=get&id=5      -> return one classroom
- * POST action=create         -> insert a new classroom
- * POST action=update         -> update an existing classroom
- */
 
 @WebServlet("/ClassroomController")
 public class ClassroomController extends HttpServlet {

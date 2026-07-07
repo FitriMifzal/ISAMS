@@ -20,7 +20,7 @@ public class StudentDAO {
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "INSERT INTO student(stud_name, stud_ic, stud_add, contact_no, class_id, student_type) "
+            sql = "INSERT INTO student(stu_name, stu_ic, stu_add, stu_phonenum, class_id, student_type) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
             ps = con.prepareStatement(sql);
@@ -43,8 +43,8 @@ public class StudentDAO {
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "UPDATE student SET stud_name=?, stud_ic=?, stud_add=?, contact_no=?, class_id=? "
-                + "WHERE stud_id=?";
+            sql = "UPDATE student SET stu_name=?, stu_ic=?, stu_add=?, stu_phonenum=?, class_id=? "
+                + "WHERE stu_id=?";
 
             ps = con.prepareStatement(sql);
             ps.setString(1, student.getStuName());
@@ -67,11 +67,11 @@ public class StudentDAO {
             con = ConnectionManager.getConnection();
 
             String[] sqlList = {
-                "DELETE FROM SVM WHERE STUD_ID=?",
-                "DELETE FROM DVM WHERE STUD_ID=?",
-                "DELETE FROM ATTENDANCE WHERE STUD_ID=?",
-                "DELETE FROM REGISTER WHERE STUD_ID=?",
-                "DELETE FROM STUDENT WHERE STUD_ID=?"
+                "DELETE FROM SVM WHERE STU_ID=?",
+                "DELETE FROM DVM WHERE STU_ID=?",
+                "DELETE FROM ATTENDANCE WHERE STU_ID=?",
+                "DELETE FROM REGISTER WHERE STU_ID=?",
+                "DELETE FROM STUDENT WHERE STU_ID=?"
             };
 
             for (String q : sqlList) {
@@ -96,7 +96,7 @@ public class StudentDAO {
             sql = "SELECT s.*, c.classcode, c.class_name "
                 + "FROM student s "
                 + "JOIN classroom c ON s.class_id = c.class_id "
-                + "WHERE s.stud_id=?";
+                + "WHERE s.stu_id=?";
 
             ps = con.prepareStatement(sql);
             ps.setInt(1, stuId);
@@ -105,11 +105,11 @@ public class StudentDAO {
 
             if (rs.next()) {
                 student = new Student();
-                student.setStuId(rs.getInt("stud_id"));
-                student.setStuName(rs.getString("stud_name"));
-                student.setStuIC(rs.getString("stud_ic"));
-                student.setStuAdd(rs.getString("stud_add"));
-                student.setStuPhoneNum(rs.getString("contact_no"));
+                student.setStuId(rs.getInt("stu_id"));
+                student.setStuName(rs.getString("stu_name"));
+                student.setStuIC(rs.getString("stu_ic"));
+                student.setStuAdd(rs.getString("stu_add"));
+                student.setStuPhoneNum(rs.getString("stu_phonenum"));
                 student.setClassId(rs.getInt("class_id"));
                 student.setStudentType(rs.getString("student_type"));
                 student.setClassCode(rs.getString("classcode"));
@@ -134,18 +134,18 @@ public class StudentDAO {
             sql = "SELECT s.*, c.classcode, c.class_name "
                 + "FROM student s "
                 + "JOIN classroom c ON s.class_id = c.class_id "
-                + "ORDER BY s.stud_id";
+                + "ORDER BY s.stu_id";
 
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 Student student = new Student();
-                student.setStuId(rs.getInt("stud_id"));
-                student.setStuName(rs.getString("stud_name"));
-                student.setStuIC(rs.getString("stud_ic"));
-                student.setStuAdd(rs.getString("stud_add"));
-                student.setStuPhoneNum(rs.getString("contact_no"));
+                student.setStuId(rs.getInt("stu_id"));
+                student.setStuName(rs.getString("stu_name"));
+                student.setStuIC(rs.getString("stu_ic"));
+                student.setStuAdd(rs.getString("stu_add"));
+                student.setStuPhoneNum(rs.getString("stu_phonenum"));
                 student.setClassId(rs.getInt("class_id"));
                 student.setStudentType(rs.getString("student_type"));
                 student.setClassCode(rs.getString("classcode"));
