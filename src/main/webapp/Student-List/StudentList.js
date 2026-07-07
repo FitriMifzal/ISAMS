@@ -38,11 +38,19 @@ function loadStudents() {
                     <td>${student.stuName}</td>
                     <td>${student.stuIC}</td>
                     <td>${student.classCode}</td>
-                    <td>
-                        <button class="btn-action btn-view" onclick="viewStudent(${student.stuId})">
-                            View
-                        </button>
-                    </td>
+					<td>
+					    <button class="btn-action btn-view" onclick="viewStudent(${student.stuId})">
+					        View
+					    </button>
+
+					    <button class="btn-action btn-update" onclick="updateStudent(${student.stuId})">
+					        Update
+					    </button>
+
+					    <button class="btn-action btn-delete" onclick="deleteStudent(${student.stuId})">
+					        Delete
+					    </button>
+					</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -80,6 +88,32 @@ function searchTable() {
 // go to the View Student page for the selected student
 function viewStudent(stuId) {
     window.location.href = "../ViewStudentServlet?id=" + stuId;
+}
+function updateStudent(stuId) {
+    window.location.href = "../Update-Student/updateStudent.html?id=" + stuId;
+}
+
+function deleteStudent(stuId) {
+    if (!confirm("Are you sure you want to delete this student?")) {
+        return;
+    }
+
+    fetch("../StudentController?action=delete&id=" + stuId, {
+        method: "POST"
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result.trim() === "success") {
+            alert("Student deleted successfully.");
+            loadStudents();
+        } else {
+            alert("Failed to delete student: " + result);
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Error deleting student.");
+    });
 }
 
 // utility functions

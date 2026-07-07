@@ -115,6 +115,17 @@ body {
     font-family: var(--font-family-main);
 }
 
+.filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-row .subject-selector {
+    margin-bottom: 0;
+}
+
 .subject-selector select {
     width: 100%;
     padding: 10px 12px;
@@ -410,4 +421,13 @@ body {
     .summary-grid {
         grid-template-columns: 1fr;
     }
+}
+.btn-save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-save:not(:disabled) {
+    opacity: 1;
+    cursor: pointer;
 }

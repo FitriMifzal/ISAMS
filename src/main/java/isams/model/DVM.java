@@ -3,17 +3,17 @@ package isams.model;
 public class DVM extends Student {
     private static final long serialVersionUID = 1L;
 
-    private String repeatPaper;
+    private int repeatPaper;
 
     public DVM() {
         super();
     }
 
-    public String getRepeatPaper() {
+    public int getRepeatPaper() {
         return repeatPaper;
     }
 
-    public void setRepeatPaper(String repeatPaper) {
+    public void setRepeatPaper(int repeatPaper) {
         this.repeatPaper = repeatPaper;
     }
 }

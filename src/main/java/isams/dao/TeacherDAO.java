@@ -20,7 +20,7 @@ public class TeacherDAO {
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "INSERT INTO teacher(t_name, t_ic, t_phonenum, t_email, t_pass) VALUES(?, ?, ?, ?, ?)";
+            sql = "INSERT INTO teacher(t_name, t_ic, t_phonenum, t_email, t_password) VALUES(?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, teacher.getTName());
@@ -44,7 +44,7 @@ public class TeacherDAO {
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_pass=? AND status='ACTIVE'";
+            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_password=? AND status='ACTIVE'";
             ps = con.prepareStatement(sql);
             ps.setString(1, ic);
             ps.setString(2, password);
@@ -58,7 +58,7 @@ public class TeacherDAO {
                 teacher.setTIC(rs.getString("t_ic"));
                 teacher.setTPhoneNum(rs.getString("t_phonenum"));
                 teacher.setTEmail(rs.getString("t_email"));
-                teacher.setTPass(rs.getString("t_pass"));
+                teacher.setTPass(rs.getString("t_password"));
             }
 
             con.close();
