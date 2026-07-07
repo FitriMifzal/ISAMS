@@ -15,17 +15,6 @@ import isams.dao.DVMDAO;
 import isams.model.SVM;
 import isams.model.DVM;
 
-/**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Handles all Student CRUD requests from frontend.
- *
- * GET  ?action=list          -> return all students
- * GET  ?action=get&id=5      -> return one student
- * POST action=create         -> insert a new student
- * POST action=update         -> update an existing student
- */
 
 @WebServlet("/StudentController")
 public class StudentController extends HttpServlet {
