@@ -405,3 +405,17 @@ td.locked-col {
         min-width: 150px;
     }
 }
+.absent-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+}
+
+.absent-box input {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}

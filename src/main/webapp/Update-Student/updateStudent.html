@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     
     <!-- Page CSS SELEPAS -->
-    <link rel="stylesheet" href="UpdateStudent.css">
+    <link rel="stylesheet" href="updateStudent.css">
 </head>
 <body>
     <!-- ════════════════════════════════════════════════════════
@@ -64,37 +64,69 @@
 
         <!-- MAIN CONTENT -->
         <main id="content">
-            <div class="form-card">
-                <h2>Update Student Profile</h2>
+			<div class="form-card">
+				<h2>Update Student Profile</h2>
 
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" placeholder="Enter student's full name">
-                </div>
+				<input type="hidden" id="stuId">
 
-                <div class="form-group">
-                    <label for="ic">IC Number</label>
-                    <input type="text" id="ic" placeholder="e.g. 031024045562">
-                </div>
+				<div class="form-group">
+					<label for="name">Full Name</label> <input id="name" type="text"
+						placeholder="Enter student's full name">
+				</div>
 
-                <div class="form-group">
-                    <label for="cls">Class</label>
-                    <input type="text" id="cls" placeholder="e.g. 2 DVM CDCS266">
-                </div>
+				<div class="form-group">
+					<label for="ic">IC Number</label> <input id="ic" type="text"
+						placeholder="e.g. 031024045562">
+				</div>
 
-                <div class="form-group">
-                    <label for="address">Home Address</label>
-                    <textarea id="address" placeholder="Enter residential address"></textarea>
-                </div>
+				<div class="form-group">
+					<label for="cls">Class</label> <select id="cls">
+						<option value="">-- Select Class --</option>
+					</select>
+				</div>
 
-                <div class="form-group">
-                    <label for="No">Contact No</label>
-                    <input type="text" id="No" placeholder="e.g. 0123456789">
-                </div>
+				<div class="form-group">
+					<label>Student Type</label> <input id="studentType" type="text"
+						readonly>
+				</div>
 
-                <button class="submit-btn" onclick="saveUpdate()">Update Student</button>
-            </div>
-        </main>
+				<div id="svmFields" style="display: none;">
+					<div class="form-group">
+						<label for="cgpaA">CGPA Academic</label> <input id="cgpaA"
+							type="number" step="0.01" min="0" max="4" placeholder="e.g. 3.50">
+					</div>
+
+					<div class="form-group">
+						<label for="cgpaV">CGPA Vocational</label> <input id="cgpaV"
+							type="number" step="0.01" min="0" max="4" placeholder="e.g. 3.70">
+					</div>
+				</div>
+
+				<div id="dvmFields" style="display: none;">
+					<div class="form-group">
+						<label for="repeatPaper">Repeat Paper</label> <input
+							id="repeatPaper" type="number" min="0" placeholder="e.g. 2">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="address">Home Address</label>
+					<textarea id="address" placeholder="Enter residential address"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="No">Contact No</label> <input id="No" type="text"
+						placeholder="e.g. 0123456789">
+				</div>
+
+				<div class="form-actions">
+					<button class="submit-btn" onclick="saveUpdate()">Update
+						Profile</button>
+					<button class="cancel-btn" type="button"
+						onclick="window.location.href='../Student-List/StudentList.html'">Cancel</button>
+				</div>
+			</div>
+		</main>
     </div>
 
     <!-- ════════════════════════════════════════════════════════
@@ -104,6 +136,6 @@
     <script src="../Sidebar/Sidebar.js"></script>
     
     <!-- Page JS SELEPAS -->
-    <script src="UpdateStudent.js"></script>
+    <script src="updateStudent.js"></script>
 </body>
 </html>

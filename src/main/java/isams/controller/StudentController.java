@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import isams.dao.StudentDAO;
 import isams.model.Student;
+import isams.dao.SVMDAO;
+import isams.dao.DVMDAO;
+import isams.model.SVM;
+import isams.model.DVM;
 
 /**
  * Author: [YOUR NAME HERE]
@@ -58,8 +62,10 @@ public class StudentController extends HttpServlet {
 
         if ("create".equals(action)) {
             handleCreate(request, out);
-        } else if ("update".equals(action)) {
+        }  else if ("update".equals(action)) {
             handleUpdate(request, out);
+        } else if ("delete".equals(action)) {
+            handleDelete(request, out);
         } else {
             out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
         }
@@ -130,6 +136,7 @@ public class StudentController extends HttpServlet {
     private void handleUpdate(HttpServletRequest request, PrintWriter out) {
         try {
             Student student = new Student();
+
             student.setStuId(Integer.parseInt(request.getParameter("stuId")));
             student.setStuName(request.getParameter("stuName"));
             student.setStuIC(request.getParameter("stuIC"));
@@ -140,13 +147,43 @@ public class StudentController extends HttpServlet {
 
             StudentDAO.updateStudent(student);
 
-            out.print("{\"status\":\"success\", \"message\":\"Student updated successfully\"}");
-        } catch (NumberFormatException e) {
-            out.print("{\"status\":\"error\", \"message\":\"Invalid id\"}");
+            if ("SVM".equalsIgnoreCase(student.getStudentType())) {
+                SVM svm = new SVM();
+                svm.setStuId(student.getStuId());
+                svm.setCgpaA(Double.parseDouble(request.getParameter("cgpaA")));
+                svm.setCgpaV(Double.parseDouble(request.getParameter("cgpaV")));
+
+                SVMDAO.upsertSVM(svm);
+            }
+
+            if ("DVM".equalsIgnoreCase(student.getStudentType())) {
+                DVM dvm = new DVM();
+                dvm.setStuId(student.getStuId());
+                dvm.setRepeatPaper(Integer.parseInt(request.getParameter("repeatPaper")));
+
+                DVMDAO.upsertDVM(dvm);
+            }
+
+            out.print("success");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            out.print("error");
         }
     }
+    private void handleDelete(HttpServletRequest request, PrintWriter out) {
+        try {
+            int stuId = Integer.parseInt(request.getParameter("id"));
 
-    // convert a Student object to a JSON string
+            StudentDAO.deleteStudent(stuId);
+
+            out.print("success");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            out.print("error");
+        }
+    }
     private String toJson(Student s) {
         StringBuilder json = new StringBuilder();
         json.append("{");

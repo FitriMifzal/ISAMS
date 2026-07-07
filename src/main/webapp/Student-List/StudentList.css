@@ -120,6 +120,29 @@
     background: #001f40;
     transform: translateY(-1px);
 }
+.btn-update {
+    background: #f59e0b;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.btn-update:hover {
+    background: #d97706;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+}
 
 /* ── TABLE STYLES ── */
 table {
@@ -164,6 +187,14 @@ tbody tr:nth-child(even) {
 
 tbody tr:nth-child(even):hover {
     background-color: #f1f5f9;
+}
+td:last-child {
+    min-width: 260px;
+    white-space: nowrap;
+}
+
+.btn-action {
+    margin: 3px;
 }
 
 /* ── NO DATA MESSAGE ── */

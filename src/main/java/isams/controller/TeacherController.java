@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import isams.dao.TeacherDAO;
 import isams.model.Teacher;
 
@@ -118,6 +119,12 @@ public class TeacherController extends HttpServlet {
         if (teacher == null) {
             out.print("{\"status\":\"error\", \"message\":\"Invalid email or password\"}");
         } else {
+
+            HttpSession session = request.getSession();
+
+            session.setAttribute("tId", teacher.getTId());
+            session.setAttribute("teacherName", teacher.getTName());
+
             StringBuilder json = new StringBuilder();
             json.append("{");
             json.append("\"status\":\"success\",");
@@ -125,6 +132,7 @@ public class TeacherController extends HttpServlet {
             json.append("\"tName\":\"").append(escapeJson(teacher.getTName())).append("\",");
             json.append("\"tEmail\":\"").append(escapeJson(teacher.getTEmail())).append("\"");
             json.append("}");
+
             out.print(json.toString());
         }
     }

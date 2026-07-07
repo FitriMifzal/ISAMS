@@ -9,54 +9,62 @@
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     
     <!-- Page CSS SELEPAS -->
-    <link rel="stylesheet" href="ViewStudent.css">
+    <link rel="stylesheet" href="viewStudent.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
-        <div class="logo-container">
-            <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
-        </div>
-
-        <div class="role-badge">Subject Teacher</div>
-
-        <div class="nav-menu">
-            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
-            <a href="../Student-List/StudentList.html" class="nav-item active">Student Profile</a>
-            
-            <button class="nav-item" data-submenu>
-                Subject
-                <span class="arrow">▾</span>
-            </button>
-            <div class="submenu">
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
-                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
-            </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
-        </div>
-        
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+    <div class="logo-container">
+        <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
     </div>
-
+ 
+    <div class="role-badge">Subject Teacher</div>
+ 
+    <div class="nav-menu">
+        
+        <!-- DASHBOARD (untuk semua roles) -->
+        <a class="nav-item" href="../Dashboard/Dashboard.html">Dashboard</a>
+ 
+        <!-- TEACHER ACCOUNT — Hanya untuk Penyelaras Intervensi -->
+        <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+ 
+        <!-- STUDENT CLASS (untuk semua roles) -->
+        <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+ 
+        <!-- STUDENT PROFILE (untuk semua roles) -->
+        <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+ 
+        <!-- SUBJECT (dengan submenu berbeda per role) -->
+        <button class="nav-item" data-submenu>
+            Subject
+            <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+            <!-- FOR SUBJECT TEACHER -->
+            <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+            <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+            
+            <!-- FOR PENYELARAS INTERVENSI -->
+            <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
+        </div>
+ 
+        <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+        <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
+ 
+    </div>
+   <button onclick="logoutUser()" class="nav-item logout">Logout</button>
+</div>
     <!-- ════════════════════════════════════════════════════════
          MAIN CONTENT AREA
          ════════════════════════════════════════════════════════ -->
     <div id="main-wrapper">
         <!-- HEADER -->
-        <header id="header">
+         <header id="header">
             <button class="header-title" onclick="toggleSidebar()">
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
             
-            <!-- USER PROFILE AREA (icon + name) -->
-            <div class="user-profile" onclick="toggleProfile()">
+           <div class="user-profile" onclick="window.location.href='../Profile/Profile.html'">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
             </div>
@@ -65,7 +73,7 @@
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="view-card">
-                <h2>Student Details</h2>
+                <h2>Student Profile</h2>
 
                 <div class="detail-row">
                     <div class="detail-label">Full Name</div>
@@ -102,8 +110,7 @@
          ════════════════════════════════════════════════════════ -->
     <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
-    <!-- Page JS SELEPAS -->
-    <script src="ViewStudent.js"></script>
+    <script src="../Header/Header.js"></script>
+    <script src="viewStudent.js?v=5"></script>
 </body>
 </html>

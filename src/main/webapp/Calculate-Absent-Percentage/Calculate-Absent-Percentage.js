@@ -1,50 +1,121 @@
 /* ============================================================
    CALCULATE-ABSENT-PERCENTAGE.JS — Page-specific logic
-   User profile initialization handled by Sidebar.js
+   Profile functions handled by Sidebar.js
    ============================================================ */
 
-// Student Master Database
-const studentDatabase = [
-    { name: "AUMAN BIN ABIDEN", id: "2023122119" },
-    { name: "ARISHA REENA BINTI AZMAL RAHIM", id: "2023112805" },
-    { name: "ILYA SYAHIRAH BT HAIDI", id: "2023112709" },
-    { name: "MUHAMMAD SYAZANI BIN AHMAD", id: "2023126582" },
-    { name: "NUR AINA INSYIRAH BT ROSLAN", id: "2023118834" },
-    { name: "NUR ALIYAH BINTI RAZALI", id: "2023117621" },
-    { name: "NUR FARHANA BINTI ZULKIFLI", id: "2023119045" },
-    { name: "NURUL AIN BINTI HAMID", id: "2023115503" },
-    { name: "SITI HAJAR BINTI MOHD NOOR", id: "2023120167" },
-    { name: "WAN HAZIQ BIN WAN AZMAN", id: "2023123412" }
-];
 
+alert("JS BARU LOAD");
+let studentDatabase = [];
 let selectedStudent = null;
 
-/* ── PAGE INITIALIZATION ── */
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
+    sessionStorage.setItem('profile_return_url', window.location.href);
+
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/Create-Account.html";
         return;
     }
 
-    loadDefaultRows();
+    loadClasses();
+    loadSubjects();
 });
 
 function loadDefaultRows() {
+
     const tbody = document.getElementById("calcBody");
     tbody.innerHTML = "";
 
-    // Default sample data
-    const initialSampleData = [
-        { name: "AUMAN BIN ABIDEN", id: "2023122119", attended: 19, absent: 1, rate: "95.0", isBarred: false, code: "TRC501" },
-        { name: "ARISHA REENA BINTI AZMAL RAHIM", id: "2023112805", attended: 20, absent: 0, rate: "100.0", isBarred: false, code: "TRC501" },
-        { name: "ILYA SYAHIRAH BT HAIDI", id: "2023112709", attended: 15, absent: 5, rate: "75.0", isBarred: true, code: "TRC501" },
-        { name: "MUHAMMAD SYAZANI BIN AHMAD", id: "2023126582", attended: 20, absent: 0, rate: "100.0", isBarred: false, code: "TRC501" }
-    ];
+    fetch("../AbsentRecordController")
+        .then(response => response.json())
+        .then(data => {
 
-    initialSampleData.forEach(item => {
-        addRowToTable(item);
-    });
+            studentDatabase = [];
+
+            data.forEach(item => {
+
+                studentDatabase.push({
+                    name: item.name,
+                    id: item.id
+                });
+
+                addRowToTable(item);
+            });
+
+        })
+        .catch(error => console.error(error));
+}
+function loadClasses() {
+    console.log("loadClasses() dipanggil");
+
+    fetch("/ISAMS/ClassroomController?action=list")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Class:", data);
+
+            let select = document.getElementById("classSelect");
+            console.log(select);
+
+            select.innerHTML = `<option value="">-- Select Class --</option>`;
+
+            data.forEach(cls => {
+                const option = document.createElement("option");
+                option.value = cls.classId;
+                option.textContent = cls.className;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => console.log(err));
+}
+
+function loadSubjects() {
+    console.log("loadSubjects() dipanggil");
+
+    fetch("/ISAMS/SubjectController?action=list")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Subject:", data);
+
+            let select = document.getElementById("subjectSelect");
+
+            select.innerHTML = `<option value="">-- Select Subject --</option>`;
+
+            data.forEach(sub => {
+                const option = document.createElement("option");
+                option.value = sub.subId;
+                option.textContent = sub.subName;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => console.log(err));
+}
+function loadMatchedStudents() {
+    let classId = document.getElementById("classSelect").value;
+    let subId = document.getElementById("subjectSelect").value;
+
+    if (classId === "" || subId === "") {
+        document.getElementById("calcBody").innerHTML = "";
+        return;
+    }
+
+    fetch("/ISAMS/AbsentRecordController?classId=" + classId + "&subId=" + subId)
+        .then(response => response.json())
+        .then(data => {
+            let tbody = document.getElementById("calcBody");
+            tbody.innerHTML = "";
+
+            data.forEach(item => {
+                addRowToTable({
+                    name: item.studName,
+                    id: item.studId,
+                    attended: item.attendedHours,
+                    absent: item.absentHours,
+                    rate: item.attendanceRate,
+                    isBarred: item.barred,
+                    code: item.subName
+                });
+            });
+        })
+        .catch(error => console.error("Absent record error:", error));
 }
 
 function addRowToTable(item) {
@@ -77,10 +148,6 @@ function addRowToTable(item) {
     tbody.appendChild(tr);
 }
 
-/* ════════════════════════════════════════════════════════
-   SEARCH STUDENT
-════════════════════════════════════════════════════════ */
-
 function searchStudent() {
     const inputID = document.getElementById("searchStudentID").value.trim();
     const msgElement = document.getElementById("searchMessage");
@@ -91,11 +158,8 @@ function searchStudent() {
     if (selectedStudent) {
         msgElement.style.color = "#28a745";
         msgElement.innerHTML = `✅ Student Found: ${selectedStudent.name}`;
-
         document.getElementById("targetStudentName").textContent = selectedStudent.name;
         inputSection.style.display = "block";
-
-        // Reset form
         document.getElementById("hoursAbsent").value = "";
         document.getElementById("totalContactHours").value = "";
     } else {
@@ -104,10 +168,6 @@ function searchStudent() {
         inputSection.style.display = "none";
     }
 }
-
-/* ════════════════════════════════════════════════════════
-   PROCESS CALCULATION
-════════════════════════════════════════════════════════ */
 
 function processSelectedCalculation() {
     if (!selectedStudent) return;
@@ -119,7 +179,6 @@ function processSelectedCalculation() {
     const absentHours = parseInt(hoursAbsentInput);
     const totalHours = parseInt(totalContactInput);
 
-    // Validation
     if (isNaN(absentHours) || isNaN(totalHours) || totalHours <= 0 || absentHours < 0) {
         alert("Please ensure 'Hours Absent' and 'Total Contact Hours' are filled with valid values.");
         return;
@@ -130,13 +189,11 @@ function processSelectedCalculation() {
         return;
     }
 
-    // Calculate
     const attendedHours = totalHours - absentHours;
     const attendancePercentage = ((attendedHours / totalHours) * 100).toFixed(1);
     const absentRate = (absentHours / totalHours) * 100;
     const isBarred = absentRate >= 20.0;
 
-    // Update or add row
     const statusClass = isBarred ? "badge-absent" : "badge-present";
     const statusText = isBarred ? "BARRED (Attendance Failed)" : "ELIGIBLE (Exam Allowed)";
 
@@ -173,10 +230,6 @@ function processSelectedCalculation() {
         tbody.appendChild(tr);
     }
 }
-
-/* ════════════════════════════════════════════════════════
-   GENERATE PDF LETTER
-════════════════════════════════════════════════════════ */
 
 function generateLetterPDF(type, name, id, course, attended, absent, displayPercent) {
     const todayDate = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -248,27 +301,9 @@ function generateLetterPDF(type, name, id, course, attended, absent, displayPerc
             </div>
             <script>
                 window.onload = function() { window.print(); setTimeout(function() { window.close(); }, 500); };
-            <\/script>
+            </script>
         </body>
         </html>
     `);
     printWindow.document.close();
-}
-
-/* ════════════════════════════════════════════════════════
-   UTILITY FUNCTIONS
-════════════════════════════════════════════════════════ */
-
-function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
-}
+	}

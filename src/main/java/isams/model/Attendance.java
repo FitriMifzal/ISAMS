@@ -1,52 +1,11 @@
 package isams.model;
 
-import java.io.Serializable;
-import java.sql.Date;
-
-public class Attendance implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private int attendanceId;
-    private Date date;
-    private String absentReasonLetter;
-    private String attendanceRecord;
+public class Attendance {
     private int classSessId;
-    private int stuId;
-
-    public Attendance() {
-    }
-
-    public int getAttendanceId() {
-        return attendanceId;
-    }
-
-    public void setAttendanceId(int attendanceId) {
-        this.attendanceId = attendanceId;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getAbsentReasonLetter() {
-        return absentReasonLetter;
-    }
-
-    public void setAbsentReasonLetter(String absentReasonLetter) {
-        this.absentReasonLetter = absentReasonLetter;
-    }
-
-    public String getAttendanceRecord() {
-        return attendanceRecord;
-    }
-
-    public void setAttendanceRecord(String attendanceRecord) {
-        this.attendanceRecord = attendanceRecord;
-    }
+    private int studId;
+    private String studName;
+    private String studIC;
+    private boolean absent;
 
     public int getClassSessId() {
         return classSessId;
@@ -56,11 +15,35 @@ public class Attendance implements Serializable {
         this.classSessId = classSessId;
     }
 
-    public int getStuId() {
-        return stuId;
+    public int getStudId() {
+        return studId;
     }
 
-    public void setStuId(int stuId) {
-        this.stuId = stuId;
+    public void setStudId(int studId) {
+        this.studId = studId;
+    }
+
+    public String getStudName() {
+        return studName;
+    }
+
+    public void setStudName(String studName) {
+        this.studName = studName;
+    }
+
+    public String getStudIC() {
+        return studIC;
+    }
+
+    public void setStudIC(String studIC) {
+        this.studIC = studIC;
+    }
+
+    public boolean isAbsent() {
+        return absent;
+    }
+
+    public void setAbsent(boolean absent) {
+        this.absent = absent;
     }
 }
