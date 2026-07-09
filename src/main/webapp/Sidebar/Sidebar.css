@@ -1,9 +1,3 @@
-/* ============================================================
-   SIDEBAR.CSS — Master stylesheet untuk sidebar + header
-   SEMUA font styling refer ke file ini je
-   Letakkan di <head> SEBELUM dashboard.css
-   ============================================================ */
-
 :root {
     /* ── LAYOUT VARIABLES ── */
     --sidebar-width: 280px;
@@ -94,9 +88,11 @@ body {
     flex-direction: column;
     gap: 4px;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: hidden;  /* BUANG SCROLLBAR */
 }
 
+/* BUANG SCROLLBAR STYLING - TAK PERLU LAGI */
+/* 
 .nav-menu::-webkit-scrollbar {
     width: 6px;
 }
@@ -114,6 +110,7 @@ body {
 .nav-menu::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.3);
 }
+*/
 
 /* ── NAV ITEM ── */
 .nav-item {

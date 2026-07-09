@@ -12,51 +12,51 @@
     <link rel="stylesheet" href="StudentClass.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
+     
         <div class="role-badge">Subject Teacher</div>
-
+     
         <div class="nav-menu">
+            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item active">Student Class</a>
+     
+            <!-- TEACHER ACCOUNT -->
+            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-            
+     
+            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
             </button>
             <div class="submenu">
-                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
-        
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
-
-    <!-- ════════════════════════════════════════════════════════
-         MAIN CONTENT AREA
-         ════════════════════════════════════════════════════════ -->
-    <div id="main-wrapper">
-        <!-- HEADER -->
-        <header id="header">
+ <div id="main-wrapper">
+        
+         <header id="header">
             <button class="header-title" onclick="toggleSidebar()">
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
             
-            <!-- USER PROFILE AREA (icon + name) -->
-            <div class="user-profile" onclick="toggleProfile()">
+           <div class="user-profile" onclick="window.location.href='../Profile/Profile.html'">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
             </div>
@@ -65,11 +65,14 @@
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="content-card">
-                <div class="header-row">
-                    <h1>Student Class</h1>
+                <h1 class="page-title">Classroom</h1>
+                <p class="page-description">Manage all classrooms and view their details. Click "Create" to add a new classroom or "Update" to update existing ones.</p>
+                <div class="orange-bar"></div>
+
+                <!-- CREATE BUTTON — RIGHT ALIGNED, ABOVE TABLE -->
+                <div class="button-row">
                     <button class="btn-create" onclick="window.location.href='../Create-Student-Class/CreateStudentClass.html'">Create</button>
                 </div>
-                <div class="orange-bar"></div>
 
                 <table>
                     <thead>
@@ -91,8 +94,7 @@
          ════════════════════════════════════════════════════════ -->
     <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
-    <!-- Page JS SELEPAS -->
+    <script src="../Header/Header.js"></script>
     <script src="StudentClass.js"></script>
 </body>
 </html>

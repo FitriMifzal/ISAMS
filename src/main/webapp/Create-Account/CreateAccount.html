@@ -3,95 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KV Student Attendance System</title>
+    <title>Create Account | KV Student Management</title>
+    
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     <link rel="stylesheet" href="CreateAccount.css">
 </head>
 <body>
-    <div class="login-container">
-        <a class="back-arrow" id="backBtn" onclick="showLogin()">&#10229;</a>
-        <div class="logo">
+    <div id="sidebar">
+        <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
-        <div id="login-section" style="max-width: 350px; margin: 0 auto;">
-            <h2>Login</h2>
-            <div class="role-selection">
-                <label class="role-option">
-                    <input type="radio" name="loginRole" value="Teacher" checked onchange="handleRoleChange()"> Teacher
-                </label>
-                <label class="role-option">
-                    <input type="radio" name="loginRole" value="Penyelaras Intervensi" onchange="handleRoleChange()"> Penyelaras Intervensi
-                </label>
+     
+        <div class="role-badge">Admin Penyelaras</div>
+     
+        <div class="nav-menu">
+            <!-- DASHBOARD -->
+            <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
+     
+            <!-- TEACHER ACCOUNT — Active for this page -->
+            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item active" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
+            <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+     
+            <!-- SUBJECT -->
+            <button class="nav-item" data-submenu>
+                Subject
+                <span class="arrow">▾</span>
+            </button>
+            <div class="submenu">
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            <div class="input-group">
-                <label id="loginIDLabel">IC Number</label>
-                <input type="text" id="loginID" placeholder="Enter your IC Number">
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <div class="password-container">
-                    <input type="password" id="loginPass" placeholder="Enter password">
-                    <button type="button" class="toggle-password" id="toggleLoginPass" onclick="togglePasswordVisibility('loginPass', 'toggleLoginPass')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                            <line x1="1" y1="1" x2="23" y2="23"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <button class="btn-kv" onclick="checkLogin()">LOGIN</button>
-            <div class="link-reg">Don't have an account? <a href="javascript:void(0);" onclick="showRegistration()">Register here</a></div>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
+    </div>
 
-        <div id="registration-section">
-            <h2>Teacher Registration</h2>
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Full Name</label>
-                    <input type="text" id="regName" placeholder="Enter Full Name">
-                </div>
-                <div class="input-group">
-                    <label>IC Number</label>
-                    <input type="text" id="regIC" placeholder="IC Number">
-                </div>
-                <div class="input-group">
-                    <label>Phone</label>
-                    <input type="text" id="regPhone" placeholder="Phone No.">
-                </div>
-                <div class="input-group full-width">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="Email">
-                </div>
-                <div class="input-group full-width">
-                    <label>Password</label>
-                    <div class="password-container">
-                        <input type="password" id="regPass" placeholder="Create Password">
-                        <button type="button" class="toggle-password" id="toggleRegPass" onclick="togglePasswordVisibility('regPass', 'toggleRegPass')">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </button>
+    <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <div class="form-card">
+                <h2 class="page-title">Create Teacher Account</h2>
+                <p class="page-description">Enter the teacher's details below. All fields are required.</p>
+                <div class="title-underline"></div>
+
+                <form id="createForm" onsubmit="handleForm(event)">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label for="t_name">Full Name</label>
+                        <input type="text" id="t_name" placeholder="Enter teacher's full name" required>
                     </div>
-                </div>
-                <div class="full-width">
-                    <button class="btn-kv" onclick="askConfirmation()">CREATE ACCOUNT</button>
-                </div>				
+
+                    <!-- IC Number -->
+                    <div class="form-group">
+                        <label for="t_ic">IC Number</label>
+                        <input type="text" id="t_ic" placeholder="e.g. 900101011234" required>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="t_email">Email Address</label>
+                        <input type="email" id="t_email" placeholder="e.g. teacher@school.edu" required>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="t_phonenum">Contact Number</label>
+                        <input type="text" id="t_phonenum" placeholder="e.g. 0123456789">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="t_pass">Password</label>
+                        <input type="password" id="t_pass" placeholder="Enter a secure password" required>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="window.location.href='../Delete-Account/DeleteAccount.html'">Cancel</button>
+                        <button type="submit" class="btn-submit">Confirm</button>
+                    </div>
+                </form>
             </div>
-        </div>
+        </main>
     </div>
 
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <h3 style="color: var(--kv-primary);">Confirm Creation?</h3>
-            <p>Do you want to proceed with creating this teacher account?</p>
-            <div class="modal-btns">
-                <button class="btn-confirm" onclick="processConfirm()">Confirm</button>
-                <button class="btn-cancel" onclick="processCancel()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- SCRIPTS -->
+    <script src="../Sidebar/Sidebar.js"></script>
+    <script src="../Header/Header.js"></script>
     <script src="CreateAccount.js"></script>
 </body>
 </html>

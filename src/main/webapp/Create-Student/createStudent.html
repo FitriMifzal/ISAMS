@@ -12,38 +12,42 @@
     <link rel="stylesheet" href="createStudent.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
-        <div class="role-badge">Subject Teacher</div>
-
+     
+        <div class="role-badge">Admin Penyelaras</div>
+     
         <div class="nav-menu">
+            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+     
+            <!-- TEACHER ACCOUNT — Active for this page -->
+            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item active" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-            
+     
+            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
             </button>
             <div class="submenu">
-                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
-        
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
-
     <!-- ════════════════════════════════════════════════════════
          MAIN CONTENT AREA
          ════════════════════════════════════════════════════════ -->
@@ -65,48 +69,59 @@
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="form-card">
-                <h2>Create Student Profile</h2>
+                <h2 class="page-title">Create Student</h2>
+                <p class="page-description">Enter the student's details below. All fields are required.</p>
+                <div class="title-underline"></div>
 
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input id="name" type="text" placeholder="Enter student's full name">
-                </div>
+                <form id="createForm" onsubmit="handleForm(event)">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label for="stu_name">Full Name</label>
+                        <input type="text" id="stu_name" placeholder="Enter student's full name" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="ic">IC Number</label>
-                    <input id="ic" type="text" placeholder="e.g. 031024045562">
-                </div>
+                    <!-- IC Number -->
+                    <div class="form-group">
+                        <label for="stu_ic">IC Number</label>
+                        <input type="text" id="stu_ic" placeholder="e.g. 900101011234" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="cls">Class</label>
-                    <select id="cls">
-                        <option value="">-- Select Class --</option>
-                    </select>
-                </div>
+                    <!-- Address - DIUBAH KEPADA TEXTAREA UNTUK LEBIH BESAR -->
+                    <div class="form-group">
+                        <label for="stu_add">Address</label>
+                        <textarea id="stu_add" placeholder="Enter student's address" rows="4"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="studentType">Student Type</label>
-                    <select id="studentType">
-                        <option value="">-- Select Type --</option>
-                        <option value="SVM">SVM</option>
-                        <option value="DVM">DVM</option>
-                    </select>
-                </div>
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="stu_phonenum">Contact Number</label>
+                        <input type="text" id="stu_phonenum" placeholder="e.g. 0123456789">
+                    </div>
 
-                <div class="form-group">
-                    <label for="address">Home Address</label>
-                    <textarea id="address" placeholder="Enter residential address"></textarea>
-                </div>
+                    <!-- Class ID (Dropdown) -->
+                    <div class="form-group">
+                        <label for="class_id">Class</label>
+                        <select id="class_id" required>
+                            <option value="">-- Select Class --</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="No">Contact No</label>
-                    <input id="No" type="text" placeholder="e.g. 0123456789">
-                </div>
+                    <!-- Student Type - SVM or DVM -->
+                    <div class="form-group">
+                        <label for="student_type">Student Type</label>
+                        <select id="student_type" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="SVM">SVM</option>
+                            <option value="DVM">DVM</option>
+                        </select>
+                    </div>
 
-                <div class="form-actions">
-                    <button class="submit-btn" onclick="saveStudent()">Save Profile</button>
-                    <button class="cancel-btn" type="button" onclick="window.location.href='../Student-List/StudentList.html'">Cancel</button>
-                </div>
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="window.location.href='../Student-List/StudentList.html'">Cancel</button>
+                        <button type="submit" class="btn-submit">Confirm</button>
+                    </div>
+                </form>
             </div>
         </main>
     </div>

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // load classes into the Class dropdown
 function loadClassDropdown() {
-    const clsSelect = document.getElementById("cls");
+    const clsSelect = document.getElementById("class_id");
 
     fetch("../ClassroomController?action=list")
         .then(response => response.json())
@@ -31,41 +31,99 @@ function loadClassDropdown() {
         });
 }
 
-// save student - called by Save Profile button
-function saveStudent() {
-    const name = document.getElementById("name").value.trim();
-    const ic = document.getElementById("ic").value.trim();
-    const cls = document.getElementById("cls").value;
-    const studentType = document.getElementById("studentType").value;
-    const address = document.getElementById("address").value.trim();
-    const contactNo = document.getElementById("No").value.trim();
+/* ────────────────────────────────────────────────────────
+   HANDLE FORM SUBMISSION
+────────────────────────────────────────────────────────── */
+function handleForm(event) {
+    event.preventDefault();
 
-    // check if all fields filled
-    if (!name || !ic || !cls || !studentType || !address || !contactNo) {
-        alert("Error: Please fill in all student details before saving.");
+    const stu_name = document.getElementById('stu_name').value.trim();
+    const stu_ic = document.getElementById('stu_ic').value.trim();
+    const stu_add = document.getElementById('stu_add').value.trim();
+    const stu_phonenum = document.getElementById('stu_phonenum').value.trim();
+    const class_id = document.getElementById('class_id').value;
+    const student_type = document.getElementById('student_type').value;
+
+    // ✅ VALIDATION 1: stu_name - NOT NULL
+    if (!stu_name) {
+        alert('Please enter the student\'s full name!');
         return;
     }
 
-    // IC Number must be 12 digits
-    if (ic.length !== 12 || isNaN(ic)) {
-        alert("Error: IC Number must contain exactly 12 digits.");
+    // ✅ VALIDATION 2: stu_name - VARCHAR2(100) max length
+    if (stu_name.length > 100) {
+        alert('Student name cannot exceed 100 characters!');
         return;
     }
 
-    // Contact No should be valid
-    if (isNaN(contactNo) || contactNo.length < 10) {
-        alert("Error: Contact number must contain at least 10 digits.");
+    // ✅ VALIDATION 3: stu_ic - NOT NULL
+    if (!stu_ic) {
+        alert('Please enter the student\'s IC Number!');
         return;
     }
 
-    // build form data to send to controller
+    // ✅ VALIDATION 4: stu_ic - must be numeric only
+    if (!/^\d+$/.test(stu_ic)) {
+        alert('IC Number must contain only numbers!');
+        return;
+    }
+
+    // ✅ VALIDATION 5: stu_ic - VARCHAR2(20) max length
+    if (stu_ic.length > 20) {
+        alert('IC Number cannot exceed 20 characters!');
+        return;
+    }
+
+    // ✅ VALIDATION 6: stu_ic - minimum 10 characters (Malaysian IC standard)
+    if (stu_ic.length < 10) {
+        alert('IC Number must be at least 10 characters!');
+        return;
+    }
+
+    // ✅ VALIDATION 7: stu_add - VARCHAR2(255) max length (if provided)
+    if (stu_add && stu_add.length > 255) {
+        alert('Address cannot exceed 255 characters!');
+        return;
+    }
+
+    // ✅ VALIDATION 8: stu_phonenum - VARCHAR2(20) max length (if provided)
+    if (stu_phonenum && stu_phonenum.length > 20) {
+        alert('Phone number cannot exceed 20 characters!');
+        return;
+    }
+
+    // ✅ VALIDATION 9: stu_phonenum - must be numeric only (if provided)
+    if (stu_phonenum && !/^\d+$/.test(stu_phonenum)) {
+        alert('Phone number must contain only numbers!');
+        return;
+    }
+
+    // ✅ VALIDATION 10: class_id - NOT NULL
+    if (!class_id) {
+        alert('Please select a class!');
+        return;
+    }
+
+    // ✅ VALIDATION 11: student_type - NOT NULL
+    if (!student_type) {
+        alert('Please select a student type!');
+        return;
+    }
+
+    // ✅ VALIDATION 12: student_type - must be 'SVM' or 'DVM'
+    if (!['SVM', 'DVM'].includes(student_type)) {
+        alert('Student type must be either "SVM" or "DVM"!');
+        return;
+    }
+
+    // Build form data untuk hantar ke controller (Eclipse backend)
     const formData = new URLSearchParams();
-    formData.append("stuName", name);
-    formData.append("stuIC", ic);
-    formData.append("classId", cls);
-    formData.append("studentType", studentType);
-    formData.append("stuAdd", address);
-    formData.append("stuPhoneNum", contactNo);
+    formData.append("stuName", stu_name);
+    formData.append("stuIC", stu_ic);
+    formData.append("classId", class_id);
+    formData.append("studentType", student_type);
+    formData.append("stuAdd", stu_add || "");
+    formData.append("stuPhoneNum", stu_phonenum || "");
 
     fetch("../StudentController?action=create", {
         method: "POST",
@@ -89,17 +147,10 @@ function saveStudent() {
     });
 }
 
-// utility functions
+/* ────────────────────────────────────────────────────────
+   TOGGLE PROFILE
+────────────────────────────────────────────────────────── */
 function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
+    sessionStorage.setItem('profile_return_url', window.location.href);
+    window.location.href = '../Profile-Details/Profile-Details.html';
 }

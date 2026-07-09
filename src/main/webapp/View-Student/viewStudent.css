@@ -27,29 +27,47 @@
     flex: 1;
     overflow-y: auto;
     background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 /* ── VIEW CARD ── */
 .view-card {
     background: white;
-    padding: 30px;
+    padding: 40px;
     border-radius: 12px;
     max-width: 700px;
+    width: 100%;
     margin: 0 auto;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     border: 1px solid #e2e8f0;
     font-family: var(--font-family-main);
+    box-sizing: border-box;
 }
 
 .view-card h2 {
     font-size: 24px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: var(--kv-primary);
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 15px;
-    text-align: center;
     font-weight: 700;
     font-family: var(--font-family-main);
+}
+
+/* ── TITLE STYLING ── */
+.page-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.title-underline {
+    height: 4px;
+    background-color: #ff5722;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
 }
 
 /* ── DETAIL ROW ── */
@@ -83,14 +101,19 @@
 }
 
 /* ── BACK BUTTON ── */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
 .btn-back {
     display: inline-block;
-    margin-top: 20px;
     background: var(--kv-primary);
     color: white;
-    padding: 12px 25px;
+    padding: 12px 30px;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 700;
     border: none;
     cursor: pointer;
@@ -119,12 +142,15 @@
 
     .view-card {
         padding: 20px;
+        border-radius: 10px;
     }
 
     .view-card h2 {
         font-size: 20px;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
+    }
+
+    .page-title {
+        font-size: 22px;
     }
 
     .detail-row {
@@ -140,6 +166,10 @@
 
     .detail-value {
         padding-left: 0;
+    }
+
+    .form-actions {
+        flex-direction: column;
     }
 
     .btn-back {

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | KV Student Management</title>
+    
+    <!-- Sidebar CSS -->
+    <link rel="stylesheet" href="../Sidebar/Sidebar.css">
+    
+    <!-- Profile CSS -->
+    <link rel="stylesheet" href="Profile.css">
+</head>
+<body>
+   <div id="sidebar">
+    <div class="logo-container">
+        <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
+    </div>
+ 
+    <div class="role-badge">Subject Teacher</div>
+ 
+    <div class="nav-menu">
+        
+        <!-- DASHBOARD (untuk semua roles) -->
+        <a class="nav-item" href="../Dashboard/Dashboard.html">Dashboard</a>
+ 
+        <!-- TEACHER ACCOUNT — Hanya untuk Penyelaras Intervensi -->
+        <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+ 
+        <!-- STUDENT CLASS (untuk semua roles) -->
+        <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+ 
+        <!-- STUDENT PROFILE (untuk semua roles) -->
+        <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
+ 
+        <!-- SUBJECT (dengan submenu berbeda per role) -->
+        <button class="nav-item" data-submenu>
+            Subject
+            <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+            <!-- FOR SUBJECT TEACHER -->
+            <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+            <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+            
+            <!-- FOR PENYELARAS INTERVENSI -->
+            <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
+        </div>
+ 
+        <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+        <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
+ 
+    </div>
+   <button onclick="logoutUser()" class="nav-item logout">Logout</button>
+</div>
+
+ <div id="main-wrapper">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="header-title" onclick="toggleSidebar()">
+                <span class="menu-icon">☰</span>
+                <span class="header-text">Intervention: Student Management System</span>
+            </button>
+            
+            <!-- USER PROFILE AREA (icon + name) — tekan untuk kembali ke page asal -->
+            <div class="user-profile" onclick="toggleProfile()">
+                <span id="user-fullname">User Name</span>
+                <div id="user-initial" class="user-initial-icon">?</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="content">
+            <div class="profile-container">
+                <!-- Profile Header with Avatar -->
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <!-- Avatar shows initials from T_Name (database) -->
+                        <div class="profile-avatar" id="profileAvatar">?</div>
+                        <div class="profile-status">
+                            <!-- Status from database (archive status, etc) -->
+                            <span class="status-dot" id="statusDot"></span>
+                            <span class="status-text" id="statusText">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="profile-header-info">
+                        <h1 id="profileDisplayName">User Name</h1>
+                        <p class="profile-role" id="profileDisplayRole">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Profile Details Card -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <h2>Personal Information</h2>
+                    </div>
+
+                    <div class="profile-details-grid">
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <label>Full Name</label>
+                                <input type="text" id="T_Name" class="profile-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <label>IC Number</label>
+                                <input type="text" id="T_IC" disabled>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <label>Email Address</label>
+                                <input type="email" id="T_Email" class="profile-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <label>Phone Number</label>
+                                <input type="text" id="T_PhoneNum" class="profile-input" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTION BUTTONS — di bawah, dekat dengan tangan user (UX: Fitts's Law) -->
+                    <div class="profile-actions">
+                        <button id="btn-edit-profile" class="btn btn-edit" onclick="enableEdit()">Edit Profile</button>
+                        <button id="btn-cancel-profile" class="btn btn-cancel" onclick="disableEdit()" style="display:none;">Discard Changes</button>
+                        <button id="btn-save-profile" class="btn btn-save" onclick="updateProfile()" style="display:none;">Save Changes</button>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="../Sidebar/Sidebar.js"></script>
+    <script src="../Header/Header.js"></script>
+    <script src="Profile.js"></script>
+</body>
+</html>

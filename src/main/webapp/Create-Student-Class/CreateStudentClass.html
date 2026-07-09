@@ -3,50 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Student Class | KV Student Management</title>
+    <title>Classroom | KV Student Management</title>
     
-    <!-- Sidebar CSS DULU (defines all variables) -->
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
-    
-    <!-- Page CSS SELEPAS -->
     <link rel="stylesheet" href="CreateStudentClass.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
+     
         <div class="role-badge">Subject Teacher</div>
-
+     
         <div class="nav-menu">
+            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item active">Student Class</a>
+     
+            <!-- TEACHER ACCOUNT -->
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-            
+     
+            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
             </button>
             <div class="submenu">
-                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
-        
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
-
-    <!-- ════════════════════════════════════════════════════════
-         MAIN CONTENT AREA
-         ════════════════════════════════════════════════════════ -->
+    
+    <!-- MAIN CONTENT -->
     <div id="main-wrapper">
         <!-- HEADER -->
         <header id="header">
@@ -55,7 +55,6 @@
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
             
-            <!-- USER PROFILE AREA (icon + name) -->
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
@@ -65,8 +64,9 @@
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="form-card">
-                <h2>Create Student Class</h2>
-                <div class="orange-bar"></div>
+                <h2 class="page-title">Classroom</h2>
+                <p class="page-description">Create a new classroom by entering the class code and class name.</p>
+                <div class="title-underline"></div>
 
                 <form id="createForm" onsubmit="handleForm(event)">
                     <div class="form-group">
@@ -88,13 +88,9 @@
         </main>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCRIPTS
-         ════════════════════════════════════════════════════════ -->
-    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <!-- SCRIPTS -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
-    <!-- Page JS SELEPAS -->
+    <script src="../Header/Header.js"></script>
     <script src="CreateStudentClass.js"></script>
 </body>
 </html>

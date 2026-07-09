@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interventive: Student Attendance Management System</title>
+    <link rel="stylesheet" href="LandingPage.css">
+</head>
+<body>
+    <!-- HEADER with logo and login icon -->
+    <header class="landing-header">
+        <div class="header-container">
+            <div class="header-left">
+                <!-- ============================================================ -->
+                <!-- LOGO KOLEJ VOKASIONAL - Pastikan fail ini wujud di folder image -->
+                <!-- ============================================================ -->
+                <img src="../image/Logo Kolej Vokasional.jpeg" alt="Kolej Vokasional Logo" class="header-logo">
+                <div class="header-content">
+                    <h1 class="header-title">Interventive: Student Attendance Management System</h1>
+                    <p class="header-subtitle">ISAMS</p>
+                </div>
+            </div>
+            <div class="login-wrapper">
+                <a href="../login/login.html" class="login-icon" title="Login Account">
+                    <svg class="icon-login" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <!-- Navigation message below login icon -->
+                <div class="login-message">Please login to use ISAMS features</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="landing-main">
+        
+        <!-- HERO SECTION with school image and animated welcome text -->
+        <section class="hero-section">
+            <div class="hero-image-wrapper">
+                <!-- ============================================================ -->
+                <!-- GAMBAR WELCOMING - Pastikan fail ini wujud di folder image     -->
+                <!-- Guna gambar landscape (lebar > tinggi) untuk hasil terbaik    -->
+                <!-- ============================================================ -->
+                <img src="kv_pic_3.jpg" alt="Kolej Vokasional Datuk Seri Abu Zahar Isnin" class="hero-image">
+                <div class="welcome-overlay">
+                    <h2 class="welcome-text" id="welcomeText">
+                        <span class="word"><span class="char">W</span><span class="char">e</span><span class="char">l</span><span class="char">c</span><span class="char">o</span><span class="char">m</span><span class="char">e</span></span>
+                        <span class="word"><span class="char">t</span><span class="char">o</span></span>
+                        <span class="word"><span class="char">I</span><span class="char">n</span><span class="char">t</span><span class="char">e</span><span class="char">r</span><span class="char">v</span><span class="char">e</span><span class="char">n</span><span class="char">t</span><span class="char">i</span><span class="char">v</span><span class="char">e</span><span class="char">:</span></span>
+                        <span class="word"><span class="char">S</span><span class="char">t</span><span class="char">u</span><span class="char">d</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></span>
+                        <span class="word"><span class="char">A</span><span class="char">t</span><span class="char">t</span><span class="char">e</span><span class="char">n</span><span class="char">d</span><span class="char">a</span><span class="char">n</span><span class="char">c</span><span class="char">e</span></span>
+                        <span class="word"><span class="char">M</span><span class="char">a</span><span class="char">n</span><span class="char">a</span><span class="char">g</span><span class="char">e</span><span class="char">m</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></span>
+                        <span class="word"><span class="char">S</span><span class="char">y</span><span class="char">s</span><span class="char">t</span><span class="char">e</span><span class="char">m</span></span>
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISION & MISSION SECTION -->
+        <section class="vision-mission-section">
+            
+            <!-- VISION CARD -->
+            <div class="vision-card">
+                <h3>Vision</h3>
+                <p>Pioneer of excellent technical and vocational education</p>
+            </div>
+
+            <!-- MISSION CARD -->
+            <div class="mission-card">
+                <h3>Mission</h3>
+                <p>Empowering technical and vocational education through quality program implementation</p>
+            </div>
+
+        </section>
+
+        <!-- SYSTEM FUNCTIONS SECTION (replacing CTA) -->
+        <section class="functions-section">
+            <h3>System Functions</h3>
+            <div class="functions-grid">
+                <div class="function-item">
+                    <div class="function-icon">&#128203;</div>
+                    <h4>Attendance Tracking</h4>
+                    <p>Record and monitor student attendance in real-time with automated tracking.</p>
+                </div>
+                <div class="function-item">
+                    <div class="function-icon">&#128202;</div>
+                    <h4>Analytics &amp; Reports</h4>
+                    <p>Generate comprehensive reports and analytics on student attendance patterns.</p>
+                </div>
+                <div class="function-item">
+                    <div class="function-icon">&#128100;</div>
+                    <h4>Student Management</h4>
+                    <p>Maintain and update student records with ease and efficiency.</p>
+                </div>
+                <div class="function-item">
+                    <div class="function-icon">&#128187;</div>
+                    <h4>Teacher Portal</h4>
+                    <p>Allow subject teachers to enroll the subjects they teach and manage their assigned students.</p>
+                </div>
+            </div>
+            <a href="../Create-Account/CreateAccount.html" class="btn-primary">Get Started</a>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+        <p>&copy; 2026 Kolej Vokasional Datuk Seri Abu Zahar Isnin. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chars = document.querySelectorAll('.char');
+            let delay = 0;
+            const startDelay = 300;
+            
+            chars.forEach((char, index) => {
+                char.style.opacity = '0';
+                char.style.transform = 'translateX(60px)';
+                char.style.display = 'inline-block';
+                
+                setTimeout(() => {
+                    char.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    char.style.opacity = '1';
+                    char.style.transform = 'translateX(0)';
+                }, startDelay + (index * 60));
+            });
+        });
+    </script>
+</body>
+</html>

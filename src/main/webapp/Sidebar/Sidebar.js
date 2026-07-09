@@ -1,10 +1,3 @@
-/* ============================================================
-   SIDEBAR.JS — Toggle submenu, sidebar, dan user profile
-   Semua pages guna file ni je untuk consistent styling
-   Letakkan: <script src="../Sidebar/Sidebar.js"></script>
-   di bahagian bawah <body> setiap page.
-   ============================================================ */
-
 (function () {
 
     /* ── INIT SUBMENU ── */
@@ -26,77 +19,96 @@
         });
     }
 
-    /* ── INIT USER PROFILE (Generate initials dari name) ── */
-    function initUserProfile() {
-        var userNameEl = document.getElementById('user-fullname');
-        var userInitialEl = document.getElementById('user-initial');
+    /* ── INIT ROLE ── */
+    function initRole() {
+        var role = localStorage.getItem('active_role') || 'Teacher';
 
-        if (userNameEl && userInitialEl) {
-            var userName = userNameEl.textContent.trim();
-
-            // Generate initials dari name
-            var initials = userName
-                .split(' ')
-                .map(function(word) { return word.charAt(0).toUpperCase(); })
-                .join('')
-                .substring(0, 2);
-
-            // Set initial (fallback to ? jika empty)
-            userInitialEl.textContent = initials || '?';
+        var roleBadgeEl = document.querySelector('.role-badge');
+        if (roleBadgeEl) {
+            // FIXED: Show "Teacher" instead of "Subject Teacher"
+            roleBadgeEl.textContent = role;
         }
+
+        document.querySelectorAll('.nav-item[data-role]').forEach(function (item) {
+            var allowedRole = item.getAttribute('data-role');
+            if (allowedRole !== role) {
+                item.style.display = 'none';
+            } else {
+                item.style.display = '';
+            }
+        });
+
+        document.querySelectorAll('.sub-nav-item[data-role]').forEach(function (item) {
+            var allowedRole = item.getAttribute('data-role');
+            if (allowedRole !== role) {
+                item.style.display = 'none';  // HIDE kalau role tak match
+            } else {
+                item.style.display = '';
+            }
+        });
     }
 
-    /* ── TOGGLE SIDEBAR (untuk mobile & menu button) ── */
-    window.toggleSidebar = function () {
-        var sidebar = document.getElementById('sidebar');
-        var mainWrapper = document.getElementById('main-wrapper');
-        var header = document.getElementById('header');
+    /* ── SET ACTIVE NAV ITEM (based on current page) ── */
+    function setActiveNav() {
+        var currentPage = window.location.pathname.toLowerCase();
+        currentPage = decodeURIComponent(currentPage);
+        
+        // Remove all active classes first
+        document.querySelectorAll('.nav-item').forEach(function (item) {
+            item.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.sub-nav-item').forEach(function (item) {
+            item.classList.remove('active');
+        });
 
-        if (sidebar) sidebar.classList.toggle('collapsed');
-        if (mainWrapper) mainWrapper.classList.toggle('collapsed');
-        if (header) header.classList.toggle('collapsed');
-    };
-
-    /* ── TOGGLE PROFILE (untuk dashboard profile section) ── */
-    window.toggleProfile = function () {
-        var profileSection = document.getElementById('profile-section');
-        var welcomeCard = document.getElementById('welcome-card');
-
-        if (profileSection) {
-            var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-            profileSection.style.display = isHidden ? 'block' : 'none';
-        }
-        if (welcomeCard) {
-            var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-            welcomeCard.style.display = isHidden ? 'none' : 'block';
-        }
-    };
+        // Find and set active class based on current page
+        document.querySelectorAll('.nav-item, .sub-nav-item').forEach(function (item) {
+            var href = item.getAttribute('href');
+            
+            if (href) {
+                // Normalize paths for comparison
+                href = href.toLowerCase();
+                
+                // Remove "../" to get clean path (e.g., "enroll-subject/enroll-subject.html")
+                var cleanHref = href.replace(/\.\.\//g, '').replace(/^\//, '');
+                cleanHref = decodeURIComponent(cleanHref);
+                
+                // Check if current page matches this link
+                // This is more specific - won't match partial paths
+                if (currentPage.includes(cleanHref)) {
+                    item.classList.add('active');
+                    
+                    // If sub-item is active, open parent submenu
+                    if (item.classList.contains('sub-nav-item')) {
+                        var submenu = item.closest('.submenu');
+                        if (submenu) {
+                            var parentBtn = submenu.previousElementSibling;
+                            if (parentBtn && parentBtn.classList.contains('nav-item')) {
+                                parentBtn.classList.add('open');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     /* ── LOGOUT ── */
-    /* Calls LogoutServlet first to invalidate the real server-side session,
-       then clears browser storage and redirects. Falls back to clearing
-       storage anyway even if the server call fails, so the user is never
-       stuck unable to log out. */
     window.logoutUser = function () {
-        if (!confirm('Are you sure you want to logout?')) {
-            return;
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '../LandingPage/LandingPage.html';
         }
-
-        fetch("../LogoutServlet", { method: "POST" })
-            .catch(function (error) {
-                console.error("Logout request failed:", error);
-            })
-            .finally(function () {
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = "../Create-Account/CreateAccount.html";
-            });
+        // If user clicks Cancel, do nothing (stay on current page)
     };
 
-    /* ── JALANKAN SELEPAS DOM SIAP ── */
+    /* ── INIT ── */
     function init() {
         initSubmenu();
-        initUserProfile();
+        initRole();
+        setActiveNav();  // ← SET ACTIVE NAV ITEM
     }
 
     if (document.readyState === 'loading') {

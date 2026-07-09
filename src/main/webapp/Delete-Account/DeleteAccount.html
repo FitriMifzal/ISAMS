@@ -7,44 +7,45 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Sidebar CSS DULU (defines all variables) -->
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
-    
-    <!-- Page CSS SELEPAS -->
     <link rel="stylesheet" href="DeleteAccount.css">
 </head>
 <body>
-    <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
-         ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
+     
         <div class="role-badge">Subject Teacher</div>
-
+     
         <div class="nav-menu">
+            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item active">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+     
+            <!-- TEACHER ACCOUNT -->
+            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi" active>Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-            
+     
+            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
             </button>
             <div class="submenu">
-                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
-        
-        <a href="../Create-Account/CreateAccount" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
 
     <!-- ════════════════════════════════════════════════════════
@@ -58,8 +59,7 @@
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
             
-            <!-- USER PROFILE AREA (icon + name) -->
-            <div class="user-profile" onclick="toggleProfile()">
+            <div class="user-profile" onclick="window.location.href='../Profile/Profile.html'">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
             </div>
@@ -70,12 +70,31 @@
             <div class="content-card">
                 <div id="successMsg"><strong>Success!</strong> Account has been archived.</div>
                 
-                <h2>TEACHER ACCOUNTS</h2>
-                <p style="text-align: center; color: #666; font-size: 14px;">Select account to archive or manage.</p>
+                <!-- Layout Header -->
+                <h2 class="page-title">Teacher Accounts</h2>
+                <p class="page-description">View teacher details or archive inactive accounts. Click "Archive" to disable an account.</p>
+                <div class="title-underline"></div>
 
-                <!-- Account List - populated dynamically from database -->
-                <div id="accountList">
-                    <p style="text-align:center; color:#999;">Loading...</p>
+                <!-- Create Button -->
+                <div class="button-row">
+                    <button class="btn-create" onclick="window.location.href='../Create-Account/CreateAccount.html'">Create</button>
+                </div>
+
+                <!-- Table Container -->
+                <div id="accountList" class="table-container">
+                    <table class="teacher-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">No.</th>
+                                <th style="width: 50%;">Teacher Name</th>
+                                <th style="width: 20%;">IC Number</th>
+                                <th style="width: 20%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Teachers will be loaded dynamically from database -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
@@ -96,19 +115,15 @@
             </div>
             
             <div class="btn-group">
-                <button class="btn-confirm" onclick="executeArchive()">Confirm Archive</button>
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            	<button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="executeArchive()">Archive</button>
+               
             </div>
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCRIPTS
-         ════════════════════════════════════════════════════════ -->
-    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
-    <!-- Page JS SELEPAS -->
+    <script src="../Header/Header.js"></script>
     <script src="DeleteAccount.js"></script>
 </body>
 </html>

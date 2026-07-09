@@ -1,6 +1,5 @@
 /* ============================================================
    STUDENTCLASS.CSS — Content area styling
-   Letakkan di <head> SELEPAS sidebar.css
    ============================================================ */
 
 #main-wrapper,
@@ -38,28 +37,38 @@
     box-sizing: border-box;
 }
 
-/* ── HEADER ROW ── */
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 32px;
-    font-weight: bold;
+/* ── PAGE TITLE ── */
+.page-title {
     color: #1e293b;
-    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
     font-family: var(--font-family-main);
 }
 
+/* ── PAGE DESCRIPTION ── */
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+    font-family: var(--font-family-main);
+}
+
+/* ── TITLE UNDERLINE ── */
 /* ── ORANGE BAR ── */
 .orange-bar {
     width: 100%;
     height: 4px;
-    background-color: var(--kv-orange);
-    margin: 0 0 20px 0;
+    background-color: #ff5722;
+    margin: 10px 0 30px 0;
+}
+/* ── BUTTON ROW - RIGHT ALIGNED ── */
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
 }
 
 /* ── CREATE BUTTON ── */
@@ -122,7 +131,7 @@ tbody tr:hover {
 
 /* ── UPDATE BUTTON ── */
 .btn-update {
-    background: #007bff;
+    background: #003366;
     color: white;
     padding: 6px 12px;
     border: none;
@@ -135,9 +144,9 @@ tbody tr:hover {
 }
 
 .btn-update:hover {
-    background: #0056b3;
+    background: #002347;
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 35, 71, 0.3);
 }
 
 /* ── NO DATA MESSAGE ── */
@@ -164,14 +173,12 @@ tbody tr td[colspan] {
         padding: 15px;
     }
 
-    .header-row {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
+    .page-title {
+        font-size: 22px;
     }
 
-    h1 {
-        font-size: 24px;
+    .page-description {
+        font-size: 13px;
     }
 
     .btn-create {

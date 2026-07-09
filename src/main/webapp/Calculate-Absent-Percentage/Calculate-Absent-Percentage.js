@@ -3,8 +3,6 @@
    Profile functions handled by Sidebar.js
    ============================================================ */
 
-
-alert("JS BARU LOAD");
 let studentDatabase = [];
 let selectedStudent = null;
 

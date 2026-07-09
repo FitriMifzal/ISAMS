@@ -1,17 +1,24 @@
-// STUDENTLIST.JS
-// User profile init handled by Sidebar.js
+/* ============================================================
+   STUDENTLIST.JS — Page-specific logic
+   Gabungan VSCode + Eclipse (Tanpa Delete)
+   ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // check if user is logged in
+    // Check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 
+    sessionStorage.setItem('profile_return_url', window.location.href);
+    // Load students from database
     loadStudents();
 });
 
-// load students from database
+/* ────────────────────────────────────────────────────────
+   LOAD STUDENTS FROM DATABASE
+────────────────────────────────────────────────────────── */
+
 function loadStudents() {
     const tableBody = document.getElementById("studentTableBody");
     tableBody.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
@@ -33,24 +40,23 @@ function loadStudents() {
             students.forEach((student, index) => {
                 const row = document.createElement("tr");
 
+                // Use database field names
+                const studentName = student.stuName || 'N/A';
+                const studentIc = student.stuIC || 'N/A';
+                const studentClass = student.classCode || student.className || 'N/A';
+                const studentId = student.stuId || index;
+
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${student.stuName}</td>
-                    <td>${student.stuIC}</td>
-                    <td>${student.classCode}</td>
-					<td>
-					    <button class="btn-action btn-view" onclick="viewStudent(${student.stuId})">
-					        View
-					    </button>
-
-					    <button class="btn-action btn-update" onclick="updateStudent(${student.stuId})">
-					        Update
-					    </button>
-
-					    <button class="btn-action btn-delete" onclick="deleteStudent(${student.stuId})">
-					        Delete
-					    </button>
-					</td>
+                    <td>${studentName}</td>
+                    <td>${studentIc}</td>
+                    <td>${studentClass}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-table-action btn-view" onclick="viewStudent(${studentId})">View</button>
+                            <button class="btn-table-action btn-update" onclick="updateStudent(${studentId})">Update</button>
+                        </div>
+                    </td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -61,14 +67,16 @@ function loadStudents() {
         });
 }
 
-// filter table rows based on search input
+/* ────────────────────────────────────────────────────────
+   SEARCH FUNCTIONALITY
+────────────────────────────────────────────────────────── */
+
 function searchTable() {
     const input = document.getElementById("searchInput");
     const filter = input.value.toUpperCase();
     const table = document.querySelector("table");
     const rows = table.getElementsByTagName("tr");
 
-    // skip header row (index 0)
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
         if (cells.length === 0) continue;
@@ -85,48 +93,27 @@ function searchTable() {
     }
 }
 
-// go to the View Student page for the selected student
-function viewStudent(stuId) {
-    window.location.href = "../ViewStudentServlet?id=" + stuId;
-}
-function updateStudent(stuId) {
-    window.location.href = "../Update-Student/updateStudent.html?id=" + stuId;
-}
+/* ────────────────────────────────────────────────────────
+   VIEW STUDENT
+────────────────────────────────────────────────────────── */
 
-function deleteStudent(stuId) {
-    if (!confirm("Are you sure you want to delete this student?")) {
-        return;
-    }
-
-    fetch("../StudentController?action=delete&id=" + stuId, {
-        method: "POST"
-    })
-    .then(response => response.text())
-    .then(result => {
-        if (result.trim() === "success") {
-            alert("Student deleted successfully.");
-            loadStudents();
-        } else {
-            alert("Failed to delete student: " + result);
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        alert("Error deleting student.");
-    });
+function viewStudent(studentId) {
+    window.location.href = "../View-Student/viewStudent.html?id=" + studentId;
 }
 
-// utility functions
+/* ────────────────────────────────────────────────────────
+   UPDATE STUDENT
+────────────────────────────────────────────────────────── */
+
+function updateStudent(studentId) {
+    window.location.href = "../Update-Student/UpdateStudent.html?id=" + studentId;
+}
+
+/* ────────────────────────────────────────────────────────
+   TOGGLE PROFILE
+────────────────────────────────────────────────────────── */
+
 function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
+    sessionStorage.setItem('profile_return_url', window.location.href);
+    window.location.href = '../Profile-Details/Profile-Details.html';
 }

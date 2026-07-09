@@ -1,41 +1,91 @@
-function showRegistration() {
-    document.getElementById('login-section').style.display = 'none';
-    document.getElementById('registration-section').style.display = 'block';
-    document.getElementById('backBtn').style.display = 'block';
+/* ============================================================
+   CREATEACCOUNT.JS — Create Teacher Account Logic
+   Connects to database via TeacherController Servlet
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', function () {
+    sessionStorage.setItem('profile_return_url', window.location.href);
+});
+
+/* ────────────────────────────────────────────────────────
+   TOGGLE PROFILE - Navigate to profile page
+────────────────────────────────────────────────────────── */
+function toggleProfile() {
+    sessionStorage.setItem('profile_return_url', window.location.href);
+    window.location.href = '../Profile-Details/Profile-Details.html';
 }
 
-function showLogin() {
-    document.getElementById('registration-section').style.display = 'none';
-    document.getElementById('login-section').style.display = 'block';
-    document.getElementById('backBtn').style.display = 'none';
-}
+/* ────────────────────────────────────────────────────────
+   HANDLE FORM SUBMISSION - Register Teacher to Database
+────────────────────────────────────────────────────────── */
 
-function askConfirmation() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pass = document.getElementById('regPass').value;
-    if (!name || !email || !pass) {
-        alert("Please fill in Name, Email and Password!");
+function handleForm(event) {
+    event.preventDefault();
+
+    const t_name = document.getElementById("t_name").value.trim();
+    const t_ic = document.getElementById("t_ic").value.trim();
+    const t_email = document.getElementById("t_email").value.trim();
+    const t_phonenum = document.getElementById("t_phonenum").value.trim();
+    const t_pass = document.getElementById("t_pass").value.trim();
+
+    // ✅ VALIDATION 1: Check each required field
+    if (!t_name) {
+        alert("Please fill in the Full Name field!");
         return;
     }
-    document.getElementById('confirmModal').style.display = 'block';
-}
+    if (!t_ic) {
+        alert("Please fill in the IC Number field!");
+        return;
+    }
+    if (!t_email) {
+        alert("Please fill in the Email Address field!");
+        return;
+    }
+    if (!t_pass) {
+        alert("Please fill in the Password field!");
+        return;
+    }
 
-function processConfirm() {
-    const ic = document.getElementById('regIC').value.trim();
-    const name = document.getElementById('regName').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pass = document.getElementById('regPass').value;
+    // ✅ VALIDATION 2: IC Number must be numeric only and 10-20 digits
+    if (!/^\d+$/.test(t_ic) || t_ic.length < 10 || t_ic.length > 20) {
+        alert("Error: IC Number must contain only numbers, between 10-20 digits.");
+        return;
+    }
 
+    // ✅ VALIDATION 3: Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(t_email)) {
+        alert("Error: Please enter a valid email address.");
+        return;
+    }
+
+    // ✅ VALIDATION 4: Phone number (if provided) must be numeric
+    if (t_phonenum && (!/^\d+$/.test(t_phonenum) || t_phonenum.length < 10)) {
+        alert("Error: Contact number must contain only numbers, minimum 10 digits.");
+        return;
+    }
+
+    // ✅ VALIDATION 5: Password minimum 6 characters
+    if (t_pass.length < 6) {
+        alert("Error: Password must be at least 6 characters long.");
+        return;
+    }
+
+    // ── SEND TO DATABASE VIA TEACHERCONTROLLER ──
     const formData = new URLSearchParams();
-    formData.append("tName", name);
-    formData.append("tIC", ic);
-    formData.append("tPhoneNum", phone);
-    formData.append("tEmail", email);
-    formData.append("tPass", pass);
+    formData.append("action", "register");
+    formData.append("tName", t_name);
+    formData.append("tIC", t_ic);
+    formData.append("tPhoneNum", t_phonenum || "");
+    formData.append("tEmail", t_email);
+    formData.append("tPass", t_pass);
 
-    fetch("../TeacherController?action=register", {
+    // Disable submit button to prevent double submission
+    const submitBtn = document.querySelector('.btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Registering...';
+
+    fetch("../TeacherController", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -44,108 +94,23 @@ function processConfirm() {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('confirmModal').style.display = 'none';
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm';
+
         if (data.status === "success") {
-            alert("Account created successfully!");
-            showLogin();
+            alert("Teacher account created successfully!");
+            // ✅ FIXED: Use correct folder name with capital letters
+            window.location.href = "../Delete-Account/DeleteAccount.html";
         } else {
-            alert("Error: " + data.message);
+            alert("Error: " + (data.message || "Failed to create account"));
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        document.getElementById('confirmModal').style.display = 'none';
-        alert("Failed to connect to server. Please try again.");
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm';
+        alert("Failed to connect to server. Please make sure the server is running.");
     });
-}
-
-// switch input label depending on selected login role
-function handleRoleChange() {
-    const selectedRole = document.querySelector('input[name="loginRole"]:checked').value;
-    const loginIDLabel = document.getElementById('loginIDLabel');
-    const loginIDInput = document.getElementById('loginID');
-
-    if (selectedRole === "Penyelaras Intervensi") {
-        loginIDLabel.textContent = "ID Number";
-        loginIDInput.placeholder = "Enter your ID Number";
-    } else {
-        loginIDLabel.textContent = "IC Number";
-        loginIDInput.placeholder = "Enter your IC Number";
-    }
-}
-
-function togglePasswordVisibility(inputId, buttonId) {
-    const passInput = document.getElementById(inputId);
-    const buttonEl = document.getElementById(buttonId);
-
-    if (passInput.type === "password") {
-        passInput.type = "text";
-        buttonEl.innerHTML = `
-            <svg viewBox="0 0 24 24">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-        `;
-    } else {
-        passInput.type = "password";
-        buttonEl.innerHTML = `
-            <svg viewBox="0 0 24 24">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                <line x1="1" y1="1" x2="23" y2="23"></line>
-            </svg>
-        `;
-    }
-}
-
-// login - Teacher role checks against real database
-function checkLogin() {
-    const inputID = document.getElementById('loginID').value.trim();
-    const inputPass = document.getElementById('loginPass').value;
-    const selectedRole = document.querySelector('input[name="loginRole"]:checked').value;
-
-    if (selectedRole === "Penyelaras Intervensi") {
-        // PI login kept as a fixed admin check for now
-        if (inputID.toUpperCase() === "ADMIN123" && inputPass === "PASSWORD123") {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('active_role', "Penyelaras Intervensi");
-            localStorage.setItem('active_name', "Admin Penyelaras");
-            window.location.href = "../Dashboard/Dashboard.html";
-        } else {
-            alert("Invalid Admin Credentials!");
-        }
-        return;
-    }
-
-    // Teacher role - real login against the database
-    const formData = new URLSearchParams();
-    formData.append("tIC", inputID);
-    formData.append("tPass", inputPass);
-
-    fetch("../LoginServlet", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData.toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('active_role', "Subject Teacher");
-            localStorage.setItem('active_name', data.tName);
-            localStorage.setItem('active_tId', data.tId);
-            window.location.href = "../Dashboard/Dashboard.html";
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Failed to connect to server. Please try again.");
-    });
-}
-
-function processCancel() {
-    document.getElementById('confirmModal').style.display = 'none';
 }

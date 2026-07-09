@@ -1,6 +1,6 @@
 /* ============================================================
-   DELETEACCOUNT.CSS — Content area styling
-   Letakkan di <head> SELEPAS sidebar.css
+   DELETEACCOUNT.CSS — FOR DATABASE INTEGRATION
+   Larger fonts for older users
    ============================================================ */
 
 #main-wrapper,
@@ -27,28 +27,85 @@
     flex: 1;
     overflow-y: auto;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     background-color: #f4f7f6;
 }
 
-/* ── CONTENT CARD ── */
+/* ── MAIN CONTENT CARD ── */
 .content-card {
     background: white;
     width: 100%;
-    max-width: 600px;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-top: 8px solid var(--kv-primary);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     box-sizing: border-box;
 }
 
-.content-card h2 {
-    color: var(--kv-primary);
-    text-align: center;
-    text-transform: uppercase;
-    margin: 0 0 15px 0;
+/* ── PAGE TITLE ── */
+.page-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: left;
+    margin: 0 0 8px 0;
     font-family: var(--font-family-main);
+}
+
+/* ── PAGE DESCRIPTION/MESSAGE ── */
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+/* ── TITLE UNDERLINE ── */
+.title-underline {
+    height: 4px;
+    background-color: #ff5722;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
+}
+
+/* ════════════════════════════════════════════════════════
+   CREATE BUTTON ROW
+   ════════════════════════════════════════════════════════ */
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.btn-create {
+    background: #f5572a;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-create:hover {
+    background: #e04d24;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 87, 41, 0.3);
+}
+
+/* ── LOADING MESSAGE ── */
+.loading-msg {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 /* ── SUCCESS MESSAGE ── */
@@ -63,100 +120,140 @@
     margin-bottom: 20px;
     font-family: var(--font-family-main);
     font-weight: 600;
+    font-size: 15px;
 }
 
-/* ── ACCOUNT ITEM ── */
-.account-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
+/* ── TABLE CONTAINER ── */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #cbd5e1;
+}
+
+.teacher-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
     font-family: var(--font-family-main);
 }
 
-.account-item:hover {
-    background: #f0f4f8;
-    border-color: var(--kv-primary);
+/* ── TABLE HEADERS ── */
+.teacher-table th {
+    background-color: #e2e8f0;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+    padding: 16px;
+    border-right: 1px solid #cbd5e1;
 }
 
-.account-item.archived {
-    background: #f9f9f9;
-    opacity: 0.6;
-    border-style: dashed;
+.teacher-table th:last-child {
+    border-right: none;
 }
 
-.account-item.archived .avatar-initial {
-    background: #9e9e9e;
-    border-color: #ccc;
+/* ── TABLE DATA CELLS ── */
+.teacher-table td {
+    padding: 16px;
+    vertical-align: middle;
+    font-size: 15px;
+    color: #334155;
+    border-bottom: 1px solid #cbd5e1;
+    border-right: 1px solid #cbd5e1;
 }
 
-.account-item.archived .acc-name {
-    color: #9e9e9e;
-    text-decoration: line-through;
+.teacher-table td:last-child {
+    border-right: none;
 }
 
-/* ── AVATAR INITIAL ── */
-.avatar-initial {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    background: var(--kv-primary);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 20px;
-    border: 2px solid var(--kv-orange);
-    text-transform: uppercase;
-    flex-shrink: 0;
-    transition: 0.3s;
-    font-family: var(--font-family-main);
+.account-row {
+    transition: background-color 0.2s ease;
 }
 
-/* ── ACCOUNT INFO ── */
-.acc-info {
-    flex-grow: 1;
+.account-row:hover {
+    background-color: #f8fafc;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .acc-name {
-    font-weight: bold;
-    color: #333;
-    font-family: var(--font-family-main);
+    font-weight: 500;
+    color: #334155;
+    text-align: left;
+    padding-left: 10px;
+    font-size: 15px;
 }
 
-.acc-id {
-    font-size: 12px;
-    color: #777;
-    font-family: var(--font-family-main);
+/* ── ACTION BUTTONS ── */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-table-action {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-archive-row {
+    background-color: #FFD700;
+    color: #000000;
+}
+
+.btn-archive-row:hover {
+    background-color: #FFC700;
+}
+
+/* ── ARCHIVED ROW STATE ── */
+.account-row.archived {
+    background-color: #f1f5f9;
+    opacity: 0.6;
+}
+
+.account-row.archived .acc-name {
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+.account-row.archived .btn-archive-row {
+    background-color: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .badge-archived {
     display: none;
     font-size: 10px;
-    background: #eee;
-    color: #666;
+    background: #64748b;
+    color: white;
     padding: 2px 8px;
     border-radius: 4px;
     margin-left: 10px;
     font-family: var(--font-family-main);
+    vertical-align: middle;
 }
 
-.account-item.archived .badge-archived {
+.account-row.archived .badge-archived {
     display: inline-block;
 }
 
-/* ── ACCOUNT ITEM ICON ── */
-.account-item i {
-    color: var(--kv-primary);
-    font-size: 20px;
-    transition: 0.3s;
+/* ── NO RESULTS MESSAGE ── */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 /* ── MODAL STYLES ── */
@@ -180,7 +277,7 @@
 .modal-content {
     background: white;
     padding: 30px;
-    border-radius: 15px;
+    border-radius: 8px;
     width: 90%;
     max-width: 400px;
     text-align: center;
@@ -190,122 +287,62 @@
 }
 
 .modal-content h3 {
-    color: var(--kv-primary);
+    color: #0f172a;
     margin: 15px 0;
-    font-family: var(--font-family-main);
+    font-size: 18px;
 }
 
 .modal-content p {
-    color: #666;
+    color: #64748b;
     margin: 10px 0;
-    font-size: 14px;
-    font-family: var(--font-family-main);
+    font-size: 15px;
 }
 
 .archive-icon-big {
     font-size: 50px;
-    color: var(--kv-orange);
+    color: #ff5722;
     margin-bottom: 15px;
 }
 
-/* ── BUTTON GROUP ── */
 .btn-group {
     display: flex;
     gap: 10px;
     justify-content: center;
     margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-button {
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-    transition: all 0.3s ease;
-    font-family: var(--font-family-main);
-    font-size: 14px;
 }
 
 .btn-confirm {
-    background: var(--kv-orange);
+    background: #ff5722;
     color: white;
-}
-
-.btn-confirm:hover {
-    background: #e64e1f;
-    transform: translateY(-2px);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: none;
+    font-size: 14px;
 }
 
 .btn-cancel {
-    background: #ccc;
-    color: #333;
-}
-
-.btn-cancel:hover {
-    background: #bbb;
-    transform: translateY(-2px);
-}
-
-.btn-back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px;
-    background: var(--kv-primary);
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    padding: 12px;
-    border-radius: 8px;
+    background: #cbd5e1;
+    color: #334155;
+    padding: 10px 20px;
+    border-radius: 4px;
     font-weight: bold;
-    transition: all 0.3s ease;
-    gap: 8px;
-    font-family: var(--font-family-main);
+    border: none;
+    font-size: 14px;
 }
 
-.btn-back:hover {
-    background: #001f40;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
-}
-
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-    #main-wrapper,
-    #main-content {
-        padding-top: 70px;
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
     }
-
-    #content,
-    #content-area {
-        padding: 15px;
+    .btn-table-action {
+        width: 100%;
     }
-
-    .content-card {
-        padding: 20px;
-    }
-
-    .account-item {
+    
+    .teacher-table th,
+    .teacher-table td {
         padding: 12px;
-        margin-bottom: 8px;
-    }
-
-    .avatar-initial {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-    }
-
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-    }
-
-    button {
-        padding: 8px 16px;
-        font-size: 13px;
+        font-size: 14px;
     }
 }

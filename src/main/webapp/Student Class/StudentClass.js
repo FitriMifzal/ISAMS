@@ -1,19 +1,23 @@
-// STUDENTCLASS.JS
-// User profile init handled by Sidebar.js
+/* ============================================================
+   STUDENTCLASS.JS — Page-specific logic
+   Gabungan VSCode + Eclipse
+   ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // check if user is logged in
+    // Check if user is logged in (dari Eclipse)
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 
-    // load classes into table
+    sessionStorage.setItem('profile_return_url', window.location.href);
+
+    // Load classes into table (dari Eclipse - database)
     loadClasses();
 
-    // check user role and adjust UI accordingly
-    const role = localStorage.getItem('active_role') || 'Subject Teacher';
-    if (role === 'Subject Teacher') {
+    // Check user role and adjust UI accordingly (dari VSCode)
+    const role = localStorage.getItem('active_role') || 'Teacher';
+    if (role === 'Teacher') {
         const createBtn = document.querySelector('.btn-create');
         if (createBtn) {
             createBtn.style.display = 'none';
@@ -21,7 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// load classes from database
+/* ────────────────────────────────────────────────────────
+   LOAD CLASSES FROM DATABASE (dari Eclipse)
+────────────────────────────────────────────────────────── */
+
 function loadClasses() {
     const table = document.getElementById("classTable");
     table.innerHTML = `<tr><td colspan="4">Loading...</td></tr>`;
@@ -39,13 +46,18 @@ function loadClasses() {
             classes.forEach((c, index) => {
                 const row = document.createElement("tr");
 
+                // Use classCode and className from database (dari Eclipse)
+                const displayClassId = c.classCode || 'N/A';
+                const displayClassName = c.className || 'N/A';
+                const classId = c.classId || index;
+
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${c.classCode}</td>
-                    <td>${c.className}</td>
+                    <td>${displayClassId}</td>
+                    <td>${displayClassName}</td>
                     <td>
-                        <button class="btn-update"
-                                onclick="window.location.href='../Update-Student-Class/UpdateStudentClass.html?id=${c.classId}'">
+                        <button class="btn-update" 
+                                onclick="window.location.href='../Update-Student-Class/UpdateStudentClass.html?id=${classId}'">
                             Update
                         </button>
                     </td>
@@ -59,17 +71,11 @@ function loadClasses() {
         });
 }
 
-// utility functions
-function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
+/* ────────────────────────────────────────────────────────
+   TOGGLE PROFILE (dari VSCode)
+────────────────────────────────────────────────────────── */
 
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
+function toggleProfile() {
+    sessionStorage.setItem('profile_return_url', window.location.href);
+    window.location.href = '../Profile-Details/Profile-Details.html';
 }
