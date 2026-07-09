@@ -13,6 +13,7 @@ public class Teacher implements Serializable {
     private String tPass;
     private Integer piId;
     private String status;
+    private String role;
 
     public Teacher() {
     }
@@ -79,5 +80,13 @@ public class Teacher implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

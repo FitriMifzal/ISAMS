@@ -32,44 +32,82 @@ public class LoginServlet extends HttpServlet {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
         PrintWriter out = response.getWriter();
 
-        String ic = request.getParameter("tIC");
-        String pass = request.getParameter("tPass");
+        String role = request.getParameter("role");
+        String tPass = request.getParameter("tPass");
 
-        // 1. verify credentials against the database
-        Teacher teacher = TeacherDAO.login(ic, pass);
+        Teacher teacher = null;
 
-        if (teacher == null) {
-            out.print("{\"status\":\"error\", \"message\":\"Invalid IC Number or password\"}");
+        if (role == null || tPass == null || role.trim().isEmpty() || tPass.trim().isEmpty()) {
+            out.print("{\"status\":\"error\", \"message\":\"Please fill in all fields\"}");
             out.flush();
             return;
         }
 
-        // 2. create a real server-side session for this teacher
-        HttpSession session = request.getSession(true); // true = create if not exists
+        if ("Penyelaras Intervensi".equals(role)) {
+            String piId = request.getParameter("piId");
+
+            if (piId == null || piId.trim().isEmpty()) {
+                out.print("{\"status\":\"error\", \"message\":\"Please enter your Penyelaras ID\"}");
+                out.flush();
+                return;
+            }
+
+            teacher = TeacherDAO.loginPI(piId, tPass);
+
+        } else if ("Teacher".equals(role)) {
+            String tIC = request.getParameter("tIC");
+
+            if (tIC == null || tIC.trim().isEmpty()) {
+                out.print("{\"status\":\"error\", \"message\":\"Please enter your IC Number\"}");
+                out.flush();
+                return;
+            }
+
+            teacher = TeacherDAO.loginTeacher(tIC, tPass);
+
+        } else {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid role selected\"}");
+            out.flush();
+            return;
+        }
+
+        if (teacher == null) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid ID, IC Number, or password\"}");
+            out.flush();
+            return;
+        }
+
+        HttpSession session = request.getSession(true);
         session.setAttribute("isLoggedIn", true);
         session.setAttribute("tId", teacher.getTId());
+        session.setAttribute("piId", teacher.getPiId());
         session.setAttribute("tName", teacher.getTName());
-        session.setAttribute("activeRole", "Subject Teacher");
+        session.setAttribute("tEmail", teacher.getTEmail());
+        session.setAttribute("activeRole", teacher.getRole());
 
-        // optional: session expires after 30 minutes of inactivity
-        session.setMaxInactiveInterval(30 * 60);
+        String piIdJson = teacher.getPiId() == null ? "null" : teacher.getPiId().toString();
 
-        // 3. return success + teacher info so the frontend can also update localStorage
-        StringBuilder json = new StringBuilder();
-        json.append("{");
-        json.append("\"status\":\"success\",");
-        json.append("\"tId\":").append(teacher.getTId()).append(",");
-        json.append("\"tName\":\"").append(escapeJson(teacher.getTName())).append("\"");
-        json.append("}");
+        String json = "{"
+                + "\"status\":\"success\","
+                + "\"tId\":" + teacher.getTId() + ","
+                + "\"piId\":" + piIdJson + ","
+                + "\"tName\":\"" + escapeJson(teacher.getTName()) + "\","
+                + "\"tEmail\":\"" + escapeJson(teacher.getTEmail()) + "\","
+                + "\"role\":\"" + escapeJson(teacher.getRole()) + "\""
+                + "}";
 
-        out.print(json.toString());
+        out.print(json);
         out.flush();
     }
 
     private String escapeJson(String value) {
-        if (value == null) return "";
+        if (value == null) {
+            return "";
+        }
+
         return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }

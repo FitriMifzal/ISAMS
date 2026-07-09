@@ -173,25 +173,38 @@ public class StudentController extends HttpServlet {
             out.print("error");
         }
     }
-    private String toJson(Student s) {
-        StringBuilder json = new StringBuilder();
-        json.append("{");
-        json.append("\"stuId\":").append(s.getStuId()).append(",");
-        json.append("\"stuName\":\"").append(escapeJson(s.getStuName())).append("\",");
-        json.append("\"stuIC\":\"").append(escapeJson(s.getStuIC())).append("\",");
-        json.append("\"stuAdd\":\"").append(escapeJson(s.getStuAdd())).append("\",");
-        json.append("\"stuPhoneNum\":\"").append(escapeJson(s.getStuPhoneNum())).append("\",");
-        json.append("\"classId\":").append(s.getClassId()).append(",");
-        json.append("\"studentType\":\"").append(escapeJson(s.getStudentType())).append("\",");
-        json.append("\"classCode\":\"").append(escapeJson(s.getClassCode())).append("\",");
-        json.append("\"className\":\"").append(escapeJson(s.getClassName())).append("\"");
-        json.append("}");
-        return json.toString();
+    private String toJson(Student student) {
+        String cgpaAJson = student.getCgpaA() == null ? "null" : student.getCgpaA().toString();
+        String cgpaVJson = student.getCgpaV() == null ? "null" : student.getCgpaV().toString();
+        String repeatPaperJson = student.getRepeatPaper() == null ? "null" : student.getRepeatPaper().toString();
+
+        return "{"
+                + "\"stuId\":" + student.getStuId() + ","
+                + "\"stuName\":\"" + escapeJson(student.getStuName()) + "\","
+                + "\"stuIC\":\"" + escapeJson(student.getStuIC()) + "\","
+                + "\"stuAdd\":\"" + escapeJson(student.getStuAdd()) + "\","
+                + "\"stuPhoneNum\":\"" + escapeJson(student.getStuPhoneNum()) + "\","
+                + "\"classId\":" + student.getClassId() + ","
+                + "\"classCode\":\"" + escapeJson(student.getClassCode()) + "\","
+                + "\"className\":\"" + escapeJson(student.getClassName()) + "\","
+                + "\"studentType\":\"" + escapeJson(student.getStudentType()) + "\","
+                + "\"cgpaA\":" + cgpaAJson + ","
+                + "\"cgpaV\":" + cgpaVJson + ","
+                + "\"repeatPaper\":" + repeatPaperJson
+                + "}";
     }
 
     // prevent broken JSON if text contains quotes
     private String escapeJson(String value) {
-        if (value == null) return "";
-        return value.replace("\\", "\\\\").replace("\"", "\\\"");
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

@@ -8,66 +8,67 @@ import isams.model.AbsentRecord;
 public class AbsentRecordDAO {
 
 	public static List<AbsentRecord> getAbsentRecordList(int classId, int subId) {
-        List<AbsentRecord> list = new ArrayList<>();
+	    List<AbsentRecord> list = new ArrayList<>();
 
-        String sql =
-            "SELECT s.STUD_ID, s.STUD_NAME, s.STUD_IC, " +
-            "sub.SUB_ID, sub.SUB_NAME, sub.CREDITHOURS, " +
-            "NVL(SUM(a.ATTENDANCERECORD),0) AS ABSENT_HOURS " +
-            "FROM REGISTER r " +
-            "JOIN STUDENT s ON r.STUD_ID = s.STUD_ID " +
-            "JOIN SUBJECT sub ON r.SUB_ID = sub.SUB_ID " +
-            "LEFT JOIN ATTENDANCE a ON a.STUD_ID = s.STUD_ID " +
-            "AND a.CLASS_ID = r.CLASS_ID " +
-            "AND a.CLASS_SESS_ID IN ( " +
-            "    SELECT cs.CLASS_SESS_ID FROM CLASS_SESSION cs " +
-            "    WHERE cs.SUB_ID = r.SUB_ID AND cs.CLASS_ID = r.CLASS_ID " +
-            ") " +
-            "WHERE r.CLASS_ID = ? AND r.SUB_ID = ? " +
-            "GROUP BY s.STUD_ID, s.STUD_NAME, s.STUD_IC, sub.SUB_ID, sub.SUB_NAME, sub.CREDITHOURS " +
-            "ORDER BY s.STUD_NAME";
+	    String sql =
+	        "SELECT s.STU_ID, s.STU_NAME, s.STU_IC, " +
+	        "       sub.SUB_ID, sub.SUB_NAME, sub.CREDITHOURS, " +
+	        "       NVL(SUM(a.HOURS), 0) AS ABSENT_HOURS " +
+	        "FROM REGISTER r " +
+	        "JOIN STUDENT s ON r.STU_ID = s.STU_ID " +
+	        "JOIN SUBJECT sub ON r.SUB_ID = sub.SUB_ID " +
+	        "LEFT JOIN CLASS_SESSION cs ON cs.SUB_ID = sub.SUB_ID " +
+	        "                         AND cs.CLASS_ID = s.CLASS_ID " +
+	        "LEFT JOIN ATTENDANCE a ON a.STU_ID = s.STU_ID " +
+	        "                      AND a.CLASS_SESS_ID = cs.CLASS_SESS_ID " +
+	        "WHERE s.CLASS_ID = ? " +
+	        "AND r.SUB_ID = ? " +
+	        "GROUP BY s.STU_ID, s.STU_NAME, s.STU_IC, " +
+	        "         sub.SUB_ID, sub.SUB_NAME, sub.CREDITHOURS " +
+	        "ORDER BY s.STU_NAME";
 
-        try {
-            Connection con = ConnectionManager.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, classId);
-            ps.setInt(2, subId);
-            ResultSet rs = ps.executeQuery();
+	    try (
+	        Connection con = ConnectionManager.getConnection();
+	        PreparedStatement ps = con.prepareStatement(sql)
+	    ) {
+	        ps.setInt(1, classId);
+	        ps.setInt(2, subId);
 
-            while (rs.next()) {
-                AbsentRecord ap = new AbsentRecord();
+	        ResultSet rs = ps.executeQuery();
 
-                int totalHours = rs.getInt("CREDITHOURS");
-                double absentHours = rs.getDouble("ABSENT_HOURS");
-                double attendedHours = totalHours - absentHours;
+	        while (rs.next()) {
+	            AbsentRecord record = new AbsentRecord();
 
-                double attendanceRate = 0;
-                if (totalHours > 0) {
-                    attendanceRate = ((double) attendedHours / totalHours) * 100;
-                }
+	            int totalHours = rs.getInt("CREDITHOURS");
+	            double absentHours = rs.getDouble("ABSENT_HOURS");
+	            double attendedHours = totalHours - absentHours;
 
-                double absentRate = 100 - attendanceRate;
+	            double attendanceRate = 0;
+	            if (totalHours > 0) {
+	                attendanceRate = (attendedHours / totalHours) * 100;
+	            }
 
-                ap.setStudId(rs.getInt("STUD_ID"));
-                ap.setStudName(rs.getString("STUD_NAME"));
-                ap.setStudIC(rs.getString("STUD_IC"));
-                ap.setSubId(rs.getInt("SUB_ID"));
-                ap.setSubName(rs.getString("SUB_NAME"));
-                ap.setTotalHours(totalHours);
-                ap.setAbsentHours(absentHours);
-                ap.setAttendedHours(attendedHours);
-                ap.setAttendanceRate(attendanceRate);
-                ap.setBarred(absentRate >= 20);
+	            double absentRate = 100 - attendanceRate;
+	            boolean barred = absentRate >= 20.0;
 
-                list.add(ap);
-            }
+	            record.setStudId(rs.getInt("STU_ID"));
+	            record.setStudName(rs.getString("STU_NAME"));
+	            record.setStudIC(rs.getString("STU_IC"));
+	            record.setSubId(rs.getInt("SUB_ID"));
+	            record.setSubName(rs.getString("SUB_NAME"));
+	            record.setTotalHours(totalHours);
+	            record.setAbsentHours(absentHours);
+	            record.setAttendedHours(attendedHours);
+	            record.setAttendanceRate(attendanceRate);
+	            record.setBarred(barred);
 
-            con.close();
+	            list.add(record);
+	        }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
-        return list;
-    }
+	    return list;
+	}
 }

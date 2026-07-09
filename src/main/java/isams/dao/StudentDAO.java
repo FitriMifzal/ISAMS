@@ -87,24 +87,31 @@ public class StudentDAO {
         }
     }
 
-    public static Student getStudent(int stuId) {
+    public static Student getStudent(int id) {
         Student student = null;
 
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "SELECT s.*, c.classcode, c.class_name "
+            sql = "SELECT s.stu_id, s.stu_name, s.stu_ic, s.stu_add, s.stu_phonenum, "
+                + "s.class_id, s.student_type, "
+                + "c.classcode, c.class_name, "
+                + "svm.cgpa_a, svm.cgpa_v, "
+                + "dvm.repeatpaper "
                 + "FROM student s "
-                + "JOIN classroom c ON s.class_id = c.class_id "
-                + "WHERE s.stu_id=?";
+                + "LEFT JOIN classroom c ON s.class_id = c.class_id "
+                + "LEFT JOIN svm ON s.stu_id = svm.stu_id "
+                + "LEFT JOIN dvm ON s.stu_id = dvm.stu_id "
+                + "WHERE s.stu_id = ?";
 
             ps = con.prepareStatement(sql);
-            ps.setInt(1, stuId);
+            ps.setInt(1, id);
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 student = new Student();
+
                 student.setStuId(rs.getInt("stu_id"));
                 student.setStuName(rs.getString("stu_name"));
                 student.setStuIC(rs.getString("stu_ic"));
@@ -114,6 +121,21 @@ public class StudentDAO {
                 student.setStudentType(rs.getString("student_type"));
                 student.setClassCode(rs.getString("classcode"));
                 student.setClassName(rs.getString("class_name"));
+
+                double cgpaA = rs.getDouble("cgpa_a");
+                if (!rs.wasNull()) {
+                    student.setCgpaA(cgpaA);
+                }
+
+                double cgpaV = rs.getDouble("cgpa_v");
+                if (!rs.wasNull()) {
+                    student.setCgpaV(cgpaV);
+                }
+
+                int repeatPaper = rs.getInt("repeatpaper");
+                if (!rs.wasNull()) {
+                    student.setRepeatPaper(repeatPaper);
+                }
             }
 
             con.close();

@@ -10,7 +10,7 @@ public class SVM extends Student {
         super();
     }
 
-    public double getCgpaA() {
+    public Double getCgpaA() {
         return cgpaA;
     }
 
@@ -18,7 +18,7 @@ public class SVM extends Student {
         this.cgpaA = cgpaA;
     }
 
-    public double getCgpaV() {
+    public Double getCgpaV() {
         return cgpaV;
     }
 

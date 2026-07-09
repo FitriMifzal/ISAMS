@@ -50,13 +50,17 @@
                    document.getElementById("svmFields").style.display = "block";
                    document.getElementById("dvmFields").style.display = "none";
 
-                   document.getElementById("cgpaA").value = student.cgpaA || "";
-                   document.getElementById("cgpaV").value = student.cgpaV || "";
+				   document.getElementById("cgpaA").value =
+				       student.cgpaA !== null && student.cgpaA !== undefined ? student.cgpaA : "";
+
+				   document.getElementById("cgpaV").value =
+				       student.cgpaV !== null && student.cgpaV !== undefined ? student.cgpaV : "";
                } else if (currentStudentType === "DVM") {
                    document.getElementById("svmFields").style.display = "none";
                    document.getElementById("dvmFields").style.display = "block";
 
-                   document.getElementById("repeatPaper").value = student.repeatPaper || "";
+				   document.getElementById("repeatPaper").value =
+				       student.repeatPaper !== null && student.repeatPaper !== undefined ? student.repeatPaper : "";
                }
            });
    }

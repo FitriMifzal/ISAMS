@@ -12,6 +12,9 @@ public class Student implements Serializable {
     private String stuPhoneNum;
     private int classId;
     private String studentType; // "SVM" or "DVM"
+    private Double cgpaA;
+    private Double cgpaV;
+    private Integer repeatPaper;
 
     // display-only fields, populated via JOIN in DAO - not stored directly on this table
     private String classCode;
@@ -90,5 +93,28 @@ public class Student implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+    public Double getCgpaA() {
+        return cgpaA;
+    }
+
+    public void setCgpaA(Double cgpaA) {
+        this.cgpaA = cgpaA;
+    }
+
+    public Double getCgpaV() {
+        return cgpaV;
+    }
+
+    public void setCgpaV(Double cgpaV) {
+        this.cgpaV = cgpaV;
+    }
+
+    public Integer getRepeatPaper() {
+        return repeatPaper;
+    }
+
+    public void setRepeatPaper(Integer repeatPaper) {
+        this.repeatPaper = repeatPaper;
     }
 }

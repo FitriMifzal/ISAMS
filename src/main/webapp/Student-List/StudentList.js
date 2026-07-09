@@ -21,17 +21,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function loadStudents() {
     const tableBody = document.getElementById("studentTableBody");
-    tableBody.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
+
+    if (!tableBody) {
+        console.error("studentTableBody not found in HTML");
+        return;
+    }
+
+    tableBody.innerHTML = `
+        <tr>
+            <td colspan="5">Loading students...</td>
+        </tr>
+    `;
 
     fetch("../StudentController?action=list")
-        .then(response => response.json())
+        .then(response => {
+            console.log("StudentController response status:", response.status);
+
+            if (!response.ok) {
+                throw new Error("HTTP Error: " + response.status);
+            }
+
+            return response.json();
+        })
         .then(students => {
+            console.log("Students from backend:", students);
+
             tableBody.innerHTML = "";
 
-            if (students.length === 0) {
+            if (!students || students.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="5" class="no-data">No students found. <a href="../Create-Student/createStudent.html" style="color: var(--kv-orange); text-decoration: none; font-weight: 600;">Create one</a></td>
+                        <td colspan="5" class="no-data">
+                            No students found.
+                        </td>
                     </tr>
                 `;
                 return;
@@ -40,33 +62,38 @@ function loadStudents() {
             students.forEach((student, index) => {
                 const row = document.createElement("tr");
 
-                // Use database field names
-                const studentName = student.stuName || 'N/A';
-                const studentIc = student.stuIC || 'N/A';
-                const studentClass = student.classCode || student.className || 'N/A';
-                const studentId = student.stuId || index;
-
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${studentName}</td>
-                    <td>${studentIc}</td>
-                    <td>${studentClass}</td>
+                    <td>${student.stuName || "N/A"}</td>
+                    <td>${student.stuIC || "N/A"}</td>
+                    <td>${student.classCode || student.className || "N/A"}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-table-action btn-view" onclick="viewStudent(${studentId})">View</button>
-                            <button class="btn-table-action btn-update" onclick="updateStudent(${studentId})">Update</button>
+                            <button class="btn-table-action btn-view" onclick="viewStudent(${student.stuId})">
+                                View
+                            </button>
+                            <button class="btn-table-action btn-update" onclick="updateStudent(${student.stuId})">
+                                Update
+                            </button>
                         </div>
                     </td>
                 `;
+
                 tableBody.appendChild(row);
             });
         })
         .catch(error => {
             console.error("Error loading students:", error);
-            tableBody.innerHTML = `<tr><td colspan="5">Failed to load students. Please try again.</td></tr>`;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        Failed to load students: ${error.message}
+                    </td>
+                </tr>
+            `;
         });
 }
-
 /* ────────────────────────────────────────────────────────
    SEARCH FUNCTIONALITY
 ────────────────────────────────────────────────────────── */
@@ -106,7 +133,7 @@ function viewStudent(studentId) {
 ────────────────────────────────────────────────────────── */
 
 function updateStudent(studentId) {
-    window.location.href = "../Update-Student/UpdateStudent.html?id=" + studentId;
+    window.location.href = "../Update-Student/updateStudent.html?id=" + studentId;
 }
 
 /* ────────────────────────────────────────────────────────
