@@ -1,6 +1,35 @@
 /* ════════════════════════════════════════════════════════════════════
+   MAIN CONTENT LAYOUT — makes room for the fixed sidebar/header
+   ════════════════════════════════════════════════════════════════════ */
+
+#main-wrapper {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    padding-top: 70px; /* clears the fixed header height */
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+#main-wrapper.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+#content {
+    padding: 30px;
+}
+
+@media (max-width: 768px) {
+    #main-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════
    DASHBOARD.CSS ADDITIONS — Statistics Section
-   
+
    ADD THESE STYLES TO THE END OF YOUR EXISTING Dashboard.css
    ════════════════════════════════════════════════════════════════════ */
 
@@ -44,16 +73,22 @@
     letter-spacing: 0.5px;
 }
 
+.card {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .statistics-section {
         grid-template-columns: 1fr;
         gap: 15px;
     }
-    
+
     .stat-value {
         font-size: 28px;
     }
 }
-
-/* ════════════════════════════════════════════════════════════════════ */

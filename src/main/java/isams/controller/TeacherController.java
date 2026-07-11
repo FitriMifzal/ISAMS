@@ -27,6 +27,8 @@ public class TeacherController extends HttpServlet {
 
         if ("list".equals(action)) {
             handleList(out);
+        } else if ("get".equals(action)) {
+            handleGet(request, out);
         } else {
             out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
         }
@@ -45,6 +47,8 @@ public class TeacherController extends HttpServlet {
 
         if ("register".equals(action)) {
             handleRegister(request, out);
+        } else if ("updateProfile".equals(action)) {
+            handleUpdateProfile(request, out);
         } else if ("archive".equals(action)) {
             handleArchive(request, out);
         } else {
@@ -71,6 +75,29 @@ public class TeacherController extends HttpServlet {
         out.print(json.toString());
     }
 
+    // return one teacher by id
+    private void handleGet(HttpServletRequest request, PrintWriter out) {
+        String idParam = request.getParameter("id");
+
+        if (idParam == null || idParam.isEmpty()) {
+            out.print("{\"status\":\"error\", \"message\":\"Missing id parameter\"}");
+            return;
+        }
+
+        try {
+            int tId = Integer.parseInt(idParam);
+            Teacher teacher = TeacherDAO.getTeacher(tId);
+
+            if (teacher == null) {
+                out.print("{\"status\":\"error\", \"message\":\"Teacher not found\"}");
+            } else {
+                out.print(toJson(teacher));
+            }
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid id parameter\"}");
+        }
+    }
+
     // create a new teacher account
     private void handleRegister(HttpServletRequest request, PrintWriter out) {
         String tName = request.getParameter("tName");
@@ -94,6 +121,23 @@ public class TeacherController extends HttpServlet {
         TeacherDAO.addTeacher(teacher);
 
         out.print("{\"status\":\"success\", \"message\":\"Account created successfully\"}");
+    }
+
+    // update a teacher's own profile (name, phone, email)
+    private void handleUpdateProfile(HttpServletRequest request, PrintWriter out) {
+        try {
+            Teacher teacher = new Teacher();
+            teacher.setTId(Integer.parseInt(request.getParameter("tId")));
+            teacher.setTName(request.getParameter("tName"));
+            teacher.setTPhoneNum(request.getParameter("tPhoneNum"));
+            teacher.setTEmail(request.getParameter("tEmail"));
+
+            TeacherDAO.updateTeacher(teacher);
+
+            out.print("{\"status\":\"success\", \"message\":\"Profile updated successfully\"}");
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid teacher id\"}");
+        }
     }
 
     // archive a teacher account

@@ -2,43 +2,60 @@
    PROFILE.JS — Profile page logic
    Nota: toggleProfile() & logoutUser() adalah GLOBAL dari
    Sidebar.js. JANGAN declare semula di sini.
-   Butang "Back" & icon profile dua-dua kembali ke page asal
-   (URL disimpan oleh Sidebar.js dalam sessionStorage).
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = "../Create-Account/CreateAccount.html";
+        return;
+    }
+
     loadProfileData();
 });
 
-/* ── LOAD PROFILE DATA (dari localStorage) ── */
+// load this teacher's real data from the database
 function loadProfileData() {
-    var name = localStorage.getItem('reg_name') || localStorage.getItem('active_name') || '';
-    var role = localStorage.getItem('active_role') || 'Teacher';
-    var id = localStorage.getItem('reg_id') || 'N/A';
+    const tId = localStorage.getItem('active_tId');
 
-    // Field inputs
-    document.getElementById('profID').value = id;
-    document.getElementById('profIC').value = localStorage.getItem('reg_ic') || 'N/A';
-    document.getElementById('profName').value = name;
-    document.getElementById('profEmail').value = localStorage.getItem('reg_email') || '';
-    document.getElementById('profPhone').value = localStorage.getItem('reg_phone') || '';
-    document.getElementById('profRole').value = (role === 'Teacher') ? 'Subject Teacher' : role;
+    if (!tId) {
+        alert("Teacher ID not found. Please login again.");
+        return;
+    }
 
-    // Header display (nama besar, role, ID badge, avatar initials)
-    document.getElementById('profileDisplayName').textContent = name || 'User Name';
-    document.getElementById('profileDisplayRole').textContent = (role === 'Teacher') ? 'Subject Teacher' : role;
-    document.getElementById('profileDisplayID').textContent = id;
+    fetch("../TeacherController?action=get&id=" + encodeURIComponent(tId))
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "error") {
+                alert(data.message);
+                return;
+            }
 
-    var initials = (name || '?')
-        .split(' ')
-        .map(function (word) { return word.charAt(0).toUpperCase(); })
-        .join('')
-        .substring(0, 2);
-    document.getElementById('profileAvatar').textContent = initials || '?';
+            document.getElementById('T_Name').value = data.tName;
+            document.getElementById('T_IC').value = data.tIC;
+            document.getElementById('T_Email').value = data.tEmail;
+            document.getElementById('T_PhoneNum').value = data.tPhoneNum;
+
+            document.getElementById('profileDisplayName').textContent = data.tName;
+            document.getElementById('profileDisplayRole').textContent = "Subject Teacher";
+
+            const isActive = data.status === "ACTIVE";
+            document.getElementById('statusText').textContent = isActive ? "Active" : "Archived";
+            document.getElementById('statusDot').style.backgroundColor = isActive ? "#22c55e" : "#94a3b8";
+
+            const initials = (data.tName || '?')
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase())
+                .join('')
+                .substring(0, 2);
+            document.getElementById('profileAvatar').textContent = initials || '?';
+        })
+        .catch(error => {
+            console.error("Error loading profile:", error);
+            alert("Failed to load profile data. Please try again.");
+        });
 }
 
-/* ── ENABLE EDIT MODE ── */
+// enable edit mode
 function enableEdit() {
     document.querySelectorAll('.profile-input').forEach(function (input) {
         input.disabled = false;
@@ -50,7 +67,7 @@ function enableEdit() {
     document.getElementById('btn-cancel-profile').style.display = 'inline-flex';
 }
 
-/* ── DISABLE EDIT MODE (Cancel — reset perubahan) ── */
+// disable edit mode, discard unsaved changes
 function disableEdit() {
     document.querySelectorAll('.profile-input').forEach(function (input) {
         input.disabled = true;
@@ -61,70 +78,70 @@ function disableEdit() {
     document.getElementById('btn-save-profile').style.display = 'none';
     document.getElementById('btn-cancel-profile').style.display = 'none';
 
-    // Reload data asal (buang perubahan yang belum save)
     loadProfileData();
 }
 
-/* ── VALIDATION HELPERS ── */
 function isValidEmail(email) {
     var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
 }
 
 function isValidPhone(phone) {
-    // Terima pelbagai format: +6012345678, 0129876543, dll
     var regex = /^(\+?6?01[0-9]{8,9}|0[0-9]{9,10})$/;
     return regex.test(phone.replace(/[\s\-()]/g, ''));
 }
 
-/* ── UPDATE PROFILE (Save) ── */
+// save changes to the real database
 function updateProfile() {
-    var profName = document.getElementById('profName').value.trim();
-    var profEmail = document.getElementById('profEmail').value.trim();
-    var profPhone = document.getElementById('profPhone').value.trim();
+    const tId = localStorage.getItem('active_tId');
+    const name = document.getElementById('T_Name').value.trim();
+    const email = document.getElementById('T_Email').value.trim();
+    const phone = document.getElementById('T_PhoneNum').value.trim();
 
-    if (!profName || !profEmail || !profPhone) {
+    if (!name || !email || !phone) {
         alert('Please fill all required fields');
         return;
     }
-    if (!isValidEmail(profEmail)) {
+    if (!isValidEmail(email)) {
         alert('Please enter a valid email address');
         return;
     }
-    if (!isValidPhone(profPhone)) {
+    if (!isValidPhone(phone)) {
         alert('Please enter a valid phone number');
         return;
     }
 
-    // Simpan ke localStorage
-    localStorage.setItem('reg_name', profName);
-    localStorage.setItem('reg_email', profEmail);
-    localStorage.setItem('reg_phone', profPhone);
-    localStorage.setItem('active_name', profName);
+    const formData = new URLSearchParams();
+    formData.append("tId", tId);
+    formData.append("tName", name);
+    formData.append("tEmail", email);
+    formData.append("tPhoneNum", phone);
 
-    // Update paparan header page & avatar terus
-    loadProfileData();
+    fetch("../TeacherController?action=updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            localStorage.setItem('active_name', name);
 
-    // Update nama & initial kat header atas (bar orange)
-    var userNameEl = document.getElementById('user-fullname');
-    if (userNameEl) {
-        userNameEl.textContent = profName;
+            const userNameEl = document.getElementById('user-fullname');
+            if (userNameEl) userNameEl.textContent = name;
 
-        var initials = profName
-            .split(' ')
-            .map(function (word) { return word.charAt(0).toUpperCase(); })
-            .join('')
-            .substring(0, 2);
-
-        var userInitialEl = document.getElementById('user-initial');
-        if (userInitialEl) userInitialEl.textContent = initials || '?';
-    }
-
-    alert('Profile updated successfully!');
-    disableEdit();
+            alert('Profile updated successfully!');
+            disableEdit();
+        } else {
+            alert("Something went wrong: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to connect to server. Please try again.");
+    });
 }
 
-/* ── GO BACK (kembali ke page sebelum user tekan icon profile) ── */
 function goBack() {
     var returnUrl = sessionStorage.getItem('profile_return_url');
     if (returnUrl) {

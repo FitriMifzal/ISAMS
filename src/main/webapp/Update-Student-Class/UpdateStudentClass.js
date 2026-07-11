@@ -31,8 +31,10 @@ function loadClassData() {
                 return;
             }
 
-            document.getElementById("classId").value = data.classId;
-            document.getElementById("classCode").value = data.classCode;
+            // hidden field holds the real numeric database id
+            document.getElementById("realClassId").value = data.classId;
+            // visible disabled field shows the class code text
+            document.getElementById("classId").value = data.classCode;
             document.getElementById("className").value = data.className;
         })
         .catch(error => {
@@ -41,10 +43,10 @@ function loadClassData() {
         });
 }
 
-// handle update - called by Confirm button
+// handle update - called by Save Changes button
 function updateClass() {
-    const classId = document.getElementById("classId").value;
-    const classCode = document.getElementById("classCode").value.trim();
+    const realClassId = document.getElementById("realClassId").value;
+    const classCode = document.getElementById("classId").value.trim();
     const className = document.getElementById("className").value.trim();
 
     if (!className) {
@@ -53,7 +55,7 @@ function updateClass() {
     }
 
     const formData = new URLSearchParams();
-    formData.append("classId", classId);
+    formData.append("classId", realClassId);
     formData.append("classCode", classCode);
     formData.append("className", className);
 

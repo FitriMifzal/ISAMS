@@ -9,28 +9,28 @@
     <link rel="stylesheet" href="UpdateStudentClass.css">
 </head>
 <body>
-    
+
     <div id="sidebar">
     <div class="logo-container">
         <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
     </div>
- 
+
     <div class="role-badge">Teacher</div>
- 
+
     <div class="nav-menu">
-        
+
         <!-- DASHBOARD (untuk semua roles) -->
         <a class="nav-item" href="../Dashboard/Dashboard.html">Dashboard</a>
- 
+
         <!-- TEACHER ACCOUNT — Hanya untuk Penyelaras Intervensi -->
         <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
- 
+
         <!-- STUDENT CLASS (untuk semua roles) -->
         <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
- 
+
         <!-- STUDENT PROFILE (untuk semua roles) -->
         <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
- 
+
         <!-- SUBJECT (dengan submenu berbeda per role) -->
         <button class="nav-item" data-submenu>
             Subject
@@ -40,18 +40,18 @@
             <!-- FOR TEACHER -->
             <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
             <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
-            
+
             <!-- FOR PENYELARAS INTERVENSI -->
             <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
         </div>
- 
+
         <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
         <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
- 
+
     </div>
    <button onclick="logoutUser()" class="nav-item logout">Logout</button>
 </div>
-   
+
     <div id="main-wrapper">
         <!-- HEADER -->
          <header id="header">
@@ -59,7 +59,7 @@
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
-            
+
            <div class="user-profile" onclick="window.location.href='../Profile/Profile.html'">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
@@ -71,8 +71,11 @@
                 <h1 class="page-title">Classroom</h1>
                 <p class="page-description">Update classroom information to keep your records current and accurate.</p>
                 <div class="orange-bar"></div>
-                
+
                 <form id="updateForm">
+                    <!-- hidden: stores the real database class_id, needed to know which row to update -->
+                    <input type="hidden" id="realClassId">
+
                     <label for="classId">Class Code</label>
                     <input type="text" id="classId" disabled>
 

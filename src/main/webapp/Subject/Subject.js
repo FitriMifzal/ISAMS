@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    currentUserRole = localStorage.getItem('active_role') || 'Subject Teacher';
+    currentUserRole = localStorage.getItem('active_role') || 'Teacher';
 
     // adjust UI based on user role
     const btnCreate = document.getElementById('btnCreate');
@@ -52,7 +52,7 @@ function renderTable() {
 
         if (currentUserRole === "Penyelaras Intervensi") {
             btns += `<button class="btn btn-update btn-sm" onclick="showForm(${s.subId})">Update</button>`;
-        } else if (currentUserRole === "Subject Teacher") {
+        } else if (currentUserRole === "Teacher") {
             if (s.tId !== null && s.tId === myTId) {
                 btns += `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-check-circle"></i> Enrolled</button>`;
             } else if (s.tId === null) {
