@@ -45,7 +45,7 @@ public class TeacherDAO {
         String sql = "SELECT * FROM TEACHER "
                    + "WHERE T_IC = ? "
                    + "AND T_PASS = ? "
-                   + "AND PI_ID IS NULL "
+                   + "AND PI_ID IS NOT NULL "
                    + "AND STATUS = 'ACTIVE'";
 
         try (
@@ -73,9 +73,9 @@ public class TeacherDAO {
         Teacher teacher = null;
 
         String sql = "SELECT * FROM TEACHER "
-                   + "WHERE PI_ID = ? "
+                   + "WHERE T_ID = ? "
                    + "AND T_PASS = ? "
-                   + "AND PI_ID IS NOT NULL "
+                   + "AND PI_ID IS NULL "
                    + "AND STATUS = 'ACTIVE'";
 
         try (

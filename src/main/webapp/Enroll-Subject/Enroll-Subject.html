@@ -15,33 +15,41 @@
     <!-- ════════════════════════════════════════════════════════
          SIDEBAR (same structure untuk semua pages)
          ════════════════════════════════════════════════════════ -->
-    <div id="sidebar">
+<div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-
+     
         <div class="role-badge">Subject Teacher</div>
-
+     
         <div class="nav-menu">
+            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../delete-account/DeleteAccount.html" id="nav-account" class="nav-item">Account</a>
-            <a href="../Student Class/StudentClass.html" class="nav-item">Student Class</a>
+     
+            <!-- TEACHER ACCOUNT -->
+            <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
+     
+            <!-- STUDENT CLASS -->
+            <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
+     
+            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-            
+     
+            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
             </button>
             <div class="submenu">
-                <a class="sub-nav-item" href="../Subject/Subject.html">Subject Details</a>
-                <a class="sub-nav-item active" href="../Enroll-Subject/Enroll-Subject.html">Enroll Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Teacher">Subject Enrollment</a>
+                <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
+                <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-            
-            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item">Student Attendance</a>
-            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item">Calculate Percentage</a>
+     
+            <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
+            <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
-        
-        <a href="#" onclick="logoutUser()" class="nav-item logout">Logout</a>
+        <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
 
     <!-- ════════════════════════════════════════════════════════
@@ -134,7 +142,7 @@
          ════════════════════════════════════════════════════════ -->
     <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
-    
+    <script src="../Header/Header.js"></script>
     <!-- Page JS SELEPAS -->
     <script src="Enroll-subject.js"></script>
 </body>

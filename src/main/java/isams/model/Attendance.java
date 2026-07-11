@@ -1,11 +1,53 @@
 package isams.model;
 
-public class Attendance {
+import java.io.Serializable;
+import java.sql.Date;
+
+public class Attendance implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private int attendanceId;
+    private Date dateRecorded;
+    private String absentReasonLetter;
+    private String attendanceRecord;
     private int classSessId;
-    private int studId;
-    private String studName;
-    private String studIC;
-    private boolean absent;
+    private int stuId;
+    private double hours;
+
+    public Attendance() {
+    }
+
+    public int getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(int attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+
+    public Date getDateRecorded() {
+        return dateRecorded;
+    }
+
+    public void setDateRecorded(Date dateRecorded) {
+        this.dateRecorded = dateRecorded;
+    }
+
+    public String getAbsentReasonLetter() {
+        return absentReasonLetter;
+    }
+
+    public void setAbsentReasonLetter(String absentReasonLetter) {
+        this.absentReasonLetter = absentReasonLetter;
+    }
+
+    public String getAttendanceRecord() {
+        return attendanceRecord;
+    }
+
+    public void setAttendanceRecord(String attendanceRecord) {
+        this.attendanceRecord = attendanceRecord;
+    }
 
     public int getClassSessId() {
         return classSessId;
@@ -15,35 +57,19 @@ public class Attendance {
         this.classSessId = classSessId;
     }
 
-    public int getStudId() {
-        return studId;
+    public int getStuId() {
+        return stuId;
     }
 
-    public void setStudId(int studId) {
-        this.studId = studId;
+    public void setStuId(int stuId) {
+        this.stuId = stuId;
     }
 
-    public String getStudName() {
-        return studName;
+    public double getHours() {
+        return hours;
     }
 
-    public void setStudName(String studName) {
-        this.studName = studName;
-    }
-
-    public String getStudIC() {
-        return studIC;
-    }
-
-    public void setStudIC(String studIC) {
-        this.studIC = studIC;
-    }
-
-    public boolean isAbsent() {
-        return absent;
-    }
-
-    public void setAbsent(boolean absent) {
-        this.absent = absent;
+    public void setHours(double hours) {
+        this.hours = hours;
     }
 }

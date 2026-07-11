@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import isams.dao.AttendanceDAO;
-import isams.model.Attendance;
+import isams.model.AttendanceView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +25,7 @@ public class AttendanceController extends HttpServlet {
         String date = request.getParameter("date");
 
         AttendanceDAO dao = new AttendanceDAO();
-        List<Attendance> list = dao.getStudentsForAttendance(subId, classId, date);
+        List<AttendanceView> list = dao.getStudentsForAttendance(subId, classId, date);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -33,12 +33,12 @@ public class AttendanceController extends HttpServlet {
 
         out.print("[");
         for (int i = 0; i < list.size(); i++) {
-            Attendance a = list.get(i);
+            AttendanceView a = list.get(i);
             out.print("{");
             out.print("\"classSessId\":" + a.getClassSessId() + ",");
-            out.print("\"studId\":" + a.getStudId() + ",");
-            out.print("\"studName\":\"" + escapeJson(a.getStudName()) + "\",");
-            out.print("\"studIC\":\"" + escapeJson(a.getStudIC()) + "\",");
+            out.print("\"studId\":" + a.getStuId() + ",");
+            out.print("\"studName\":\"" + escapeJson(a.getStuName()) + "\",");
+            out.print("\"studIC\":\"" + escapeJson(a.getStuIC()) + "\",");
             out.print("\"absent\":" + a.isAbsent());
             out.print("}");
             if (i < list.size() - 1) {

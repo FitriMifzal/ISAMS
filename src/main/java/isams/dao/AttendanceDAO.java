@@ -3,7 +3,7 @@ package isams.dao;
 import java.sql.*;
 import java.util.*;
 import isams.connection.ConnectionManager;
-import isams.model.Attendance;
+import isams.model.AttendanceView;
 
 public class AttendanceDAO {
 
@@ -62,9 +62,9 @@ public class AttendanceDAO {
     }
 
     // students registered for this subject, AND belonging to the selected class
-    // (class comes from STUDENT.CLASS_ID, since REGISTER only tracks Sub_ID + Stu_ID)
-    public List<Attendance> getStudentsForAttendance(int subId, int classId, String date) {
-        List<Attendance> list = new ArrayList<>();
+    // returns AttendanceView (DTO), not the Attendance entity
+    public List<AttendanceView> getStudentsForAttendance(int subId, int classId, String date) {
+        List<AttendanceView> list = new ArrayList<>();
 
         int classSessId = getOrCreateSession(subId, classId, date);
 
@@ -90,12 +90,12 @@ public class AttendanceDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Attendance a = new Attendance();
+                AttendanceView a = new AttendanceView();
 
                 a.setClassSessId(classSessId);
-                a.setStudId(rs.getInt("STU_ID"));
-                a.setStudName(rs.getString("STU_NAME"));
-                a.setStudIC(rs.getString("STU_IC"));
+                a.setStuId(rs.getInt("STU_ID"));
+                a.setStuName(rs.getString("STU_NAME"));
+                a.setStuIC(rs.getString("STU_IC"));
                 a.setAbsent(rs.getString("ABSENT_STU_ID") != null);
 
                 list.add(a);
