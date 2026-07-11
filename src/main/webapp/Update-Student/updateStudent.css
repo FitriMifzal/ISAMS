@@ -1,6 +1,6 @@
 /* ============================================================
    UPDATESTUDENT.CSS — Content area styling
-   Letakkan di <head> SELEPAS sidebar.css
+   Matched with VSCode design — Sama macam gambar
    ============================================================ */
 
 #main-wrapper,
@@ -23,104 +23,156 @@
 
 #content,
 #content-area {
-    padding: 40px;
+    padding: 30px;
     flex: 1;
     overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    box-sizing: border-box;
     background-color: #f4f7f6;
 }
 
-/* ── FORM CARD ── */
-.form-card {
+/* ── SHADOW BOX ── */
+.shadow-box {
     background: white;
     padding: 30px;
-    border-radius: 12px;
-    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     width: 100%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    font-family: var(--font-family-main);
-}
-
-.form-card h2 {
-    color: var(--kv-primary);
-    text-align: center;
-    margin: 0 0 25px 0;
-    font-size: 24px;
-    font-weight: 700;
-    font-family: var(--font-family-main);
-}
-
-/* ── FORM GROUP ── */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 8px;
-    color: #475569;
-    font-size: 14px;
-    font-family: var(--font-family-main);
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    max-width: 800px;
+    margin: 0 auto;
     box-sizing: border-box;
+    font-family: var(--font-family-main);
+}
+
+/* ── PAGE TITLE ── */
+.page-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.title-underline {
+    height: 4px;
+    background-color: #ff5722;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
+}
+
+/* ── FORM STYLING ── */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 16px;
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #1e293b;
     font-size: 14px;
     font-family: var(--font-family-main);
-    outline: none;
-    transition: all 0.3s ease;
-    color: #334155;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: #94a3b8;
+label:first-of-type {
+    margin-top: 0;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: var(--kv-orange);
-    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.1);
-    background-color: white;
-}
-
-.form-group textarea {
-    height: 110px;
-    resize: vertical;
-}
-
-/* ── SUBMIT BUTTON ── */
-.submit-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 14px;
+input,
+select,
+textarea {
     width: 100%;
-    font-weight: 700;
-    font-size: 16px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--font-family-main);
+    color: #1e293b;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+input:disabled {
+    background-color: #f1f3f5;
+    cursor: not-allowed;
+    color: #64748b;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ── FOCUS & HOVER STATES ── */
+input:not(:disabled):hover,
+select:hover,
+textarea:hover {
+    border-color: #ff5722;
+}
+
+input:not(:disabled):focus,
+select:focus,
+textarea:focus {
+    border-color: #ff5722;
+    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.12);
+    background-color: #ffffff;
+}
+
+/* ── ACTION BUTTONS ── */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+
+.btn-submit {
+    background: #22c55e;
+    color: white;
+    padding: 10px 24px;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
     transition: all 0.3s ease;
     font-family: var(--font-family-main);
 }
 
-.submit-btn:hover {
-    background: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+.btn-submit:hover {
+    background: #16a34a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
 }
 
-.submit-btn:active {
-    transform: translateY(0);
+.btn-cancel {
+    background: #ef4444;
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-cancel:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
 }
 
 /* ── RESPONSIVE ── */
@@ -135,27 +187,60 @@
         padding: 15px;
     }
 
-    .form-card {
+    .shadow-box {
         padding: 20px;
     }
 
-    .form-card h2 {
-        font-size: 20px;
-        margin-bottom: 20px;
+    .page-title {
+        font-size: 22px;
     }
 
-    .form-group {
-        margin-bottom: 12px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        padding: 10px;
+    .page-description {
         font-size: 13px;
     }
 
-    .submit-btn {
-        padding: 12px;
-        font-size: 14px;
+    label {
+        margin-top: 14px;
+        font-size: 13px;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shadow-box {
+        padding: 15px;
+    }
+
+    .page-title {
+        font-size: 18px;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+        margin-top: 12px;
     }
 }

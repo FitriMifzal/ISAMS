@@ -92,12 +92,6 @@ input {
     color: #333;
 }
 
-input:focus {
-    border-color: var(--kv-primary);
-    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
-    background-color: white;
-}
-
 input:disabled {
     background-color: #f1f3f5;
     cursor: not-allowed;
@@ -111,44 +105,6 @@ input:disabled {
     gap: 10px;
     margin-top: 25px;
     flex-wrap: wrap;
-}
-
-.btn-submit {
-    padding: 10px 20px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    font-family: var(--font-family-main);
-}
-
-.btn-submit:hover {
-    background: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-}
-
-.btn-cancel {
-    padding: 10px 20px;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    font-family: var(--font-family-main);
-}
-
-.btn-cancel:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(90, 98, 104, 0.3);
 }
 
 /* ── RESPONSIVE ── */
@@ -193,4 +149,89 @@ input:disabled {
         width: 100%;
         padding: 10px 16px;
     }
+}
+
+/* ════════════════════════════════════════════════════════
+   ADDED: Page title, description, and underline styling
+   ════════════════════════════════════════════════════════ */
+
+.page-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.title-underline {
+    height: 4px;
+    background-color: #ff5722;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
+}
+
+/* ════════════════════════════════════════════════════════
+   UPDATED: Editable input field border — neon orange on hover/focus
+   ════════════════════════════════════════════════════════ */
+
+input:not(:disabled):hover {
+    border-color: var(--kv-orange);
+}
+
+input:not(:disabled):focus {
+    border-color: var(--kv-orange);
+    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.15);
+    background-color: white;
+}
+
+/* ════════════════════════════════════════════════════════
+   UPDATED: Button colors — Match Profile.css consistency
+   Discard Changes: Red #ef4444
+   Save Changes: Green #22c55e
+   ════════════════════════════════════════════════════════ */
+
+.btn-submit {
+    background: #22c55e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-submit:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.btn-cancel {
+    background: #ef4444;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-main);
+}
+
+.btn-cancel:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
