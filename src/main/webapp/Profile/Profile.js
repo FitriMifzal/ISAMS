@@ -36,7 +36,24 @@ function loadProfileData() {
             document.getElementById('T_PhoneNum').value = data.tPhoneNum;
 
             document.getElementById('profileDisplayName').textContent = data.tName;
-            document.getElementById('profileDisplayRole').textContent = "Subject Teacher";
+            
+            // ============================================================
+            // FIX AREA: KEMASKINI SETIAP PARAMETER ROLE BADGE IKUT LOGIN
+            // ============================================================
+            const currentRole = localStorage.getItem('active_role') || 'Teacher';
+            
+            // 1. Selesaikan highlight biru pada kad maklumat utama profile
+            const profileDisplayRoleEl = document.getElementById('profileDisplayRole');
+            if (profileDisplayRoleEl) {
+                profileDisplayRoleEl.textContent = currentRole;
+            }
+            
+            // 2. Kunci kedudukan role badge di sidebar agar sentiasa sync
+            const sidebarRoleBadgeEl = document.querySelector('.role-badge');
+            if (sidebarRoleBadgeEl) {
+                sidebarRoleBadgeEl.textContent = currentRole;
+            }
+            // ============================================================
 
             const isActive = data.status === "ACTIVE";
             document.getElementById('statusText').textContent = isActive ? "Active" : "Archived";
