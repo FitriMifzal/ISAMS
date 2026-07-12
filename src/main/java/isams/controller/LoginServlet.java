@@ -11,17 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import isams.dao.TeacherDAO;
 import isams.model.Teacher;
 
-/**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Login microservice.
- * Verifies teacher credentials against the database and, on success,
- * creates a real server-side HttpSession holding the logged-in teacher's
- * details. This session is what LogoutServlet later invalidates.
- *
- * POST tIC, tPass -> returns JSON with login result
- */
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
