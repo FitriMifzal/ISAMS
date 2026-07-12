@@ -1,7 +1,9 @@
 /* ============================================================
    STUDENTLIST.JS — Page-specific logic
-   Gabungan VSCode + Eclipse (Tanpa Delete)
+   Gabungan VSCode + Eclipse (Dengan Delete - Fixed)
    ============================================================ */
+
+let deleteStudentId = null; // Untuk simpan ID student yang nak dihapuskan
 
 document.addEventListener('DOMContentLoaded', function () {
     // Check if user is logged in
@@ -11,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     sessionStorage.setItem('profile_return_url', window.location.href);
+    
+    // ── PENYELESAIAN PROFILE ICON ──
+    // Memaksa klik ikon profil pada page ini pergi ke folder yang betul, 
+    // bebas daripada sebarang gangguan fail luar dan elak 404 Profile-Details.
+    window.toggleProfile = function() {
+        window.location.href = "../Profile/Profile.html";
+    };
+
     // Load students from database
     loadStudents();
 });
@@ -75,6 +85,9 @@ function loadStudents() {
                             <button class="btn-table-action btn-update" onclick="updateStudent(${student.stuId})">
                                 Update
                             </button>
+                            <button class="btn-table-action btn-delete" onclick="openDeleteModal(${student.stuId}, '${student.stuName}')">
+                                Delete
+                            </button>
                         </div>
                     </td>
                 `;
@@ -94,6 +107,7 @@ function loadStudents() {
             `;
         });
 }
+
 /* ────────────────────────────────────────────────────────
    SEARCH FUNCTIONALITY
 ────────────────────────────────────────────────────────── */
@@ -137,10 +151,72 @@ function updateStudent(studentId) {
 }
 
 /* ────────────────────────────────────────────────────────
-   TOGGLE PROFILE
+   DELETE STUDENT - Open Confirmation Modal
 ────────────────────────────────────────────────────────── */
 
-function toggleProfile() {
-    sessionStorage.setItem('profile_return_url', window.location.href);
-    window.location.href = '../Profile-Details/Profile-Details.html';
+function openDeleteModal(studentId, studentName) {
+    deleteStudentId = studentId;
+    document.getElementById('deleteStudentName').innerText = studentName;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+/* ────────────────────────────────────────────────────────
+   DELETE STUDENT - Execute Delete (DIKEMASKINI: POST & PARAMETER ID)
+────────────────────────────────────────────────────────── */
+
+function confirmDelete() {
+    if (!deleteStudentId) {
+        console.error("No student ID to delete");
+        return;
+    }
+
+    // Hide the modal first
+    bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+
+    // Membina parameter POST yang dipadankan dengan StudentController.java
+    const params = new URLSearchParams();
+    params.append('action', 'delete'); // Dihantar ke doPost -> "delete".equals(action)
+    params.append('id', deleteStudentId);  
+
+    console.log("Deleting student with ID via POST:", deleteStudentId);
+
+    fetch("../StudentController", {
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    })
+    .then(response => {
+        console.log("Response status:", response.status);
+        
+        if (!response.ok) {
+            throw new Error("HTTP Error: " + response.status);
+        }
+        return response.text();
+    })
+    .then(text => {
+        console.log("Response text:", text);
+        
+        if (text.trim() === "success" || text.toLowerCase().includes("success")) {
+            document.getElementById('successMsg').innerText = "Student deleted successfully!";
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        } else {
+            alert("Error dari Server: " + text);
+        }
+    })
+    .catch(error => {
+        console.error("Error deleting student:", error);
+        alert("Failed to delete student: " + error.message);
+    });
+}
+
+/* ────────────────────────────────────────────────────────
+   CLOSE SUCCESS MODAL & RELOAD TABLE
+────────────────────────────────────────────────────────── */
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    deleteStudentId = null;
+    loadStudents(); // Reload table
 }

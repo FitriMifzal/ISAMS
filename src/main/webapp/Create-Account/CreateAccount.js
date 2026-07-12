@@ -7,13 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     sessionStorage.setItem('profile_return_url', window.location.href);
 });
 
-/* ────────────────────────────────────────────────────────
-   TOGGLE PROFILE - Navigate to profile page
-────────────────────────────────────────────────────────── */
-function toggleProfile() {
-    sessionStorage.setItem('profile_return_url', window.location.href);
-    window.location.href = '../Profile-Details/Profile-Details.html';
-}
 
 /* ────────────────────────────────────────────────────────
    HANDLE FORM SUBMISSION - Register Teacher to Database

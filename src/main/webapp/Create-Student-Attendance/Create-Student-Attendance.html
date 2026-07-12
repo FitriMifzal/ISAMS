@@ -15,7 +15,7 @@
     <!-- ════════════════════════════════════════════════════════
          SIDEBAR (same structure untuk semua pages)
          ════════════════════════════════════════════════════════ -->
-<div id="sidebar">
+    <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
@@ -71,29 +71,35 @@
         </header>
 
         <!-- MAIN CONTENT -->
-        <main id="content">
-            <div class="card">
-                <h2 class="card-title">Student Attendance Spreadsheet Matrix</h2>
+        <main id="content-area">
+            <!-- STUDENT ATTENDANCE PAGE (Using content-card to match Subject page layout) -->
+            <div id="attendancePage" class="content-card">
+                <h1 class="page-title">Student Attendance</h1>
+                <p class="page-description">Student Attendance Spreadsheet Matrix. Select the date, subject, class, and enter hours to load the attendance grid matrix.</p>
+                <div class="orange-bar"></div>
 
                 <!-- Toolbar -->
-				<div class="toolbar-panel">
-					<input type="date" id="attendanceDate" class="search-input">
+                <div class="toolbar-panel">
+                    <input type="date" id="attendanceDate" class="search-input">
 
-					<select id="subjectSelect" class="search-input">
-						<option value=""> Select Subject </option>
-					</select> <select id="classSelect" class="search-input">
-						<option value=""> Select Class </option>
-					</select> <input type="number" id="hoursInput" class="search-input"
- 						placeholder="Enter hours" min="0.5" step="0.5">
+                    <select id="subjectSelect" class="search-input">
+                        <option value=""> Select Subject </option>
+                    </select> 
+                    
+                    <select id="classSelect" class="search-input">
+                        <option value=""> Select Class </option>
+                    </select> 
+                    
+                    <input type="number" id="hoursInput" class="search-input" placeholder="Enter hours" min="0.5" step="0.5">
 
-					<div class="btn-group-actions">
-						<button class="btn btn-save" onclick="loadAttendance()">Load
-							Attendance</button>
-						<button class="btn btn-reset" onclick="resetGrid()">Reset</button>
-					</div>
-				</div>
+                    <!-- Buttons Group Modifikasi UX: Diletakkan ke Hujung Kanan Toolbar -->
+                    <div class="btn-group-actions">
+                        <button class="btn btn-reset" onclick="resetGrid()">Reset</button>
+                        <button class="btn btn-save" onclick="loadAttendance()">Load Attendance</button>
+                    </div>
+                </div>
 
-				<!-- Table -->
+                <!-- Table -->
                 <div class="sheet-table-wrapper">
                     <table id="attendanceGrid">
                         <thead id="gridHead"></thead>
@@ -110,10 +116,8 @@
     <!-- ════════════════════════════════════════════════════════
          SCRIPTS
          ════════════════════════════════════════════════════════ -->
-    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
-    <!-- Page JS SELEPAS -->
     <script src="Create-Student-Attendance.js"></script>
 </body>
 </html>

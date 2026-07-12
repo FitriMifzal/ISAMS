@@ -7,7 +7,13 @@ window.onload = function () {
     loadStudents();
 };
 
+// ============================================================
+// LOAD & FILTER SUBJECTS BASED ON LOGGED-IN TEACHER
+// ============================================================
 function loadSubjects() {
+    // Mengambil ID Teacher yang sedang log masuk dari localStorage
+    const myTId = parseInt(localStorage.getItem('active_tId'));
+
     fetch("../SubjectController?action=list")
         .then(response => response.json())
         .then(data => {
@@ -15,10 +21,13 @@ function loadSubjects() {
             select.innerHTML = `<option value="">-- Select Subject --</option>`;
 
             data.forEach(subject => {
-                const option = document.createElement("option");
-                option.value = subject.subId;
-                option.textContent = subject.subName;
-                select.appendChild(option);
+                // KUNCI: Hanya paparkan subjek jika tId subjek sepadan dengan tId teacher yang login
+                if (subject.tId !== null && parseInt(subject.tId) === myTId) {
+                    const option = document.createElement("option");
+                    option.value = subject.subId;
+                    option.textContent = subject.subName;
+                    select.appendChild(option);
+                }
             });
         });
 }
@@ -156,6 +165,7 @@ function removeStudent(stuId) {
     onClassChange();
     displayEnrolledStudents();
 }
+
 function saveEnrollment() {
     const subjectId = document.getElementById("subject-select").value;
     const classId = document.getElementById("class-select").value;

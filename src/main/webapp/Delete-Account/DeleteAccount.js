@@ -1,7 +1,3 @@
-/* ============================================================
-   DELETEACCOUNT.JS — INTEGRATED WITH DATABASE & CORRECT TABLE DESIGN
-   ============================================================ */
-
 let selectedId = null;
 const modal = document.getElementById('archiveModal');
 const successMsg = document.getElementById('successMsg');
@@ -161,17 +157,21 @@ window.onclick = function(event) {
     }
 }
 
-// Profile Section utility toggle
-function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
+/* ────────────────────────────────────────────────────────
+   PENAWAR UTK ISU REDIRECT PADA KLIK KEDUA (HANYA INI SAHAJA DITAMBAH)
+────────────────────────────────────────────────────────── */
+function toggleProfile(event) {
+    // Menghalang sebarang aksi limpahan (bubbling/redirect) lalai daripada browser
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    // Cari dropdown menu profil anda (tukar 'profile-dropdown' ke ID container dropdown profil sebenar jika ada)
+    var profileSection = document.getElementById('profile-section') || document.querySelector('.profile-dropdown');
+    
     if (profileSection) {
         var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
         profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
     }
 }

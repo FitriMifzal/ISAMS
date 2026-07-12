@@ -1,6 +1,6 @@
 /* ============================================================
    CREATE-STUDENT-ATTENDANCE.CSS — Content area styling
-   Letakkan di <head> SELEPAS sidebar.css
+   (Fully aligned and mapped with Subject.css design rules)
    ============================================================ */
 
 #main-wrapper,
@@ -21,109 +21,78 @@
     width: 100%;
 }
 
-#content,
 #content-area {
-    padding: 28px;
+    padding: 30px;
     flex: 1;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    background-color: #f4f7fa;
+    background-color: #f4f7f6;
 }
 
-/* ── CARD STYLING ── */
-.card {
+/* ── CONTENT CARD (Same as Subject.css) ── */
+.content-card {
     background: white;
     border-radius: 8px;
-    padding: 26px 28px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    box-sizing: border-box;
 }
 
-.card h2 {
-    color: var(--kv-primary);
-    margin: 0 0 10px 0;
-}
+/* ════════════════════════════════════════════════════════
+   PAGE TITLE & DESCRIPTION (Same as Subject.css)
+   ════════════════════════════════════════════════════════ */
 
-.card-title {
-    font-size: 17px;
-    font-weight: 700;
+.page-title {
     color: #1e293b;
-    margin-bottom: 4px;
-    font-family: var(--font-family-main);
-}
-
-.card-sub {
-    font-size: 12.5px;
-    color: #64748b;
-    margin-bottom: 22px;
-    font-family: var(--font-family-main);
-}
-
-/* ── LEGEND ── */
-.legend-row {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    font-size: 12.5px;
-    color: #475569;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    font-family: var(--font-family-main);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.legend-dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+    font-size: 28px;
     font-weight: 700;
+    margin: 0 0 8px 0;
 }
 
-.badge-present {
-    background: #dcfce7;
-    color: #166534;
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
 }
 
-.badge-absent {
-    background: #fee2e2;
-    color: #991b1b;
+/* ── ORANGE BAR (Same as Subject.css) ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 0 0 20px 0;
 }
 
-.badge-reason {
-    background: #fef9c3;
-    color: #854d0e;
+.title-underline {
+    height: 4px;
+    background-color: #ff5722;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
 }
 
-/* ── TOOLBAR ── */
+/* ── TOOLBAR PANEL ── */
 .toolbar-panel {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 20px;
     gap: 12px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .search-input {
     flex: 1;
-    max-width: 380px;
+    max-width: 240px; /* Dioptimumkan saiz input supaya muat sebaris bersama butang kanan */
     padding: 10px 14px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-size: 13.5px;
     font-family: var(--font-family-main);
     outline: none;
+    box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -131,60 +100,62 @@
     box-shadow: 0 0 0 2px rgba(245, 87, 41, 0.2);
 }
 
-/* ── BUTTONS ── */
+/* ── BUTTONS POSITION & UX ACTIONS (Modified for Right-Side Alignment) ── */
 .btn-group-actions {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-left: auto; /* Memaksa butang ke posisi paling kanan */
+    align-items: center;
 }
 
 .btn {
-    padding: 9px 18px;
+    padding: 10px 20px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 700;
-    font-size: 12.5px;
+    font-size: 13px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     font-family: var(--font-family-main);
 }
 
+/* Primary Action - Load Attendance */
 .btn-save {
-    background: var(--kv-primary);
+    background: #003366; 
     color: white;
 }
 
 .btn-save:hover {
-    background: #001224;
+    background: #002347;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 51, 102, 0.25);
 }
 
-.btn-export {
-    background: #334155;
-    color: white;
+.btn-save:active {
+    transform: translateY(0);
 }
 
-.btn-export:hover {
-    background: #1e293b;
-    transform: translateY(-1px);
-}
-
+/* Secondary Action - Reset */
 .btn-reset {
-    background: #e2e8f0;
-    color: #334155;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
 }
 
 .btn-reset:hover {
-    background: #cbd5e1;
+    background: #e2e8f0;
+    color: #1e293b;
+    border-color: #94a3b8;
 }
 
-/* ── TABLE STYLING ── */
+/* ── TABLE STYLING (Same Border & Head as Subject.css) ── */
 .sheet-table-wrapper {
     overflow-x: auto;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #bbb;
     border-radius: 6px;
 }
 
@@ -196,13 +167,11 @@ table {
 thead th {
     text-align: center;
     padding: 12px 10px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    font-size: 11.5px;
-    color: #475569;
+    background: #e0e0e0;
+    border: 1px solid #bbb;
+    font-size: 12px;
+    color: #1e293b;
     font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
     white-space: nowrap;
     font-family: var(--font-family-main);
 }
@@ -211,7 +180,7 @@ th.sticky-col,
 td.sticky-col {
     position: sticky;
     left: 0;
-    background: #f8fafc;
+    background: #e0e0e0;
     z-index: 5;
     border-right: 2px solid #cbd5e1;
     text-align: left;
@@ -224,10 +193,10 @@ td.sticky-col {
 }
 
 tbody td {
-    padding: 5px 6px;
-    border: 1px solid #e2e8f0;
+    padding: 8px 6px;
+    border: 1px solid #bbb;
     font-size: 13px;
-    color: #334155;
+    color: #475569;
     text-align: center;
     vertical-align: middle;
     height: 40px;
@@ -235,74 +204,29 @@ tbody td {
 }
 
 tbody tr:hover td {
-    background-color: #f1f5f9 !important;
+    background-color: #f8fafc !important;
 }
 
 tbody tr:hover td.sticky-col {
-    background-color: #f1f5f9;
-}
-
-/* ── TODAY COLUMN ── */
-th.today-col {
-    background: #fef3c7;
-    color: #92400e;
-    border-bottom: 2px solid #f59e0b;
-}
-
-td.today-col {
-    background: #fffbeb !important;
-}
-
-.today-tag {
-    display: inline-block;
-    background: #f59e0b;
-    color: white;
-    font-size: 9px;
-    font-weight: 800;
-    padding: 1px 5px;
-    border-radius: 3px;
-    margin-left: 5px;
-    letter-spacing: 0.5px;
-    vertical-align: middle;
-}
-
-/* ── PAST COLUMN (locked) ── */
-td.locked-col {
-    background: #f8fafc;
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-/* ── ATTENDANCE BADGE ── */
-.att-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 700;
+    background-color: #f8fafc;
 }
 
 /* ── ATTENDANCE DROPDOWN ── */
 .att-select {
     width: 100%;
     height: 32px;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid #cbd5e1;
     border-radius: 5px;
-    font-size: 15px;
+    font-size: 14px;
     text-align: center;
     background: white;
     cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    padding: 0 4px;
-    transition: border-color 0.15s;
     font-family: var(--font-family-main);
 }
 
 .att-select:focus {
     outline: none;
     border-color: var(--kv-orange);
-    box-shadow: 0 0 0 2px rgba(245, 87, 41, 0.2);
 }
 
 .att-select.val-present {
@@ -315,12 +239,6 @@ td.locked-col {
     background: #fef2f2;
     border-color: #fca5a5;
     color: #991b1b;
-}
-
-.att-select.val-reason {
-    background: #fffbeb;
-    border-color: #fcd34d;
-    color: #92400e;
 }
 
 /* ── TOAST NOTIFICATION ── */
@@ -345,21 +263,26 @@ td.locked-col {
     display: flex;
 }
 
-/* ── RESPONSIVE ── */
+/* ── RESPONSIVE DESIGN (Same Breakpoints as Subject.css) ── */
 @media (max-width: 768px) {
-    #main-wrapper,
-    #main-content {
+    #main-wrapper {
         padding-top: 70px;
     }
 
-    #content,
     #content-area {
         padding: 15px;
-        gap: 15px;
     }
 
-    .card {
+    .content-card {
         padding: 15px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .page-description {
+        font-size: 13px;
     }
 
     .toolbar-panel {
@@ -373,6 +296,8 @@ td.locked-col {
 
     .btn-group-actions {
         flex-direction: column;
+        margin-left: 0; /* Balik kepada susunan menegak untuk peranti mudah alih */
+        width: 100%;
     }
 
     .btn {
@@ -380,42 +305,13 @@ td.locked-col {
         justify-content: center;
     }
 
-    .legend-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .legend-item:last-child {
-        margin-left: 0 !important;
-    }
-
     thead th {
         padding: 8px 4px;
-        font-size: 10px;
+        font-size: 11px;
     }
 
     tbody td {
-        padding: 4px 2px;
+        padding: 6px 4px;
         height: 35px;
     }
-
-    th.sticky-col,
-    td.sticky-col {
-        min-width: 150px;
-    }
-}
-.absent-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    color: #334155;
-    cursor: pointer;
-}
-
-.absent-box input {
-    width: 17px;
-    height: 17px;
-    cursor: pointer;
 }

@@ -1,31 +1,50 @@
-// SUBJECT.JS
-// User profile init handled by Sidebar.js
+// SUBJECT.JS — Gabungan VSCode + Eclipse
+// ============================================================
 
-let subjects = [];      // holds the last-fetched list, used by view/enroll modals
+let subjects = [];      // holds the last-fetched list
 let currentUserRole = "";
 let activeSubId = null; // subject currently targeted for enroll
 
 document.addEventListener('DOMContentLoaded', function () {
-    // check if user is logged in
+    // Check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 
     currentUserRole = localStorage.getItem('active_role') || 'Teacher';
+    
+    console.log('=== USER INFO ===');
+    console.log('Role:', currentUserRole);
+    console.log('================');
 
-    // adjust UI based on user role
+    // CHANGE PAGE TITLE AND DESCRIPTION BASED ON ROLE
+    const pageTitle = document.getElementById('pageTitle');
+    const pageDescription = document.getElementById('pageDescription');
+    
+    if (currentUserRole.trim() === "Penyelaras Intervensi") {
+        pageTitle.innerText = "Subject Details";
+        pageDescription.innerText = "Create, and manage all subjects. Click 'Create' to add a new subject or 'Edit' to modify existing ones.";
+    } else {
+        pageTitle.innerText = "Subject Enrollment";
+        pageDescription.innerText = "Enroll in the ones you wish to teach. Click 'Enroll' to register for a subject.";
+    }
+    
+    // Adjust UI based on role
     const btnCreate = document.getElementById('btnCreate');
-    if (currentUserRole === "Penyelaras Intervensi") {
+    if (currentUserRole.trim() === "Penyelaras Intervensi") {
         btnCreate.style.display = 'block';
     } else {
         btnCreate.style.display = 'none';
     }
 
+    // Load subjects from database
     loadSubjects();
 });
 
-// load subjects from database
+// ============================================================
+// LOAD SUBJECTS FROM DATABASE
+// ============================================================
 function loadSubjects() {
     fetch("../SubjectController?action=list")
         .then(response => response.json())
@@ -40,25 +59,35 @@ function loadSubjects() {
         });
 }
 
-// render subject table based on user role
+// ============================================================
+// RENDER TABLE
+// ============================================================
 function renderTable() {
     const body = document.getElementById('subjectTableBody');
     body.innerHTML = '';
 
     const myTId = parseInt(localStorage.getItem('active_tId'));
+    const roleToCheck = currentUserRole.trim();
+
+    if (subjects.length === 0) {
+        body.innerHTML = `<tr><td colspan="4" class="text-center">No subjects available.</td></tr>`;
+        return;
+    }
 
     subjects.forEach((s) => {
-        let btns = `<button class="btn btn-view btn-sm" onclick="viewSub(${s.subId})">View</button>`;
+        let btns = '';
 
-        if (currentUserRole === "Penyelaras Intervensi") {
-            btns += `<button class="btn btn-update btn-sm" onclick="showForm(${s.subId})">Update</button>`;
-        } else if (currentUserRole === "Teacher") {
+        if (roleToCheck === "Penyelaras Intervensi") {
+            // PENYELARAS: Show Update button only
+            btns = `<button class="btn-update" onclick="showForm(${s.subId})">Update</button>`;
+        } else if (roleToCheck === "Subject Teacher" || roleToCheck.includes("Teacher")) {
+            // TEACHER: Show Enroll/Status buttons
             if (s.tId !== null && s.tId === myTId) {
-                btns += `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-check-circle"></i> Enrolled</button>`;
+                btns = `<button class="btn-secondary" disabled><i class="bi bi-check-circle"></i> Enrolled</button>`;
             } else if (s.tId === null) {
-                btns += `<button class="btn btn-save btn-sm" onclick="openEnroll(${s.subId})">Enroll</button>`;
+                btns = `<button class="btn-save" onclick="openEnroll(${s.subId})">Enroll</button>`;
             } else {
-                btns += `<button class="btn btn-secondary btn-sm" disabled>Assigned</button>`;
+                btns = `<button class="btn-secondary" disabled>Assigned</button>`;
             }
         }
 
@@ -68,40 +97,55 @@ function renderTable() {
             <td>${s.subName}</td>
             <td>${s.creditHours}</td>
             <td>${lecturer}</td>
-            <td><div class="action-gap">${btns}</div></td>
+            <td>${btns}</td>
         </tr>`;
     });
 }
 
-// show subject list page
+// ============================================================
+// SHOW LIST PAGE
+// ============================================================
 function showList() {
     document.getElementById('subjectListPage').classList.remove('hidden');
     document.getElementById('formPage').classList.add('hidden');
-    document.getElementById('successPage').classList.add('hidden');
     loadSubjects();
 }
 
-// show form page for create/update
+// ============================================================
+// SHOW FORM PAGE (Create/Update)
+// ============================================================
 function showForm(subId) {
     document.getElementById('subjectForm').reset();
     document.getElementById('globalError').classList.add('hidden');
 
     if (subId !== undefined) {
+        // UPDATE MODE
         const s = subjects.find(sub => sub.subId === subId);
-        document.getElementById('formTitle').innerText = "Update Subject Information";
-        document.getElementById('subName').value = s.subName;
-        document.getElementById('subCredit').value = s.creditHours;
-        document.getElementById('editIdx').value = subId;
+        if (s) {
+            document.getElementById('formTitle').innerText = "Subject Details";
+            document.getElementById('subName').value = s.subName;
+            document.getElementById('subCredit').value = s.creditHours;
+            document.getElementById('editIdx').value = subId;
+            
+            document.getElementById('updateButtons').classList.remove('hidden');
+            document.getElementById('createButtons').classList.add('hidden');
+        }
     } else {
-        document.getElementById('formTitle').innerText = "Subject Registration Form";
+        // CREATE MODE
+        document.getElementById('formTitle').innerText = "Subject Details";
         document.getElementById('editIdx').value = "";
+        
+        document.getElementById('createButtons').classList.remove('hidden');
+        document.getElementById('updateButtons').classList.add('hidden');
     }
 
     document.getElementById('subjectListPage').classList.add('hidden');
     document.getElementById('formPage').classList.remove('hidden');
 }
 
-// save subject - create or update
+// ============================================================
+// SAVE SUBJECT (Create/Update) - Database Integration
+// ============================================================
 function saveData() {
     const name = document.getElementById('subName').value.trim();
     const credit = document.getElementById('subCredit').value.trim();
@@ -140,13 +184,12 @@ function saveData() {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            document.getElementById('resTitle').innerText = successTitle;
-            document.getElementById('resMsg').innerText = successMsg;
+            document.getElementById('successMsg').innerText = successMsg;
             document.getElementById('formPage').classList.add('hidden');
-            document.getElementById('successPage').classList.remove('hidden');
+            new bootstrap.Modal(document.getElementById('successModal')).show();
         } else {
             document.getElementById('globalError').classList.remove('hidden');
-            document.getElementById('globalError').innerText = data.message;
+            document.getElementById('globalError').innerText = data.message || "Operation failed.";
         }
     })
     .catch(error => {
@@ -156,30 +199,21 @@ function saveData() {
     });
 }
 
-// view subject details in modal
-function viewSub(subId) {
-    const s = subjects.find(sub => sub.subId === subId);
-    const lecturer = s.tId === null
-        ? '<span class="text-muted">Not Assigned</span>'
-        : `<span class="text-success fw-bold">${s.teacherName}</span>`;
-
-    document.getElementById('viewDetailBody').innerHTML = `
-        <div class="mb-2"><strong>Subject Name:</strong> ${s.subName}</div>
-        <div class="mb-2"><strong>Credit Hours:</strong> ${s.creditHours}</div>
-        <div><strong>Lecturer:</strong> ${lecturer}</div>
-    `;
-    new bootstrap.Modal(document.getElementById('viewModal')).show();
-}
-
-// open enrollment confirmation modal
+// ============================================================
+// OPEN ENROLLMENT MODAL
+// ============================================================
 function openEnroll(subId) {
     activeSubId = subId;
     const s = subjects.find(sub => sub.subId === subId);
-    document.getElementById('targetSub').innerText = s.subName;
-    new bootstrap.Modal(document.getElementById('enrollModal')).show();
+    if (s) {
+        document.getElementById('targetSub').innerText = s.subName;
+        new bootstrap.Modal(document.getElementById('enrollModal')).show();
+    }
 }
 
-// execute enrollment - claims the subject for the logged-in teacher
+// ============================================================
+// EXECUTE ENROLLMENT - Database Integration
+// ============================================================
 function executeEnroll() {
     const tId = localStorage.getItem('active_tId');
 
@@ -198,10 +232,8 @@ function executeEnroll() {
 
         if (data.status === "success") {
             const s = subjects.find(sub => sub.subId === activeSubId);
-            document.getElementById('resTitle').innerText = "Enrollment Successful!";
-            document.getElementById('resMsg').innerText = "You registered for " + s.subName;
-            document.getElementById('subjectListPage').classList.add('hidden');
-            document.getElementById('successPage').classList.remove('hidden');
+            document.getElementById('successMsg').innerText = "You enrolled for " + (s ? s.subName : "the subject");
+            new bootstrap.Modal(document.getElementById('successModal')).show();
         } else {
             alert("Something went wrong: " + data.message);
         }
@@ -213,17 +245,13 @@ function executeEnroll() {
     });
 }
 
-// utility functions
-function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
+// ============================================================
+// CLOSE SUCCESS MODAL
+// ============================================================
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    document.getElementById('subjectListPage').classList.remove('hidden');
+    document.getElementById('formPage').classList.add('hidden');
+    loadSubjects();
 }
+
