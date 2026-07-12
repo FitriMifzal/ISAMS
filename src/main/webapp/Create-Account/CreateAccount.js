@@ -21,6 +21,7 @@ function handleForm(event) {
     const t_phonenum = document.getElementById("t_phonenum").value.trim();
     const t_pass = document.getElementById("t_pass").value.trim();
 
+
     // ✅ VALIDATION 1: Check each required field
     if (!t_name) {
         alert("Please fill in the Full Name field!");
@@ -72,6 +73,7 @@ function handleForm(event) {
     formData.append("tPhoneNum", t_phonenum || "");
     formData.append("tEmail", t_email);
     formData.append("tPass", t_pass);
+	formData.append("piId", localStorage.getItem('active_tId'));
 
     // Disable submit button to prevent double submission
     const submitBtn = document.querySelector('.btn-submit');

@@ -17,11 +17,13 @@ public class TeacherDAO {
     private static String sql;
 
     // insert a new teacher (used by Create Account)
-    public static void addTeacher(Teacher teacher) {
+    // creatorPiId = the T_ID of the Penyelaras Intervensi who created this teacher
+    public static void addTeacher(Teacher teacher, int creatorPiId) {
         try {
             con = ConnectionManager.getConnection();
 
-            sql = "INSERT INTO teacher(t_name, t_ic, t_phonenum, t_email, t_pass) VALUES(?, ?, ?, ?, ?)";
+            sql = "INSERT INTO teacher(t_name, t_ic, t_phonenum, t_email, t_pass, pi_id, status) "
+                + "VALUES(?, ?, ?, ?, ?, ?, 'ACTIVE')";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, teacher.getTName());
@@ -29,6 +31,7 @@ public class TeacherDAO {
             ps.setString(3, teacher.getTPhoneNum());
             ps.setString(4, teacher.getTEmail());
             ps.setString(5, teacher.getTPass());
+            ps.setInt(6, creatorPiId);
 
             ps.executeUpdate();
 
@@ -38,37 +41,75 @@ public class TeacherDAO {
             e.printStackTrace();
         }
     }
-    
- public static Teacher loginPI(String piId, String password) {
-     Teacher teacher = null;
-     try {
-         con = ConnectionManager.getConnection();
-         sql = "SELECT * FROM teacher WHERE pi_id=? AND t_pass=? AND status='ACTIVE'";
-         ps = con.prepareStatement(sql);
-         ps.setString(1, piId);
-         ps.setString(2, password);
 
-         rs = ps.executeQuery();
+    // login for Penyelaras Intervensi (PI) - identified by her own T_ID
+    // she has no PI above her, so PI_ID must be NULL
+    public static Teacher loginPI(String piId, String password) {
+        Teacher teacher = null;
+        try {
+            con = ConnectionManager.getConnection();
+            sql = "SELECT * FROM teacher WHERE t_id=? AND t_pass=? AND pi_id IS NULL AND status='ACTIVE'";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(piId));
+            ps.setString(2, password);
 
-         if (rs.next()) {
-             teacher = new Teacher();
-             teacher.setTId(rs.getInt("t_id"));
-             teacher.setPiId(rs.getInt("pi_id"));  // ✅ Set PI_ID
-             teacher.setTName(rs.getString("t_name"));
-             teacher.setTIC(rs.getString("t_ic"));
-             teacher.setTPhoneNum(rs.getString("t_phonenum"));
-             teacher.setTEmail(rs.getString("t_email"));
-             teacher.setTPass(rs.getString("t_pass"));
-             teacher.setStatus(rs.getString("status"));
-         }
+            rs = ps.executeQuery();
 
-         con.close();
+            if (rs.next()) {
+                teacher = new Teacher();
+                teacher.setTId(rs.getInt("t_id"));
+                teacher.setPiId(null); // she has no creator PI
+                teacher.setTName(rs.getString("t_name"));
+                teacher.setTIC(rs.getString("t_ic"));
+                teacher.setTPhoneNum(rs.getString("t_phonenum"));
+                teacher.setTEmail(rs.getString("t_email"));
+                teacher.setTPass(rs.getString("t_pass"));
+                teacher.setStatus(rs.getString("status"));
+            }
 
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
-     return teacher;
- }
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return teacher;
+    }
+
+    // login for regular Teacher - identified by IC, must have a creator PI
+    public static Teacher loginTeacher(String tIC, String tPass) {
+        Teacher teacher = null;
+        try {
+            con = ConnectionManager.getConnection();
+
+            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_pass=? AND pi_id IS NOT NULL AND status='ACTIVE'";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, tIC);
+            ps.setString(2, tPass);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                teacher = new Teacher();
+                teacher.setTId(rs.getInt("t_id"));
+
+                int piId = rs.getInt("pi_id");
+                teacher.setPiId(rs.wasNull() ? null : piId);
+
+                teacher.setTName(rs.getString("t_name"));
+                teacher.setTIC(rs.getString("t_ic"));
+                teacher.setTPhoneNum(rs.getString("t_phonenum"));
+                teacher.setTEmail(rs.getString("t_email"));
+                teacher.setTPass(rs.getString("t_pass"));
+                teacher.setStatus(rs.getString("status"));
+            }
+
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return teacher;
+    }
 
     // update a teacher's own profile (name, phone, email only - not IC or password)
     public static void updateTeacher(Teacher teacher) {
@@ -90,37 +131,6 @@ public class TeacherDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // check login credentials, return the matching Teacher or null
-    public static Teacher login(String ic, String password) {
-        Teacher teacher = null;
-        try {
-            con = ConnectionManager.getConnection();
-
-            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_pass=? AND status='ACTIVE'";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, ic);
-            ps.setString(2, password);
-
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                teacher = new Teacher();
-                teacher.setTId(rs.getInt("t_id"));
-                teacher.setTName(rs.getString("t_name"));
-                teacher.setTIC(rs.getString("t_ic"));
-                teacher.setTPhoneNum(rs.getString("t_phonenum"));
-                teacher.setTEmail(rs.getString("t_email"));
-                teacher.setTPass(rs.getString("t_pass"));
-            }
-
-            con.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return teacher;
     }
 
     // get one teacher by id (includes status - used by Profile page)
@@ -224,37 +234,4 @@ public class TeacherDAO {
         }
         return exists;
     }
-
-    public static Teacher loginTeacher(String tIC, String tPass) {
-        Teacher teacher = null;
-        try {
-            con = ConnectionManager.getConnection();
-
-            // 🔥 Query guna T_IC (bukan PI_ID)
-            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_pass=? AND status='ACTIVE'";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, tIC);
-            ps.setString(2, tPass);
-
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                teacher = new Teacher();
-                teacher.setTId(rs.getInt("t_id"));
-                teacher.setPiId(rs.getInt("pi_id"));
-                teacher.setTName(rs.getString("t_name"));
-                teacher.setTIC(rs.getString("t_ic"));
-                teacher.setTPhoneNum(rs.getString("t_phonenum"));
-                teacher.setTEmail(rs.getString("t_email"));
-                teacher.setTPass(rs.getString("t_pass"));
-                teacher.setStatus(rs.getString("status"));
-            }
-
-            con.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return teacher;
-    }
-    }
+}

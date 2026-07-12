@@ -99,15 +99,26 @@ public class TeacherController extends HttpServlet {
     }
 
     // create a new teacher account
+    // must be called by a logged-in PI - the PI's own T_ID is sent as "piId"
+    // and stored as the new teacher's PI_ID (who created them)
     private void handleRegister(HttpServletRequest request, PrintWriter out) {
         String tName = request.getParameter("tName");
         String tIC = request.getParameter("tIC");
         String tPhoneNum = request.getParameter("tPhoneNum");
         String tEmail = request.getParameter("tEmail");
         String tPass = request.getParameter("tPass");
+        String piIdParam = request.getParameter("piId");
 
         if (TeacherDAO.icExists(tIC)) {
             out.print("{\"status\":\"error\", \"message\":\"This IC Number is already registered\"}");
+            return;
+        }
+
+        int creatorPiId;
+        try {
+            creatorPiId = Integer.parseInt(piIdParam);
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Missing or invalid PI id\"}");
             return;
         }
 
@@ -118,7 +129,7 @@ public class TeacherController extends HttpServlet {
         teacher.setTEmail(tEmail);
         teacher.setTPass(tPass);
 
-        TeacherDAO.addTeacher(teacher);
+        TeacherDAO.addTeacher(teacher, creatorPiId);
 
         out.print("{\"status\":\"success\", \"message\":\"Account created successfully\"}");
     }
