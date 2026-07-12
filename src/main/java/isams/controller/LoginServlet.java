@@ -12,22 +12,20 @@ import isams.dao.TeacherDAO;
 import isams.model.Teacher;
 
 /**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Login microservice.
- * Verifies teacher credentials against the database and, on success,
- * creates a real server-side HttpSession holding the logged-in teacher's
- * details. This session is what LogoutServlet later invalidates.
+ * Author: [YOUR NAME HERE] Student ID: [YOUR STUDENT ID HERE] Date: July 2026
+ * Purpose: ISAMS - Login microservice. Verifies teacher credentials against the
+ * database and, on success, creates a real server-side HttpSession holding the
+ * logged-in teacher's details. This session is what LogoutServlet later
+ * invalidates.
  *
  * POST tIC, tPass -> returns JSON with login result
  */
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json");
@@ -56,6 +54,10 @@ public class LoginServlet extends HttpServlet {
             }
 
             teacher = TeacherDAO.loginPI(piId, tPass);
+            
+            if (teacher != null) {
+                teacher.setRole("Penyelaras Intervensi");
+            }
 
         } else if ("Teacher".equals(role)) {
             String tIC = request.getParameter("tIC");
@@ -67,6 +69,10 @@ public class LoginServlet extends HttpServlet {
             }
 
             teacher = TeacherDAO.loginTeacher(tIC, tPass);
+            
+            if (teacher != null) {
+                teacher.setRole("Teacher");
+            }
 
         } else {
             out.print("{\"status\":\"error\", \"message\":\"Invalid role selected\"}");
@@ -101,13 +107,14 @@ public class LoginServlet extends HttpServlet {
 
         out.print(json);
         out.flush();
+       
     }
 
-    private String escapeJson(String value) {
-        if (value == null) {
-            return "";
-        }
+	private String escapeJson(String value) {
+		if (value == null) {
+			return "";
+		}
 
-        return value.replace("\\", "\\\\").replace("\"", "\\\"");
-    }
+		return value.replace("\\", "\\\\").replace("\"", "\\\"");
+	}
 }

@@ -34,29 +34,32 @@
         if (header) header.classList.toggle('collapsed');
     };
 
-      window.toggleProfile = function () {
+    window.toggleProfile = function () {
         var currentPage = window.location.pathname.toLowerCase();
         
-        // Check if already on Profile page
-        var isOnProfilePage = currentPage.indexOf('/profile/profile.html') !== -1;
+        // Mengesan root projek secara automatik
+        var pathSegments = window.location.pathname.split('/');
+        var contextPath = pathSegments[1] ? '/' + pathSegments[1] : '';
+
+        // Check jika user berada di page Profile
+        var isOnProfilePage = currentPage.endsWith('/profile/profile.html') || currentPage.endsWith('/profile.html');
 
         if (isOnProfilePage) {
-            // User is on Profile page → Go back to previous page
+            // ── JALAN PULANG 100% DINAMIK (TANPA HARDCODE NAMA PAGE) ──
             var returnUrl = sessionStorage.getItem('profile_return_url');
             
             if (returnUrl) {
-                window.location.href = returnUrl;
+                window.location.href = returnUrl; 
             } else {
-                // If no previous URL saved, go to Dashboard
-                window.location.href = '../Dashboard/Dashboard.html';
+                // Jika memori kosong, sistem automatik undur ke belakang mengikut history pelayar
+                window.history.back(); 
             }
         } else {
-            // User is NOT on Profile page → Go to Profile page
-            // Save current URL first (so user can return later)
+            // User berada di page biasa → Simpan URL penuh secara automatik
             sessionStorage.setItem('profile_return_url', window.location.href);
             
-            // Navigate to Profile page
-            window.location.href = '../Profile/Profile.html';
+            // Pergi ke Profile page mengikut root projek
+            window.location.href = window.location.origin + contextPath + '/Profile/Profile.html';
         }
     };
 

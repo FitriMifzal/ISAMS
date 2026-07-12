@@ -23,43 +23,83 @@
 
 #content,
 #content-area {
-    padding: 30px 30px 30px 0px;
+    padding: 30px;
     flex: 1;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+    background-color: #f4f7f6;
 }
 
-/* ── CARD STYLING ── */
-.card {
+/* ── CONTENT CARD ── */
+.content-card {
     background: white;
     border-radius: 8px;
-    padding: 26px 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    margin-left: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
-.card h2 {
-    color: var(--kv-primary);
-    margin: 0 0 10px 0;
+.content-card:last-child {
+    margin-bottom: 0;
 }
+
+/* ════════════════════════════════════════════════════════
+   PAGE TITLE, DESCRIPTION & UNDERLINE
+   ════════════════════════════════════════════════════════ */
+
+.page-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.page-description {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+/* ── ORANGE BAR (Same as Subject page) ── */
+.orange-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--kv-orange);
+    margin: 0 0 20px 0;
+}
+
+.title-underline {
+    height: 4px;
+    background-color: var(--kv-orange);
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 2px;
+}
+
+/* ════════════════════════════════════════════════════════
+   CARD HEADER / SUBTITLE
+   ════════════════════════════════════════════════════════ */
 
 .card-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
     color: #1e293b;
-    margin-bottom: 4px;
+    margin: 0 0 4px 0;
 }
 
 .card-sub {
-    font-size: 12.5px;
+    font-size: 14px;
     color: #64748b;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
+    font-weight: 500;
 }
 
-/* ── SEARCH INPUT ── */
+/* ════════════════════════════════════════════════════════
+   SELECT / DROPDOWN STYLES (Same as Subject input)
+   ════════════════════════════════════════════════════════ */
+
 .search-input {
     padding: 10px 14px;
     border: 1px solid #cbd5e1;
@@ -68,62 +108,194 @@
     font-family: var(--font-family-main);
     outline: none;
     flex: 1;
+    transition: all 0.3s ease;
+    background-color: white;
+    color: #1e293b;
+    cursor: pointer;
 }
 
 .search-input:focus {
     border-color: var(--kv-orange);
+    box-shadow: 0 0 0 3px rgba(245, 87, 41, 0.1);
 }
 
-/* ── FORM INPUTS ── */
-input[type="text"],
-input[type="number"],
-select {
+.search-input option {
+    padding: 8px;
+}
+
+/* ── SELECT CONTAINER ROW ── */
+.select-row {
+    display: flex;
+    gap: 12px;
+    max-width: 700px;
+    align-items: center;
+}
+
+.select-row .search-input {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* ════════════════════════════════════════════════════════
+   TABLE STYLES (Same as Subject page)
+   ════════════════════════════════════════════════════════ */
+
+.table-container {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
+    overflow-x: auto;
+    border: 1px solid #bbb;
     border-radius: 6px;
-    font-size: 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    border: 1px solid #bbb;
     font-family: var(--font-family-main);
-    outline: none;
 }
 
-input:focus,
-select:focus {
-    border-color: var(--kv-orange);
-}
-
-/* ── CONFIG INPUT LAYOUT ── */
-.config-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.config-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.form-group label {
+thead th {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #bbb;
+    background: #e0e0e0;
+    color: #1e293b;
+    font-weight: 700;
     font-size: 13px;
-    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: var(--font-family-main);
+}
+
+tbody td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #bbb;
     color: #475569;
+    font-family: var(--font-family-main);
+    font-size: 13px;
 }
 
-.config-actions {
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* ── NO DATA MESSAGE ── */
+.no-data {
+    color: #9ca3af;
+    font-style: italic;
+    padding: 20px 12px;
+    text-align: center;
+}
+
+/* ════════════════════════════════════════════════════════
+   STATUS BADGES
+   ════════════════════════════════════════════════════════ */
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-present {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.badge-absent {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+/* ════════════════════════════════════════════════════════
+   ACTION BUTTONS FOR LETTERS
+   ════════════════════════════════════════════════════════ */
+
+.letter-actions {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 5px;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
-/* ── BUTTONS ── */
+.btn-letter {
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+    font-family: var(--font-family-main);
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-letter:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-warning {
+    background-color: #f59e0b;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #d97706;
+}
+
+.btn-intervention {
+    background-color: #2b6cb0;
+    color: white;
+}
+
+.btn-intervention:hover {
+    background-color: #1a4f8b;
+}
+
+.btn-disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.txt-disabled {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* ════════════════════════════════════════════════════════
+   BUTTONS (Same as Subject page)
+   ════════════════════════════════════════════════════════ */
+
 .btn {
     padding: 10px 20px;
     border: none;
@@ -145,6 +317,8 @@ select:focus {
 
 .btn-save:hover {
     background: #001224;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 18, 36, 0.3);
 }
 
 .btn-export {
@@ -154,110 +328,77 @@ select:focus {
 
 .btn-export:hover {
     background: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
 }
 
-/* ── TABLE STYLING ── */
-.sheet-table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    margin-left: 15px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-thead th {
-    padding: 12px 10px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    font-size: 11.5px;
-    color: #475569;
-    text-align: left;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-family: var(--font-family-main);
-}
-
-tbody td {
-    padding: 12px 14px;
-    border: 1px solid #e2e8f0;
-    font-size: 13px;
-    color: #334155;
-    font-family: var(--font-family-main);
-}
-
-tbody tr {
-    transition: 0.2s;
-}
-
-tbody tr:hover {
-    background-color: #f9f9f9;
-}
-
-/* ── STATUS BADGES ── */
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.badge-present {
-    background: #e6f4ea;
-    color: #137333;
-}
-
-.badge-absent {
-    background: #fce8e6;
-    color: #c5221f;
-}
-
-/* ── ACTION BUTTONS FOR LETTERS ── */
-.letter-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.btn-letter {
-    padding: 6px 12px;
-    font-size: 11px;
-    font-weight: 700;
+.btn-verify {
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    color: white;
-    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 13px;
     font-family: var(--font-family-main);
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.btn-warning {
-    background-color: #f59e0b;
-    color: #000;
+.btn-verify:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
 
-.btn-intervention {
-    background-color: #2b6cb0;
+.btn-calculate {
+    background: #003366;
     color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-family-main);
+    transition: all 0.3s ease;
 }
 
-.btn-letter:hover {
-    opacity: 0.85;
+.btn-calculate:hover {
+    background: #002347;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 35, 71, 0.3);
 }
 
-.txt-disabled {
-    color: #94a3b8;
-    font-style: italic;
-    font-size: 12px;
+.config-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    gap: 10px;
 }
 
-/* ── RESPONSIVE ── */
+/* ════════════════════════════════════════════════════════
+   SEARCH MESSAGE
+   ════════════════════════════════════════════════════════ */
+
+.search-message {
+    margin-top: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.search-message.success {
+    color: #28a745;
+}
+
+.search-message.error {
+    color: #e53e3e;
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ════════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
     #main-wrapper,
     #main-content {
@@ -267,43 +408,130 @@ tbody tr:hover {
     #content,
     #content-area {
         padding: 15px;
-        gap: 15px;
     }
 
-    .card {
+    .content-card {
         padding: 15px;
-        margin-left: 0;
+        margin-bottom: 15px;
     }
 
-    .sheet-table-wrapper {
-        margin-left: 0;
+    .page-title {
+        font-size: 22px;
     }
 
-    .config-grid {
-        grid-template-columns: 1fr;
+    .page-description {
+        font-size: 13px;
     }
 
-    .btn {
-        padding: 8px 12px;
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-sub {
+        font-size: 12px;
+    }
+
+    /* Select row - stack vertically */
+    .select-row {
+        flex-direction: column;
+        max-width: 100%;
+        gap: 10px;
+    }
+
+    .select-row .search-input {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Table responsive */
+    table {
         font-size: 12px;
     }
 
     thead th,
     tbody td {
-        padding: 8px;
-        font-size: 12px;
+        padding: 8px 6px;
+        font-size: 11px;
     }
 
+    /* Action buttons stack */
     .letter-actions {
         flex-direction: column;
+        gap: 4px;
     }
 
     .btn-letter {
         width: 100%;
         justify-content: center;
+        padding: 6px 10px;
+        font-size: 10px;
     }
 
-    .search-input {
-        max-width: 100% !important;
+    .status-badge {
+        font-size: 10px;
+        padding: 2px 10px;
+    }
+
+    /* Config actions */
+    .config-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .config-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .btn-verify,
+    .btn-calculate {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ── EXTRA SMALL SCREENS ── */
+@media (max-width: 480px) {
+    #content,
+    #content-area {
+        padding: 10px;
+    }
+
+    .content-card {
+        padding: 12px;
+    }
+
+    .page-title {
+        font-size: 19px;
+    }
+
+    .page-description {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .title-underline {
+        margin-bottom: 16px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 6px 4px;
+        font-size: 10px;
+    }
+
+    .btn-letter {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .status-badge {
+        font-size: 9px;
+        padding: 2px 8px;
     }
 }

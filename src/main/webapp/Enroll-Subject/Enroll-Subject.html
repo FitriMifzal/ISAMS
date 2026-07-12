@@ -15,7 +15,7 @@
     <!-- ════════════════════════════════════════════════════════
          SIDEBAR (same structure untuk semua pages)
          ════════════════════════════════════════════════════════ -->
-<div id="sidebar">
+    <div id="sidebar">
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
@@ -70,80 +70,77 @@
             </div>
         </header>
 
-        <!-- MAIN CONTENT -->
+        <!-- MAIN CONTENT (Ditukar pembungkus kepada .content-card utama) -->
         <main id="content">
-            <div class="page-title">Subject Enrollment</div>
-            <div class="page-subtitle">Enroll students into the subjects taught by you.</div>
+            <div class="content-card">
+                <h1 class="page-title">Subject Enrollment</h1>
+                <p class="page-description">Enroll students into the subjects taught by you.</p>
+                <div class="orange-bar"></div>
 
-            <!-- Summary Card -->
-            <div class="summary-card">
-                <h3>Saved Enrollment Summary</h3>
-                <div class="summary-grid" id="summary-grid">
-                    <div style="color:var(--text-secondary);font-size:13px;">No saved data available.</div>
+                <!-- Summary Card (Kekal di dalam struktur) -->
+                <div class="summary-card">
+                    <h3>Saved Enrollment Summary</h3>
+                    <div class="summary-grid" id="summary-grid">
+                        <div style="color:var(--text-secondary);font-size:13px;">No saved data available.</div>
+                    </div>
+                </div>
+
+                <!-- Enrollment Layout (Dua kad diletakkan bersebelahan) -->
+                <div class="enrollment-layout">
+
+                    <!-- Left: Available Students -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Available Students List</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="filter-row">
+                                <div class="subject-selector">
+                                    <label>Select Subject</label> 
+                                    <select id="subject-select" onchange="onSubjectChange()">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+
+                                <div class="subject-selector" id="class-filter-box">
+                                    <label>Select Class</label> 
+                                    <select id="class-select" onchange="onClassChange()">
+                                        <option value="">-- Select Class --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="student-pool" id="student-pool"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Enrolled Students -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Enrolled Students</h2>
+                            <span id="enrolled-subject-label" style="font-size: 12px; color: #64748b;">—</span>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="enrolled-list" id="enrolled-list"></div>
+                            <button class="btn-save" id="btn-save" onclick="saveEnrollment()">
+                                    Save &amp; Continue
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
-            <!-- Enrollment Layout -->
-           <!-- Enrollment Layout -->
-			<div class="enrollment-layout">
-
-				<!-- Left: Available Students -->
-				<div class="card">
-					<div class="card-header">
-						<h2>Available Students List</h2>
-					</div>
-
-					<div class="card-body">
-						<div class="filter-row">
-							<div class="subject-selector">
-								<label>Select Subject</label> <select id="subject-select"
-									onchange="onSubjectChange()">
-									<option value="">-- Select Subject --</option>
-								</select>
-							</div>
-
-							<div class="subject-selector" id="class-filter-box">
-								<label>Select Class</label> <select id="class-select"
-									onchange="onClassChange()">
-									<option value="">-- Select Class --</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="student-pool" id="student-pool"></div>
-					</div>
-				</div>
-
-				<!-- Right: Enrolled Students -->
-				<div class="card">
-					<div class="card-header">
-						<h2>Enrolled Students</h2>
-						<span id="enrolled-subject-label"
-							style="font-size: 12px; color: var(--text-secondary);">—</span>
-					</div>
-
-					<div class="card-body">
-						<div class="enrolled-list" id="enrolled-list"></div>
-						<button class="btn-save" id="btn-save" onclick="saveEnrollment()">
-								Save &amp; Continue
-						</button>
-					</div>
-				</div>
-
-			</div>
-		</main>
+        </main>
     </div>
 
     <!-- Toast Notification -->
     <div id="toast"></div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCRIPTS
-         ════════════════════════════════════════════════════════ -->
-    <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
+    <!-- SCRIPTS -->
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
-    <!-- Page JS SELEPAS -->
     <script src="Enroll-subject.js"></script>
 </body>
 </html>

@@ -38,6 +38,37 @@ public class TeacherDAO {
             e.printStackTrace();
         }
     }
+    
+ public static Teacher loginPI(String piId, String password) {
+     Teacher teacher = null;
+     try {
+         con = ConnectionManager.getConnection();
+         sql = "SELECT * FROM teacher WHERE pi_id=? AND t_pass=? AND status='ACTIVE'";
+         ps = con.prepareStatement(sql);
+         ps.setString(1, piId);
+         ps.setString(2, password);
+
+         rs = ps.executeQuery();
+
+         if (rs.next()) {
+             teacher = new Teacher();
+             teacher.setTId(rs.getInt("t_id"));
+             teacher.setPiId(rs.getInt("pi_id"));  // ✅ Set PI_ID
+             teacher.setTName(rs.getString("t_name"));
+             teacher.setTIC(rs.getString("t_ic"));
+             teacher.setTPhoneNum(rs.getString("t_phonenum"));
+             teacher.setTEmail(rs.getString("t_email"));
+             teacher.setTPass(rs.getString("t_pass"));
+             teacher.setStatus(rs.getString("status"));
+         }
+
+         con.close();
+
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+     return teacher;
+ }
 
     // update a teacher's own profile (name, phone, email only - not IC or password)
     public static void updateTeacher(Teacher teacher) {
@@ -193,4 +224,37 @@ public class TeacherDAO {
         }
         return exists;
     }
-}
+
+    public static Teacher loginTeacher(String tIC, String tPass) {
+        Teacher teacher = null;
+        try {
+            con = ConnectionManager.getConnection();
+
+            // 🔥 Query guna T_IC (bukan PI_ID)
+            sql = "SELECT * FROM teacher WHERE t_ic=? AND t_pass=? AND status='ACTIVE'";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, tIC);
+            ps.setString(2, tPass);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                teacher = new Teacher();
+                teacher.setTId(rs.getInt("t_id"));
+                teacher.setPiId(rs.getInt("pi_id"));
+                teacher.setTName(rs.getString("t_name"));
+                teacher.setTIC(rs.getString("t_ic"));
+                teacher.setTPhoneNum(rs.getString("t_phonenum"));
+                teacher.setTEmail(rs.getString("t_email"));
+                teacher.setTPass(rs.getString("t_pass"));
+                teacher.setStatus(rs.getString("status"));
+            }
+
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return teacher;
+    }
+    }

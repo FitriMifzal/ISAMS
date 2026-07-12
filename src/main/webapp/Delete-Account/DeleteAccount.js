@@ -1,7 +1,3 @@
-/* ============================================================
-   DELETEACCOUNT.JS — INTEGRATED WITH DATABASE & CORRECT TABLE DESIGN
-   ============================================================ */
-
 let selectedId = null;
 const modal = document.getElementById('archiveModal');
 const successMsg = document.getElementById('successMsg');

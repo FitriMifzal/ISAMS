@@ -1,7 +1,9 @@
 /* ============================================================
    STUDENTLIST.JS — Page-specific logic
-   Gabungan VSCode + Eclipse (Tanpa Delete)
+   Gabungan VSCode + Eclipse (Dengan Delete - Fixed)
    ============================================================ */
+
+let deleteStudentId = null; // Untuk simpan ID student yang nak dihapuskan
 
 document.addEventListener('DOMContentLoaded', function () {
     // Check if user is logged in
@@ -75,6 +77,9 @@ function loadStudents() {
                             <button class="btn-table-action btn-update" onclick="updateStudent(${student.stuId})">
                                 Update
                             </button>
+                            <button class="btn-table-action btn-delete" onclick="openDeleteModal(${student.stuId}, '${student.stuName}')">
+                                Delete
+                            </button>
                         </div>
                     </td>
                 `;
@@ -94,6 +99,7 @@ function loadStudents() {
             `;
         });
 }
+
 /* ────────────────────────────────────────────────────────
    SEARCH FUNCTIONALITY
 ────────────────────────────────────────────────────────── */
@@ -134,6 +140,79 @@ function viewStudent(studentId) {
 
 function updateStudent(studentId) {
     window.location.href = "../Update-Student/updateStudent.html?id=" + studentId;
+}
+
+/* ────────────────────────────────────────────────────────
+   DELETE STUDENT - Open Confirmation Modal
+────────────────────────────────────────────────────────── */
+
+function openDeleteModal(studentId, studentName) {
+    deleteStudentId = studentId;
+    document.getElementById('deleteStudentName').innerText = studentName;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+/* ────────────────────────────────────────────────────────
+   DELETE STUDENT - Execute Delete (DIKEMASKINI: POST & PARAMETER ID)
+────────────────────────────────────────────────────────── */
+
+function confirmDelete() {
+    if (!deleteStudentId) {
+        console.error("No student ID to delete");
+        return;
+    }
+
+    // Hide the modal first
+    bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+
+    // Membina parameter POST yang dipadankan dengan StudentController.java
+    const params = new URLSearchParams();
+    params.append('action', 'delete'); // Dihantar ke doPost -> "delete".equals(action)
+    params.append('id', deleteStudentId);  // 👈 DITUKAR KE 'id' supaya sepadan dengan request.getParameter("id") di Java
+
+    console.log("Deleting student with ID via POST:", deleteStudentId);
+
+    fetch("../StudentController", {
+        method: "POST", // 👈 DITUKAR KE POST supaya diproses oleh doPost servlet
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    })
+    .then(response => {
+        console.log("Response status:", response.status);
+        
+        if (!response.ok) {
+            throw new Error("HTTP Error: " + response.status);
+        }
+        return response.text();
+    })
+    .then(text => {
+        console.log("Response text:", text);
+        
+        // Memandangkan backend memulangkan string "success" secara kosong/terus,
+        // kita terus semak string output tersebut.
+        if (text.trim() === "success" || text.toLowerCase().includes("success")) {
+            document.getElementById('successMsg').innerText = "Student deleted successfully!";
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        } else {
+            alert("Error dari Server: " + text);
+        }
+    })
+    .catch(error => {
+        console.error("Error deleting student:", error);
+        alert("Failed to delete student: " + error.message);
+    });
+}
+
+/* ────────────────────────────────────────────────────────
+   CLOSE SUCCESS MODAL & RELOAD TABLE
+────────────────────────────────────────────────────────── */
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    deleteStudentId = null;
+    loadStudents(); // Reload table
 }
 
 /* ────────────────────────────────────────────────────────

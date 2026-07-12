@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile | KV Student Management</title>
     
+    <!-- Bootstrap (untuk modal) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Sidebar CSS DULU (defines all variables) -->
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     
@@ -69,10 +72,10 @@
 
         <!-- MAIN CONTENT -->
         <main id="content">
-            <div class="table-card">
-                <h1>Student Profile</h1>
+            <div class="content-card">
+                <h1 class="page-title">Student Profile</h1>
                 <p class="page-description">Manage all student profiles and view their details. Click "Create" to add a new student or "View" to see more information.</p>
-                <div class="title-underline"></div>
+                <div class="orange-bar"></div>
 
                 <div class="top-actions">
                     <div class="search-box-container">
@@ -94,15 +97,58 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="studentTableBody"></tbody>
+                    <tbody id="studentTableBody">
+                        <!-- Student rows will be populated by JavaScript -->
+                    </tbody>
                 </table>
             </div>
         </main>
     </div>
 
     <!-- ════════════════════════════════════════════════════════
+         DELETE CONFIRMATION MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong><span id="deleteStudentName"></span></strong>?</p>
+                    <p class="text-muted" style="font-size: 14px;">This action cannot be undone. All associated records will be permanently removed.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         SUCCESS MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Success!</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="successMsg">Student deleted successfully.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="closeSuccessModal()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
          SCRIPTS
          ════════════════════════════════════════════════════════ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Sidebar.js DULU (handle submenu, sidebar toggle, user profile init) -->
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
