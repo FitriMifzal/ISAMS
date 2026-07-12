@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     sessionStorage.setItem('profile_return_url', window.location.href);
+    
+    // ── PENYELESAIAN PROFILE ICON ──
+    // Memaksa klik ikon profil pada page ini pergi ke folder yang betul, 
+    // bebas daripada sebarang gangguan fail luar dan elak 404 Profile-Details.
+    window.toggleProfile = function() {
+        window.location.href = "../Profile/Profile.html";
+    };
+
     // Load students from database
     loadStudents();
 });
@@ -168,12 +176,12 @@ function confirmDelete() {
     // Membina parameter POST yang dipadankan dengan StudentController.java
     const params = new URLSearchParams();
     params.append('action', 'delete'); // Dihantar ke doPost -> "delete".equals(action)
-    params.append('id', deleteStudentId);  // 👈 DITUKAR KE 'id' supaya sepadan dengan request.getParameter("id") di Java
+    params.append('id', deleteStudentId);  
 
     console.log("Deleting student with ID via POST:", deleteStudentId);
 
     fetch("../StudentController", {
-        method: "POST", // 👈 DITUKAR KE POST supaya diproses oleh doPost servlet
+        method: "POST", 
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
@@ -190,8 +198,6 @@ function confirmDelete() {
     .then(text => {
         console.log("Response text:", text);
         
-        // Memandangkan backend memulangkan string "success" secara kosong/terus,
-        // kita terus semak string output tersebut.
         if (text.trim() === "success" || text.toLowerCase().includes("success")) {
             document.getElementById('successMsg').innerText = "Student deleted successfully!";
             new bootstrap.Modal(document.getElementById('successModal')).show();
@@ -213,13 +219,4 @@ function closeSuccessModal() {
     bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
     deleteStudentId = null;
     loadStudents(); // Reload table
-}
-
-/* ────────────────────────────────────────────────────────
-   TOGGLE PROFILE
-────────────────────────────────────────────────────────── */
-
-function toggleProfile() {
-    sessionStorage.setItem('profile_return_url', window.location.href);
-    window.location.href = '../Profile-Details/Profile-Details.html';
 }

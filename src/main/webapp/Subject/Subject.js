@@ -255,19 +255,3 @@ function closeSuccessModal() {
     loadSubjects();
 }
 
-// ============================================================
-// UTILITY FUNCTIONS (Dari code asal Eclipse)
-// ============================================================
-function toggleProfile() {
-    var profileSection = document.getElementById('profile-section');
-    var welcomeCard = document.getElementById('welcome-card');
-
-    if (profileSection) {
-        var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
-        profileSection.style.display = isHidden ? 'block' : 'none';
-    }
-    if (welcomeCard) {
-        var isHidden = welcomeCard.style.display === 'none' || welcomeCard.style.display === '';
-        welcomeCard.style.display = isHidden ? 'none' : 'block';
-    }
-}
