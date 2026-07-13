@@ -6,7 +6,7 @@ function loadAttendance() {
     const classId = document.getElementById("classSelect").value;
 
     if (date === "" || subId === "" || classId === "") {
-        showToast("Please select date, subject and class");
+        showNotification("Please select date, subject and class", "warning");
         return;
     }
 
@@ -17,11 +17,11 @@ function loadAttendance() {
         .then(data => {
             attendanceList = data;
             buildAttendanceTable();
-            showToast("Attendance loaded");
+            showNotification("Attendance loaded successfully", "info");
         })
         .catch(error => {
             console.error(error);
-            showToast("Failed to load attendance");
+            showNotification("Failed to load attendance", "error");
         });
 }
 
@@ -76,28 +76,29 @@ function buildAttendanceTable() {
 function saveAttendance(checkbox, classSessId, studId) {
     const absent = checkbox.checked;
     const date = document.getElementById("attendanceDate").value;
-	const tId = localStorage.getItem("active_tId");
+    const tId = localStorage.getItem("active_tId");
 
-	if (!tId) {
-	    showToast("Teacher ID not found. Please login again.");
-	    return;
-	}
+    if (!tId) {
+        showNotification("Teacher ID not found. Please login again.", "error");
+        return;
+    }
     const classId = document.getElementById("classSelect").value;
-	const hours = document.getElementById("hoursInput").value;
+    const hours = document.getElementById("hoursInput").value;
 
-	if (hours === "" || Number(hours) <= 0) {
-	    showToast("Please enter hours.");
-	    checkbox.checked = !absent;
-	    return;
-	}
-	const bodyData =
-	    "date=" + encodeURIComponent(date) +
-	    "&tId=" + encodeURIComponent(tId) +
-	    "&classSessId=" + encodeURIComponent(classSessId) +
-	    "&classId=" + encodeURIComponent(classId) +
-	    "&studId=" + encodeURIComponent(studId) +
-	    "&absent=" + encodeURIComponent(absent) +
-	    "&hours=" + encodeURIComponent(hours);
+    if (hours === "" || Number(hours) <= 0) {
+        showNotification("Please enter valid hours before marking attendance.", "warning");
+        checkbox.checked = !absent;
+        return;
+    }
+
+    const bodyData =
+        "date=" + encodeURIComponent(date) +
+        "&tId=" + encodeURIComponent(tId) +
+        "&classSessId=" + encodeURIComponent(classSessId) +
+        "&classId=" + encodeURIComponent(classId) +
+        "&studId=" + encodeURIComponent(studId) +
+        "&absent=" + encodeURIComponent(absent) +
+        "&hours=" + encodeURIComponent(hours);
 
     console.log("POST Attendance:", bodyData);
 
@@ -116,20 +117,29 @@ function saveAttendance(checkbox, classSessId, studId) {
         console.log("POST result:", result);
 
         if (result.trim() === "success") {
-            showToast(absent ? "Student marked as absent" : "Student marked as present");
-			} else {
-			    showToast("Failed: " + result);
-			    checkbox.checked = !absent;
-			}
+            // --- Enhanced notification based on action ---
+            if (absent) {
+                showNotification(
+                    "Student marked as ABSENT. Record saved to database for percentage calculation.",
+                    "warning"
+                );
+            } else {
+                showNotification(
+                    "Student marked as PRESENT. Record saved to database for percentage calculation.",
+                    "success"
+                );
+            }
+        } else {
+            showNotification("Failed to save: " + result, "error");
+            checkbox.checked = !absent;
+        }
     })
     .catch(error => {
         console.error(error);
-        showToast("Error updating attendance");
+        showNotification("Error updating attendance. Please try again.", "error");
         checkbox.checked = !absent;
     });
 }
-
-
 
 function resetGrid() {
     document.querySelectorAll("#gridBody input[type='checkbox']").forEach(cb => {
@@ -139,7 +149,7 @@ function resetGrid() {
         }
     });
 
-    showToast("All students reset to present");
+    showNotification("All students reset to PRESENT status. Database updated.", "info");
 }
 
 function loadSubjects() {
@@ -176,14 +186,40 @@ function loadClasses() {
         .catch(error => console.error("Error loading classes:", error));
 }
 
-function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
+/* ── NEW ENHANCED NOTIFICATION FUNCTION ── */
+function showNotification(message, type = "info") {
+    const toast = document.getElementById("toast");
+    const toastMessage = document.getElementById("toastMessage");
+    const toastIcon = document.getElementById("toastIcon");
 
+    // Set message
+    toastMessage.textContent = message;
+
+    // Clear previous classes
+    toast.className = "toast";
+
+    // Add appropriate class based on type
+    if (type === "success") {
+        toast.classList.add("success");
+        toastIcon.textContent = "✓";
+    } else if (type === "warning") {
+        toast.classList.add("warning");
+        toastIcon.textContent = "⚠";
+    } else if (type === "error") {
+        toast.classList.add("error");
+        toastIcon.textContent = "✗";
+    } else {
+        toast.classList.add("info");
+        toastIcon.textContent = "●";
+    }
+
+    // Show toast
+    toast.classList.add("show");
+
+    // Auto-hide after 4 seconds (longer for clarity)
     setTimeout(() => {
-        t.classList.remove("show");
-    }, 2500);
+        toast.classList.remove("show");
+    }, 4000);
 }
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -85,7 +85,7 @@
 
 .search-input {
     flex: 1;
-    max-width: 240px; /* Dioptimumkan saiz input supaya muat sebaris bersama butang kanan */
+    max-width: 240px;
     padding: 10px 14px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
@@ -100,12 +100,12 @@
     box-shadow: 0 0 0 2px rgba(245, 87, 41, 0.2);
 }
 
-/* ── BUTTONS POSITION & UX ACTIONS (Modified for Right-Side Alignment) ── */
+/* ── BUTTONS POSITION & UX ACTIONS ── */
 .btn-group-actions {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-left: auto; /* Memaksa butang ke posisi paling kanan */
+    margin-left: auto;
     align-items: center;
 }
 
@@ -123,7 +123,6 @@
     font-family: var(--font-family-main);
 }
 
-/* Primary Action - Load Attendance */
 .btn-save {
     background: #003366; 
     color: white;
@@ -139,7 +138,6 @@
     transform: translateY(0);
 }
 
-/* Secondary Action - Reset */
 .btn-reset {
     background: #f1f5f9;
     color: #475569;
@@ -152,7 +150,7 @@
     border-color: #94a3b8;
 }
 
-/* ── TABLE STYLING (Same Border & Head as Subject.css) ── */
+/* ── TABLE STYLING ── */
 .sheet-table-wrapper {
     overflow-x: auto;
     border: 1px solid #bbb;
@@ -241,29 +239,112 @@ tbody tr:hover td.sticky-col {
     color: #991b1b;
 }
 
-/* ── TOAST NOTIFICATION ── */
+/* ════════════════════════════════════════════════════════
+   TOAST NOTIFICATION — HAPPY & VIBRANT COLORS
+   ════════════════════════════════════════════════════════ */
 .toast {
     display: none;
     position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: #1e293b;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
     color: white;
-    padding: 13px 22px;
-    border-radius: 6px;
-    font-size: 13.5px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
     z-index: 2000;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     font-family: var(--font-family-main);
+    min-width: 340px;
+    max-width: 650px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    border-left: 6px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .toast.show {
     display: flex;
+    animation: slideDown 0.5s ease forwards;
 }
 
-/* ── RESPONSIVE DESIGN (Same Breakpoints as Subject.css) ── */
+/* ── SUCCESS — HAPPY BRIGHT GREEN ── */
+.toast.success {
+    background: #059669;
+    border-left-color: #a7f3d0;
+    box-shadow: 0 8px 30px rgba(5, 150, 105, 0.4);
+}
+
+.toast.success .toast-icon {
+    color: #a7f3d0;
+}
+
+/* ── INFO — BRIGHT BLUE ── */
+.toast.info {
+    background: #2563eb;
+    border-left-color: #93c5fd;
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+}
+
+.toast.info .toast-icon {
+    color: #93c5fd;
+}
+
+/* ── WARNING — BRIGHT ORANGE ── */
+.toast.warning {
+    background: #ea580c;
+    border-left-color: #fdba74;
+    box-shadow: 0 8px 30px rgba(234, 88, 12, 0.4);
+}
+
+.toast.warning .toast-icon {
+    color: #fdba74;
+}
+
+/* ── ERROR — BRIGHT RED ── */
+.toast.error {
+    background: #dc2626;
+    border-left-color: #fca5a5;
+    box-shadow: 0 8px 30px rgba(220, 38, 38, 0.4);
+}
+
+.toast.error .toast-icon {
+    color: #fca5a5;
+}
+
+/* ── TOAST ICON ── */
+.toast-icon {
+    font-size: 22px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    flex-shrink: 0;
+}
+
+/* ── TOAST MESSAGE ── */
+#toastMessage {
+    flex: 1;
+    line-height: 1.5;
+}
+
+/* ── TOAST ANIMATION ── */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     #main-wrapper {
         padding-top: 70px;
@@ -296,7 +377,7 @@ tbody tr:hover td.sticky-col {
 
     .btn-group-actions {
         flex-direction: column;
-        margin-left: 0; /* Balik kepada susunan menegak untuk peranti mudah alih */
+        margin-left: 0;
         width: 100%;
     }
 
@@ -313,5 +394,37 @@ tbody tr:hover td.sticky-col {
     tbody td {
         padding: 6px 4px;
         height: 35px;
+    }
+
+    .toast {
+        top: 80px;
+        min-width: 92%;
+        max-width: 92%;
+        padding: 14px 18px;
+        font-size: 14px;
+        border-radius: 6px;
+        border-left-width: 4px;
+    }
+
+    .toast-icon {
+        font-size: 18px;
+        min-width: 24px;
+    }
+}
+
+/* ── EXTRA SMALL SCREENS ── */
+@media (max-width: 480px) {
+    .toast {
+        top: 75px;
+        padding: 12px 14px;
+        font-size: 13px;
+        min-width: 96%;
+        max-width: 96%;
+        gap: 8px;
+    }
+
+    .toast-icon {
+        font-size: 16px;
+        min-width: 20px;
     }
 }

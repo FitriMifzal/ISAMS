@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Attendance | KV Student Management</title>
     
-    <!-- Sidebar CSS DULU (defines all variables) -->
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
-    
-    <!-- Page CSS SELEPAS -->
     <link rel="stylesheet" href="Create-Student-Attendance.css">
 </head>
 <body>
     <!-- ════════════════════════════════════════════════════════
-         SIDEBAR (same structure untuk semua pages)
+         SIDEBAR
          ════════════════════════════════════════════════════════ -->
     <div id="sidebar">
         <div class="logo-container">
@@ -23,19 +20,10 @@
         <div class="role-badge">Subject Teacher</div>
      
         <div class="nav-menu">
-            <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-     
-            <!-- TEACHER ACCOUNT -->
             <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
-     
-            <!-- STUDENT CLASS -->
             <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
-     
-            <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-     
-            <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
                 <span class="arrow">▾</span>
@@ -45,7 +33,6 @@
                 <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
                 <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-     
             <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
             <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
@@ -53,46 +40,41 @@
     </div>
 
     <!-- ════════════════════════════════════════════════════════
-         MAIN CONTENT AREA
+         MAIN CONTENT
          ════════════════════════════════════════════════════════ -->
     <div id="main-wrapper">
-        <!-- HEADER -->
         <header id="header">
             <button class="header-title" onclick="toggleSidebar()">
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
-            
-            <!-- USER PROFILE AREA (icon + name) -->
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
             </div>
         </header>
 
-        <!-- MAIN CONTENT -->
         <main id="content-area">
-            <!-- STUDENT ATTENDANCE PAGE (Using content-card to match Subject page layout) -->
             <div id="attendancePage" class="content-card">
                 <h1 class="page-title">Student Attendance</h1>
                 <p class="page-description">Student Attendance Spreadsheet Matrix. Select the date, subject, class, and enter hours to load the attendance grid matrix.</p>
                 <div class="orange-bar"></div>
 
+                <!-- NOTIFICATION AREA — DITEMPAKKAN SECARA JELAS DI SINI -->
+                <div id="notificationArea" style="display: none; margin-bottom: 18px; padding: 14px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; background: #f0fdf4; border-left: 5px solid #22c55e; color: #166534;">
+                    <span id="notificationMessage">Student marked as present. Record saved to database for percentage calculation.</span>
+                </div>
+
                 <!-- Toolbar -->
                 <div class="toolbar-panel">
                     <input type="date" id="attendanceDate" class="search-input">
-
                     <select id="subjectSelect" class="search-input">
                         <option value=""> Select Subject </option>
                     </select> 
-                    
                     <select id="classSelect" class="search-input">
                         <option value=""> Select Class </option>
                     </select> 
-                    
                     <input type="number" id="hoursInput" class="search-input" placeholder="Enter hours" min="0.5" step="0.5">
-
-                    <!-- Buttons Group Modifikasi UX: Diletakkan ke Hujung Kanan Toolbar -->
                     <div class="btn-group-actions">
                         <button class="btn btn-reset" onclick="resetGrid()">Reset</button>
                         <button class="btn btn-save" onclick="loadAttendance()">Load Attendance</button>
@@ -110,12 +92,12 @@
         </main>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
+    <!-- Toast Notification (repositioned to top center via CSS) -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">●</span>
+        <span id="toastMessage">Message</span>
+    </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCRIPTS
-         ════════════════════════════════════════════════════════ -->
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
     <script src="Create-Student-Attendance.js"></script>

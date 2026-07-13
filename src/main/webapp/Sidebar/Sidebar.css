@@ -88,29 +88,8 @@ body {
     flex-direction: column;
     gap: 4px;
     flex: 1;
-    overflow-y: hidden;  /* BUANG SCROLLBAR */
+    overflow-y: hidden;
 }
-
-/* BUANG SCROLLBAR STYLING - TAK PERLU LAGI */
-/* 
-.nav-menu::-webkit-scrollbar {
-    width: 6px;
-}
-
-.nav-menu::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-    border-radius: 3px;
-}
-
-.nav-menu::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 3px;
-}
-
-.nav-menu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.3);
-}
-*/
 
 /* ── NAV ITEM ── */
 .nav-item {
@@ -327,6 +306,141 @@ header.collapsed {
     border: 2px solid white;
 }
 
+/* ════════════════════════════════════════════════════════
+   LOGOUT CONFIRMATION MODAL — CUSTOM DESIGN
+   ════════════════════════════════════════════════════════ */
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+/* ── MODAL BOX ── */
+.modal-box {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 48px;
+    max-width: 440px;
+    width: 92%;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    text-align: center;
+    animation: modalSlideUp 0.35s ease;
+}
+
+/* ── MODAL ICON ── */
+.modal-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #fef2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 34px;
+    font-weight: 700;
+    color: #dc2626;
+    border: 2px solid #fca5a5;
+}
+
+/* ── MODAL TITLE ── */
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    font-family: var(--font-family-main);
+}
+
+/* ── MODAL MESSAGE ── */
+.modal-message {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0 0 28px 0;
+    line-height: 1.6;
+    font-family: var(--font-family-main);
+}
+
+/* ── MODAL BUTTONS ── */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-btn {
+    padding: 11px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 110px;
+}
+
+.modal-btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.modal-btn-cancel:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+    border-color: #94a3b8;
+}
+
+.modal-btn-logout {
+    background: #dc2626;
+    color: white;
+}
+
+.modal-btn-logout:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+}
+
+.modal-btn-logout:active {
+    transform: translateY(0);
+}
+
+/* ── MODAL ANIMATIONS ── */
+@keyframes modalFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 /* ============================================================
    RESPONSIVE (MOBILE)
    ============================================================ */
@@ -355,5 +469,63 @@ header.collapsed {
     
     .header-text {
         font-size: 14px;
+    }
+
+    .modal-box {
+        padding: 30px 24px;
+        max-width: 94%;
+    }
+
+    .modal-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+    }
+
+    .modal-title {
+        font-size: 19px;
+    }
+
+    .modal-message {
+        font-size: 14px;
+    }
+
+    .modal-btn {
+        padding: 10px 24px;
+        font-size: 13px;
+        min-width: 90px;
+    }
+
+    .modal-actions {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-box {
+        padding: 24px 18px;
+        border-radius: 12px;
+    }
+
+    .modal-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 24px;
+        margin-bottom: 14px;
+    }
+
+    .modal-title {
+        font-size: 17px;
+    }
+
+    .modal-message {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .modal-btn {
+        padding: 9px 18px;
+        font-size: 12px;
+        min-width: 80px;
     }
 }
