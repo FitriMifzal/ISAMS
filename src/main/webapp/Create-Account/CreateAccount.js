@@ -9,6 +9,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 /* ────────────────────────────────────────────────────────
+   MESSAGE MODALS (Success / Error)
+────────────────────────────────────────────────────────── */
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    window.location.href = "../Delete-Account/DeleteAccount.html";
+}
+
+
+/* ────────────────────────────────────────────────────────
    HANDLE FORM SUBMISSION - Register Teacher to Database
 ────────────────────────────────────────────────────────── */
 
@@ -22,46 +41,34 @@ function handleForm(event) {
     const t_pass = document.getElementById("t_pass").value.trim();
 
 
-    // ✅ VALIDATION 1: Check each required field
-    if (!t_name) {
-        alert("Please fill in the Full Name field!");
-        return;
-    }
-    if (!t_ic) {
-        alert("Please fill in the IC Number field!");
-        return;
-    }
-    if (!t_email) {
-        alert("Please fill in the Email Address field!");
-        return;
-    }
-    if (!t_pass) {
-        alert("Please fill in the Password field!");
+    // ✅ VALIDATION 1: SEMUA FIELD - NOT NULL (standardized)
+    if (!t_name || !t_ic || !t_email || !t_phonenum || !t_pass) {
+        showError("Please fill in all fields!");
         return;
     }
 
     // ✅ VALIDATION 2: IC Number must be numeric only and 10-20 digits
     if (!/^\d+$/.test(t_ic) || t_ic.length < 10 || t_ic.length > 20) {
-        alert("Error: IC Number must contain only numbers, between 10-20 digits.");
+        showError("Error: IC Number must contain only numbers, between 10-20 digits.");
         return;
     }
 
     // ✅ VALIDATION 3: Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(t_email)) {
-        alert("Error: Please enter a valid email address.");
+        showError("Error: Please enter a valid email address.");
         return;
     }
 
-    // ✅ VALIDATION 4: Phone number (if provided) must be numeric
-    if (t_phonenum && (!/^\d+$/.test(t_phonenum) || t_phonenum.length < 10)) {
-        alert("Error: Contact number must contain only numbers, minimum 10 digits.");
+    // ✅ VALIDATION 4: Phone number must be numeric
+    if (!/^\d+$/.test(t_phonenum) || t_phonenum.length < 10) {
+        showError("Error: Contact number must contain only numbers, minimum 10 digits.");
         return;
     }
 
     // ✅ VALIDATION 5: Password minimum 6 characters
     if (t_pass.length < 6) {
-        alert("Error: Password must be at least 6 characters long.");
+        showError("Error: Password must be at least 6 characters long.");
         return;
     }
 
@@ -94,11 +101,9 @@ function handleForm(event) {
         submitBtn.textContent = 'Confirm';
 
         if (data.status === "success") {
-            alert("Teacher account created successfully!");
-            // ✅ FIXED: Use correct folder name with capital letters
-            window.location.href = "../Delete-Account/DeleteAccount.html";
+            showSuccess("Teacher account created successfully!");
         } else {
-            alert("Error: " + (data.message || "Failed to create account"));
+            showError("Error: " + (data.message || "Failed to create account"));
         }
     })
     .catch(error => {
@@ -106,6 +111,6 @@ function handleForm(event) {
         // Re-enable submit button
         submitBtn.disabled = false;
         submitBtn.textContent = 'Confirm';
-        alert("Failed to connect to server. Please make sure the server is running.");
+        showError("Failed to connect to server. Please make sure the server is running.");
     });
 }

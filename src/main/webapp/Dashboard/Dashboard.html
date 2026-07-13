@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | KV Student Management</title>
-    
+
+    <!-- Bootstrap Icons (untuk icon dalam stats card) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     <link rel="stylesheet" href="Dashboard.css">
 </head>
@@ -67,25 +70,9 @@
                 <h1 id="welcome-msg">Welcome!</h1>
                 <p>Status: <strong id="status-text">Teacher</strong></p>
             </div>
-                 <section class="statistics-section">
-                <!-- Total Students from Student table -->
-                <div class="stats-card">
-                    <div class="stat-value" id="totalStudents">0</div>
-                    <div class="stat-label">Total Students</div>
-                </div>
 
-                <!-- Total Classes from Class table -->
-                <div class="stats-card">
-                    <div class="stat-value" id="totalClasses">0</div>
-                    <div class="stat-label">Total Classes</div>
-                </div>
-
-                <!-- Subjects Teaching (Count Subject WHERE T_ID = current teacher) -->
-                <div class="stats-card">
-                    <div class="stat-value" id="totalSubjects">0</div>
-                    <div class="stat-label">Subjects Teaching</div>
-                </div>
-            </section>
+            <!-- STATISTICS SECTION — cards di-render oleh Dashboard.js ikut role -->
+            <section class="statistics-section" id="statsSection"></section>
         </main>
     </div>
 

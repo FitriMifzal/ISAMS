@@ -11,6 +11,24 @@ document.addEventListener('DOMContentLoaded', function () {
     loadClassDropdown();
 });
 
+/* ────────────────────────────────────────────────────────
+   MESSAGE MODALS (Success / Error)
+────────────────────────────────────────────────────────── */
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    window.location.href = "../Student-List/StudentList.html";
+}
+
 // load classes into the Class dropdown
 function loadClassDropdown() {
     const clsSelect = document.getElementById("class_id");
@@ -27,7 +45,7 @@ function loadClassDropdown() {
         })
         .catch(error => {
             console.error("Error loading classes:", error);
-            alert("Failed to load class list. Please refresh the page.");
+            showError("Failed to load class list. Please refresh the page.");
         });
 }
 
@@ -44,75 +62,57 @@ function handleForm(event) {
     const class_id = document.getElementById('class_id').value;
     const student_type = document.getElementById('student_type').value;
 
-    // ✅ VALIDATION 1: stu_name - NOT NULL
-    if (!stu_name) {
-        alert('Please enter the student\'s full name!');
+    // ✅ VALIDATION: SEMUA FIELD - NOT NULL (standardized dengan Subject page)
+    if (!stu_name || !stu_ic || !stu_add || !stu_phonenum || !class_id || !student_type) {
+        showError('Please fill in all field!');
         return;
     }
 
-    // ✅ VALIDATION 2: stu_name - VARCHAR2(100) max length
+    // ✅ VALIDATION: stu_name - VARCHAR2(100) max length
     if (stu_name.length > 100) {
-        alert('Student name cannot exceed 100 characters!');
+        showError('Student name cannot exceed 100 characters!');
         return;
     }
 
-    // ✅ VALIDATION 3: stu_ic - NOT NULL
-    if (!stu_ic) {
-        alert('Please enter the student\'s IC Number!');
-        return;
-    }
-
-    // ✅ VALIDATION 4: stu_ic - must be numeric only
+    // ✅ VALIDATION: stu_ic - must be numeric only
     if (!/^\d+$/.test(stu_ic)) {
-        alert('IC Number must contain only numbers!');
+        showError('IC Number must contain only numbers!');
         return;
     }
 
-    // ✅ VALIDATION 5: stu_ic - VARCHAR2(20) max length
+    // ✅ VALIDATION: stu_ic - VARCHAR2(20) max length
     if (stu_ic.length > 20) {
-        alert('IC Number cannot exceed 20 characters!');
+        showError('IC Number cannot exceed 20 characters!');
         return;
     }
 
-    // ✅ VALIDATION 6: stu_ic - minimum 10 characters (Malaysian IC standard)
+    // ✅ VALIDATION: stu_ic - minimum 10 characters (Malaysian IC standard)
     if (stu_ic.length < 10) {
-        alert('IC Number must be at least 10 characters!');
+        showError('IC Number must be at least 10 characters!');
         return;
     }
 
-    // ✅ VALIDATION 7: stu_add - VARCHAR2(255) max length (if provided)
-    if (stu_add && stu_add.length > 255) {
-        alert('Address cannot exceed 255 characters!');
+    // ✅ VALIDATION: stu_add - VARCHAR2(255) max length
+    if (stu_add.length > 255) {
+        showError('Address cannot exceed 255 characters!');
         return;
     }
 
-    // ✅ VALIDATION 8: stu_phonenum - VARCHAR2(20) max length (if provided)
-    if (stu_phonenum && stu_phonenum.length > 20) {
-        alert('Phone number cannot exceed 20 characters!');
+    // ✅ VALIDATION: stu_phonenum - VARCHAR2(20) max length
+    if (stu_phonenum.length > 20) {
+        showError('Phone number cannot exceed 20 characters!');
         return;
     }
 
-    // ✅ VALIDATION 9: stu_phonenum - must be numeric only (if provided)
-    if (stu_phonenum && !/^\d+$/.test(stu_phonenum)) {
-        alert('Phone number must contain only numbers!');
+    // ✅ VALIDATION: stu_phonenum - must be numeric only
+    if (!/^\d+$/.test(stu_phonenum)) {
+        showError('Phone number must contain only numbers!');
         return;
     }
 
-    // ✅ VALIDATION 10: class_id - NOT NULL
-    if (!class_id) {
-        alert('Please select a class!');
-        return;
-    }
-
-    // ✅ VALIDATION 11: student_type - NOT NULL
-    if (!student_type) {
-        alert('Please select a student type!');
-        return;
-    }
-
-    // ✅ VALIDATION 12: student_type - must be 'SVM' or 'DVM'
+    // ✅ VALIDATION: student_type - must be 'SVM' or 'DVM'
     if (!['SVM', 'DVM'].includes(student_type)) {
-        alert('Student type must be either "SVM" or "DVM"!');
+        showError('Student type must be either "SVM" or "DVM"!');
         return;
     }
 
@@ -135,15 +135,14 @@ function handleForm(event) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            alert("Student profile created successfully!");
-            window.location.href = "../Student-List/StudentList.html";
+            showSuccess("Student profile created successfully!");
         } else {
-            alert("Something went wrong: " + data.message);
+            showError("Something went wrong: " + data.message);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Failed to connect to server. Please try again.");
+        showError("Failed to connect to server. Please try again.");
     });
 }
 

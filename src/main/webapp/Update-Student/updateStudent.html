@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Student | KV Student Management</title>
-    
+
+    <!-- Bootstrap (untuk modal) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Sidebar CSS DULU (defines all variables) -->
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
-    
+
     <!-- Page CSS SELEPAS -->
     <link rel="stylesheet" href="updateStudent.css">
 </head>
@@ -36,7 +39,6 @@
         </div>
         <button onclick="logoutUser()" class="nav-item logout">Logout</button>
     </div>
-
     <!-- ════════════════════════════════════════════════════════
          MAIN CONTENT AREA
          ════════════════════════════════════════════════════════ -->
@@ -47,61 +49,50 @@
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
-            
+
             <!-- USER PROFILE AREA (icon + name) -->
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
             </div>
         </header>
-
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="shadow-box">
                 <h1 class="page-title">Student Profile</h1>
                 <p class="page-description">Update student information to keep your records current and accurate.</p>
                 <div class="title-underline"></div>
-                
+
                 <form id="updateForm">
                     <input type="hidden" id="stuId">
-
                     <label for="name">Full Name</label>
                     <input type="text" id="name" placeholder="Enter student's full name" required>
-
                     <label for="ic">IC Number</label>
                     <input type="text" id="ic" placeholder="e.g. 031024045562" required>
-
                     <label for="cls">Class</label>
                     <select id="cls" required>
                         <option value="">-- Select Class --</option>
                     </select>
-
                     <label for="student_type">Student Type</label>
                     <select id="student_type" required>
                         <option value="">-- Select Type --</option>
                         <option value="SVM">SVM</option>
                         <option value="DVM">DVM</option>
                     </select>
-
                     <div id="svmFields" style="display: none;">
                         <label for="cgpaA">CGPA Academic</label>
                         <input type="number" id="cgpaA" step="0.01" min="0" max="4" placeholder="e.g. 3.50">
-
                         <label for="cgpaV">CGPA Vocational</label>
                         <input type="number" id="cgpaV" step="0.01" min="0" max="4" placeholder="e.g. 3.70">
                     </div>
-
                     <div id="dvmFields" style="display: none;">
                         <label for="repeatPaper">Repeat Paper</label>
                         <input type="number" id="repeatPaper" min="0" placeholder="e.g. 2">
                     </div>
-
                     <label for="address">Home Address</label>
                     <textarea id="address" rows="3" placeholder="Enter student's home address"></textarea>
-
                     <label for="No">Contact No</label>
                     <input type="text" id="No" placeholder="e.g. 0123456789">
-
                     <div class="actions">
                         <button type="button" class="btn-cancel" onclick="window.location.href='../Student-List/StudentList.html'">Discard Changes</button>
                         <button type="button" class="btn-submit" onclick="saveUpdate()">Save Changes</button>
@@ -111,6 +102,45 @@
         </main>
     </div>
 
+    <!-- ════════════════════════════════════════════════════════
+         SUCCESS MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Success!</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="successMsg">Student updated successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="closeSuccessModal()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         ERROR MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Error!</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMsg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
     <script src="updateStudent.js"></script>

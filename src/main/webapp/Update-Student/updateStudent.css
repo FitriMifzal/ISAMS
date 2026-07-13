@@ -30,6 +30,31 @@
     background-color: #f4f7f6;
 }
 
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-family-main);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header.bg-danger {
+    background-color: #dc2626 !important;
+}
+
+.modal-body {
+    color: #334155;
+    font-family: var(--font-family-main);
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
 /* ── SHADOW BOX ── */
 .shadow-box {
     background: white;

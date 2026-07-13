@@ -2,27 +2,41 @@
    UPDATESTUDENT.JS — Page-specific logic
    User profile initialization handled by Sidebar.js
    ============================================================ */
-
 let currentStudentType = "";
 
 document.addEventListener('DOMContentLoaded', function () {
     loadClassDropdown();
     loadStudentData();
-
     // toggle SVM/DVM fields whenever the teacher changes the dropdown
     document.getElementById("student_type").addEventListener("change", function () {
         toggleTypeFields(this.value);
     });
 });
 
+/* ────────────────────────────────────────────────────────
+   MESSAGE MODALS (Success / Error)
+────────────────────────────────────────────────────────── */
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    window.location.href = "../Student-List/StudentList.html";
+}
+
 function loadClassDropdown() {
     const clsSelect = document.getElementById("cls");
-
     fetch("../ClassroomController?action=list")
         .then(response => response.json())
         .then(classes => {
             clsSelect.innerHTML = `<option value="">-- Select Class --</option>`;
-
             classes.forEach(c => {
                 const option = document.createElement("option");
                 option.value = c.classId;
@@ -40,7 +54,6 @@ function toggleTypeFields(type) {
 
 function loadStudentData() {
     const id = new URLSearchParams(window.location.search).get("id");
-
     fetch("../StudentController?action=get&id=" + id)
         .then(response => response.json())
         .then(student => {
@@ -50,15 +63,11 @@ function loadStudentData() {
             document.getElementById("address").value = student.stuAdd || "";
             document.getElementById("No").value = student.stuPhoneNum || "";
             document.getElementById("student_type").value = student.studentType || "";
-
             currentStudentType = student.studentType;
-
             setTimeout(() => {
                 document.getElementById("cls").value = student.classId;
             }, 300);
-
             toggleTypeFields(currentStudentType);
-
             if (currentStudentType === "SVM") {
                 document.getElementById("cgpaA").value =
                     (student.cgpaA !== null && student.cgpaA !== undefined) ? student.cgpaA : "";
@@ -81,7 +90,7 @@ function saveUpdate() {
     const contactNo = document.getElementById("No").value.trim();
 
     if (!name || !ic || !cls || !studentType || !address || !contactNo) {
-        alert("Please fill in all student details.");
+        showError("Please fill in all student details.");
         return;
     }
 
@@ -97,24 +106,20 @@ function saveUpdate() {
     if (studentType === "SVM") {
         const cgpaA = document.getElementById("cgpaA").value.trim();
         const cgpaV = document.getElementById("cgpaV").value.trim();
-
         if (!cgpaA || !cgpaV) {
-            alert("Please fill in both CGPA fields for SVM students.");
+            showError("Please fill in both CGPA fields for SVM students.");
             return;
         }
-
         formData.append("cgpaA", cgpaA);
         formData.append("cgpaV", cgpaV);
     }
 
     if (studentType === "DVM") {
         const repeatPaper = document.getElementById("repeatPaper").value.trim();
-
         if (!repeatPaper) {
-            alert("Please fill in Repeat Paper for DVM students.");
+            showError("Please fill in Repeat Paper for DVM students.");
             return;
         }
-
         formData.append("repeatPaper", repeatPaper);
     }
 
@@ -128,14 +133,13 @@ function saveUpdate() {
     .then(response => response.text())
     .then(result => {
         if (result.trim() === "success") {
-            alert("Student updated successfully.");
-            window.location.href = "../Student-List/StudentList.html";
+            showSuccess("Student updated successfully!");
         } else {
-            alert("Update failed: " + result);
+            showError("Update failed: " + result);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Failed to connect to server. Please try again.");
+        showError("Failed to connect to server. Please try again.");
     });
 }

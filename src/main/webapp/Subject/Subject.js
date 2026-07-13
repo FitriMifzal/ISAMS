@@ -43,6 +43,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ============================================================
+// MESSAGE MODAL (Error)
+// ============================================================
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+// ============================================================
 // LOAD SUBJECTS FROM DATABASE
 // ============================================================
 function loadSubjects() {
@@ -151,11 +159,8 @@ function saveData() {
     const credit = document.getElementById('subCredit').value.trim();
     const subId = document.getElementById('editIdx').value;
 
-    document.getElementById('globalError').classList.add('hidden');
-
     if (!name || !credit) {
-        document.getElementById('globalError').classList.remove('hidden');
-        document.getElementById('globalError').innerText = "Please fill in all fields!";
+        showError("Please fill in all fields!");
         return;
     }
 
@@ -188,14 +193,12 @@ function saveData() {
             document.getElementById('formPage').classList.add('hidden');
             new bootstrap.Modal(document.getElementById('successModal')).show();
         } else {
-            document.getElementById('globalError').classList.remove('hidden');
-            document.getElementById('globalError').innerText = data.message || "Operation failed.";
+            showError(data.message || "Operation failed.");
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        document.getElementById('globalError').classList.remove('hidden');
-        document.getElementById('globalError').innerText = "Failed to connect to server.";
+        showError("Failed to connect to server.");
     });
 }
 
@@ -235,13 +238,13 @@ function executeEnroll() {
             document.getElementById('successMsg').innerText = "You enrolled for " + (s ? s.subName : "the subject");
             new bootstrap.Modal(document.getElementById('successModal')).show();
         } else {
-            alert("Something went wrong: " + data.message);
+            showError("Something went wrong: " + data.message);
         }
     })
     .catch(error => {
         console.error("Error:", error);
         bootstrap.Modal.getInstance(document.getElementById('enrollModal')).hide();
-        alert("Failed to connect to server. Please try again.");
+        showError("Failed to connect to server. Please try again.");
     });
 }
 
@@ -254,4 +257,3 @@ function closeSuccessModal() {
     document.getElementById('formPage').classList.add('hidden');
     loadSubjects();
 }
-
