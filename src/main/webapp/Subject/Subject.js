@@ -1,27 +1,23 @@
-// SUBJECT.JS — Gabungan VSCode + Eclipse
+// SUBJECT.JS — M:N via CLASS_SESSION (three-way link)
 // ============================================================
 
-let subjects = [];      // holds the last-fetched list
+let subjects = [];
+let assignments = [];   // {subId, classId, tId, teacherName, classCode, className}
+let classrooms = [];
 let currentUserRole = "";
-let activeSubId = null; // subject currently targeted for enroll
+let activeSubId = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is logged in
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/CreateAccount.html";
         return;
     }
 
     currentUserRole = localStorage.getItem('active_role') || 'Teacher';
-    
-    console.log('=== USER INFO ===');
-    console.log('Role:', currentUserRole);
-    console.log('================');
 
-    // CHANGE PAGE TITLE AND DESCRIPTION BASED ON ROLE
     const pageTitle = document.getElementById('pageTitle');
     const pageDescription = document.getElementById('pageDescription');
-    
+
     if (currentUserRole.trim() === "Penyelaras Intervensi") {
         pageTitle.innerText = "Subject Details";
         pageDescription.innerText = "Create, and manage all subjects. Click 'Create' to add a new subject or 'Edit' to modify existing ones.";
@@ -29,8 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pageTitle.innerText = "Subject Enrollment";
         pageDescription.innerText = "Enroll in the ones you wish to teach. Click 'Enroll' to register for a subject.";
     }
-    
-    // Adjust UI based on role
+
     const btnCreate = document.getElementById('btnCreate');
     if (currentUserRole.trim() === "Penyelaras Intervensi") {
         btnCreate.style.display = 'block';
@@ -38,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnCreate.style.display = 'none';
     }
 
-    // Load subjects from database
+    loadClassrooms();
     loadSubjects();
 });
 
@@ -51,20 +46,33 @@ function showError(message) {
 }
 
 // ============================================================
-// LOAD SUBJECTS FROM DATABASE
+// LOAD CLASSROOMS (untuk dropdown enroll)
+// ============================================================
+function loadClassrooms() {
+    fetch("../ClassroomController?action=list")
+        .then(r => r.json())
+        .then(data => { classrooms = data; })
+        .catch(e => console.error("Error loading classrooms:", e));
+}
+
+// ============================================================
+// LOAD SUBJECTS + ASSIGNMENTS
 // ============================================================
 function loadSubjects() {
-    fetch("../SubjectController?action=list")
-        .then(response => response.json())
-        .then(data => {
-            subjects = data;
-            renderTable();
-        })
-        .catch(error => {
-            console.error("Error loading subjects:", error);
-            document.getElementById('subjectTableBody').innerHTML =
-                `<tr><td colspan="4" class="text-center">Failed to load subjects.</td></tr>`;
-        });
+    Promise.all([
+        fetch("../SubjectController?action=list").then(r => r.json()),
+        fetch("../SubjectController?action=assignments").then(r => r.json())
+    ])
+    .then(([subs, assigns]) => {
+        subjects = subs;
+        assignments = assigns;
+        renderTable();
+    })
+    .catch(error => {
+        console.error("Error loading subjects:", error);
+        document.getElementById('subjectTableBody').innerHTML =
+            `<tr><td colspan="4" class="text-center">Failed to load subjects.</td></tr>`;
+    });
 }
 
 // ============================================================
@@ -83,23 +91,29 @@ function renderTable() {
     }
 
     subjects.forEach((s) => {
+        // semua assignment untuk subjek ni
+        const rows = assignments.filter(a => a.subId === s.subId);
+
+        // lecturer column: "Cikgu A (DVMCS4A)", satu per baris
+        let lecturer;
+        if (rows.length === 0) {
+            lecturer = '<span class="text-muted">Unassigned</span>';
+        } else {
+            lecturer = rows.map(a => `${a.teacherName} <small>(${a.classCode})</small>`).join('<br>');
+        }
+
         let btns = '';
 
         if (roleToCheck === "Penyelaras Intervensi") {
-            // PENYELARAS: Show Update button only
             btns = `<button class="btn-update" onclick="showForm(${s.subId})">Update</button>`;
-        } else if (roleToCheck === "Subject Teacher" || roleToCheck.includes("Teacher")) {
-            // TEACHER: Show Enroll/Status buttons
-            if (s.tId !== null && s.tId === myTId) {
-                btns = `<button class="btn-secondary" disabled><i class="bi bi-check-circle"></i> Enrolled</button>`;
-            } else if (s.tId === null) {
-                btns = `<button class="btn-save" onclick="openEnroll(${s.subId})">Enroll</button>`;
-            } else {
-                btns = `<button class="btn-secondary" disabled>Assigned</button>`;
+        } else {
+            // TEACHER: sentiasa boleh enroll (untuk kelas lain)
+            const myClasses = rows.filter(a => a.tId === myTId);
+            btns = `<button class="btn-save" onclick="openEnroll(${s.subId})">Enroll</button>`;
+            if (myClasses.length > 0) {
+                btns += `<div style="margin-top:6px;"><small class="text-muted">You teach: ${myClasses.map(a => a.classCode).join(', ')}</small></div>`;
             }
         }
-
-        const lecturer = s.tId === null ? '<span class="text-muted">Unassigned</span>' : s.teacherName;
 
         body.innerHTML += `<tr>
             <td>${s.subName}</td>
@@ -124,25 +138,22 @@ function showList() {
 // ============================================================
 function showForm(subId) {
     document.getElementById('subjectForm').reset();
-    document.getElementById('globalError').classList.add('hidden');
 
     if (subId !== undefined) {
-        // UPDATE MODE
         const s = subjects.find(sub => sub.subId === subId);
         if (s) {
             document.getElementById('formTitle').innerText = "Subject Details";
             document.getElementById('subName').value = s.subName;
             document.getElementById('subCredit').value = s.creditHours;
             document.getElementById('editIdx').value = subId;
-            
+
             document.getElementById('updateButtons').classList.remove('hidden');
             document.getElementById('createButtons').classList.add('hidden');
         }
     } else {
-        // CREATE MODE
         document.getElementById('formTitle').innerText = "Subject Details";
         document.getElementById('editIdx').value = "";
-        
+
         document.getElementById('createButtons').classList.remove('hidden');
         document.getElementById('updateButtons').classList.add('hidden');
     }
@@ -152,7 +163,7 @@ function showForm(subId) {
 }
 
 // ============================================================
-// SAVE SUBJECT (Create/Update) - Database Integration
+// SAVE SUBJECT (Create/Update)
 // ============================================================
 function saveData() {
     const name = document.getElementById('subName').value.trim();
@@ -168,16 +179,14 @@ function saveData() {
     formData.append("subName", name);
     formData.append("creditHours", credit);
 
-    let url, successTitle, successMsg;
+    let url, successMsg;
 
     if (subId === "") {
         url = "../SubjectController?action=create";
-        successTitle = "Registration Successful!";
         successMsg = "New subject added.";
     } else {
         formData.append("subId", subId);
         url = "../SubjectController?action=update";
-        successTitle = "Update Successful!";
         successMsg = "Subject updated.";
     }
 
@@ -203,26 +212,58 @@ function saveData() {
 }
 
 // ============================================================
-// OPEN ENROLLMENT MODAL
+// OPEN ENROLLMENT MODAL — pilih kelas
+// (kelas yang sudah diambil untuk subjek ini tidak dipaparkan)
 // ============================================================
 function openEnroll(subId) {
     activeSubId = subId;
     const s = subjects.find(sub => sub.subId === subId);
-    if (s) {
-        document.getElementById('targetSub').innerText = s.subName;
+    if (!s) return;
+
+    document.getElementById('targetSub').innerText = s.subName;
+
+    // kelas yang SUDAH diambil untuk subjek ni (oleh mana-mana cikgu)
+    const takenClassIds = assignments
+        .filter(a => a.subId === subId)
+        .map(a => a.classId);
+
+    const sel = document.getElementById('enrollClassSelect');
+    sel.innerHTML = `<option value="">-- Select Class --</option>`;
+
+    const available = classrooms.filter(c => !takenClassIds.includes(c.classId));
+
+    if (available.length === 0) {
+        sel.innerHTML = `<option value="">-- All classes already assigned --</option>`;
         new bootstrap.Modal(document.getElementById('enrollModal')).show();
+        return;
     }
+
+    available.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.classId;
+        o.textContent = c.classCode + " - " + c.className;
+        sel.appendChild(o);
+    });
+
+    new bootstrap.Modal(document.getElementById('enrollModal')).show();
 }
 
 // ============================================================
-// EXECUTE ENROLLMENT - Database Integration
+// EXECUTE ENROLLMENT
 // ============================================================
 function executeEnroll() {
     const tId = localStorage.getItem('active_tId');
+    const classId = document.getElementById('enrollClassSelect').value;
+
+    if (!classId) {
+        showError("Please select a class!");
+        return;
+    }
 
     const formData = new URLSearchParams();
     formData.append("subId", activeSubId);
     formData.append("tId", tId);
+    formData.append("classId", classId);
 
     fetch("../SubjectController?action=enroll", {
         method: "POST",
@@ -238,7 +279,7 @@ function executeEnroll() {
             document.getElementById('successMsg').innerText = "You enrolled for " + (s ? s.subName : "the subject");
             new bootstrap.Modal(document.getElementById('successModal')).show();
         } else {
-            showError("Something went wrong: " + data.message);
+            showError(data.message || "Something went wrong.");
         }
     })
     .catch(error => {

@@ -39,6 +39,8 @@ public class SubjectController extends HttpServlet {
 
         if ("list".equals(action)) {
             handleList(out);
+        } else if ("assignments".equals(action)) {
+            handleAssignments(out);
         } else if ("get".equals(action)) {
             handleGet(request, out);
         } else {
@@ -69,7 +71,6 @@ public class SubjectController extends HttpServlet {
 
         out.flush();
     }
-
     // return all subjects
     private void handleList(PrintWriter out) {
         List<Subject> subjects = SubjectDAO.getSubjects();
@@ -141,20 +142,36 @@ public class SubjectController extends HttpServlet {
         }
     }
 
-    // a teacher enrolls (claims) a subject
+ // return all teaching assignments (subject + class + teacher)
+    private void handleAssignments(PrintWriter out) {
+        java.util.List<String> rows = SubjectDAO.getAssignmentsJson();
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        for (int i = 0; i < rows.size(); i++) {
+            json.append(rows.get(i));
+            if (i < rows.size() - 1) json.append(",");
+        }
+        json.append("]");
+        out.print(json.toString());
+    }
+
+    // a teacher enrolls to teach a subject for a specific class
     private void handleEnroll(HttpServletRequest request, PrintWriter out) {
         try {
             int subId = Integer.parseInt(request.getParameter("subId"));
             int tId = Integer.parseInt(request.getParameter("tId"));
+            int classId = Integer.parseInt(request.getParameter("classId"));
 
-            SubjectDAO.enrollSubject(subId, tId);
-
-            out.print("{\"status\":\"success\", \"message\":\"Subject enrolled successfully\"}");
+            boolean ok = SubjectDAO.enrollTeacher(subId, classId, tId);
+            if (ok) {
+                out.print("{\"status\":\"success\", \"message\":\"Enrolled successfully\"}");
+            } else {
+                out.print("{\"status\":\"error\", \"message\":\"You are already enrolled for this subject and class\"}");
+            }
         } catch (NumberFormatException e) {
             out.print("{\"status\":\"error\", \"message\":\"Invalid id\"}");
         }
     }
-
     // convert a Subject object to a JSON string
     private String toJson(Subject s) {
         StringBuilder json = new StringBuilder();

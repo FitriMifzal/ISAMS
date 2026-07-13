@@ -6,26 +6,41 @@ window.onload = function () {
     loadSubjects();
     loadStudents();
 };
+// ============================================================
+// MESSAGE MODALS (Success / Error)
+// ============================================================
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
 
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
 // ============================================================
 // LOAD & FILTER SUBJECTS BASED ON LOGGED-IN TEACHER
 // ============================================================
+// ============================================================
+// LOAD & FILTER SUBJECTS BASED ON LOGGED-IN TEACHER (via assignments)
+// ============================================================
 function loadSubjects() {
-    // Mengambil ID Teacher yang sedang log masuk dari localStorage
     const myTId = parseInt(localStorage.getItem('active_tId'));
 
-    fetch("../SubjectController?action=list")
+    fetch("../SubjectController?action=assignments")
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById("subject-select");
             select.innerHTML = `<option value="">-- Select Subject --</option>`;
 
-            data.forEach(subject => {
-                // KUNCI: Hanya paparkan subjek jika tId subjek sepadan dengan tId teacher yang login
-                if (subject.tId !== null && parseInt(subject.tId) === myTId) {
+            // subjek unik yang cikgu ni ajar
+            const seen = [];
+            data.forEach(a => {
+                if (a.tId === myTId && !seen.includes(a.subId)) {
+                    seen.push(a.subId);
                     const option = document.createElement("option");
-                    option.value = subject.subId;
-                    option.textContent = subject.subName;
+                    option.value = a.subId;
+                    option.textContent = a.subName;
                     select.appendChild(option);
                 }
             });
@@ -171,12 +186,12 @@ function saveEnrollment() {
     const classId = document.getElementById("class-select").value;
 
     if (subjectId === "" || classId === "") {
-        alert("Please select subject and class.");
+        showError("Please select subject and class.");
         return;
     }
 
     if (enrolledStudents.length === 0) {
-        alert("Please enroll at least one student.");
+        showError("Please enroll at least one student.");
         return;
     }
 
@@ -200,12 +215,12 @@ function saveEnrollment() {
             }
 
             if (savedCount === enrolledStudents.length) {
-                alert("Enrollment saved successfully.");
+                showSuccess("Enrollment saved successfully!");
             }
         })
         .catch(error => {
             console.log(error);
-            alert("Failed to save enrollment.");
+            showError("Failed to save enrollment.");
         });
     });
 }

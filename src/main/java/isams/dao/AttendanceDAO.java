@@ -28,10 +28,13 @@ public class AttendanceDAO {
             if (rs.next()) {
                 classSessId = rs.getInt("CLASS_SESS_ID");
             } else {
+                // T_ID diambil dari baris assignment (SESSION_DATE IS NULL)
                 String insertSql =
                     "INSERT INTO CLASS_SESSION " +
-                    "(SUB_ID, CLASS_ID, SESSION_DATE, SESSION_TIME) " +
-                    "VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?)";
+                    "(SUB_ID, CLASS_ID, SESSION_DATE, SESSION_TIME, T_ID) " +
+                    "VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, " +
+                    "  (SELECT MIN(T_ID) FROM CLASS_SESSION " +
+                    "    WHERE SUB_ID = ? AND CLASS_ID = ? AND SESSION_DATE IS NULL))";
 
                 PreparedStatement ps2 = con.prepareStatement(
                     insertSql,
@@ -42,6 +45,8 @@ public class AttendanceDAO {
                 ps2.setInt(2, classId);
                 ps2.setString(3, date);
                 ps2.setString(4, "-");
+                ps2.setInt(5, subId);
+                ps2.setInt(6, classId);
 
                 ps2.executeUpdate();
 

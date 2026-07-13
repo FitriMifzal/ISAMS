@@ -116,7 +116,24 @@ function loadDashboardStatistics() {
             .catch(e => console.error("Error loading teachers:", e));
     }
 }
-
+// ── SUBJECTS ──
+    if (role === 'Penyelaras Intervensi') {
+        fetch("../SubjectController?action=list")
+            .then(r => r.json())
+            .then(list => setStat('totalSubjects', list.length))
+            .catch(e => console.error("Error loading subjects:", e));
+    } else {
+        fetch("../SubjectController?action=assignments")
+            .then(r => r.json())
+            .then(list => {
+                const seen = [];
+                list.forEach(a => {
+                    if (a.tId === myTId && !seen.includes(a.subId)) seen.push(a.subId);
+                });
+                setStat('totalSubjects', seen.length);
+            })
+            .catch(e => console.error("Error loading subjects:", e));
+    }
 /* ── Helper: set nilai kad kalau element wujud ── */
 function setStat(id, value) {
     var el = document.getElementById(id);

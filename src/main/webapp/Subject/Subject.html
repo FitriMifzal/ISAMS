@@ -136,7 +136,13 @@
                     <h5 class="modal-title">Enrollment Confirmation</h5>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to enroll in <strong><span id="targetSub"></span></strong>?
+                    <p>You are enrolling to teach <strong><span id="targetSub"></span></strong>.</p>
+                    <div class="form-group">
+                        <label for="enrollClassSelect">Select Class</label>
+                        <select id="enrollClassSelect" class="form-control">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-submit" onclick="executeEnroll()">Confirm</button>
@@ -145,7 +151,6 @@
             </div>
         </div>
     </div>
-
     <!-- SUCCESS MODAL -->
     <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog">
