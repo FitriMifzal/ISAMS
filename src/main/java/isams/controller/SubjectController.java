@@ -11,19 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import isams.dao.SubjectDAO;
 import isams.model.Subject;
 
-/**
- * Author: [YOUR NAME HERE]
- * Student ID: [YOUR STUDENT ID HERE]
- * Date: July 2026
- * Purpose: ISAMS - Handles all Subject actions from frontend.
- *
- * GET  ?action=list          -> return all subjects
- * GET  ?action=get&id=5      -> return one subject
- * POST action=create         -> insert a new subject (PI only, no teacher assigned yet)
- * POST action=update         -> update subject name/credit hours (PI only)
- * POST action=enroll         -> a teacher claims a subject (sets t_id)
- */
-
 @WebServlet("/SubjectController")
 public class SubjectController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -142,7 +129,7 @@ public class SubjectController extends HttpServlet {
         }
     }
 
- // return all teaching assignments (subject + class + teacher)
+    // return all teaching assignments (subject + class + teacher)
     private void handleAssignments(PrintWriter out) {
         java.util.List<String> rows = SubjectDAO.getAssignmentsJson();
         StringBuilder json = new StringBuilder();
@@ -172,15 +159,15 @@ public class SubjectController extends HttpServlet {
             out.print("{\"status\":\"error\", \"message\":\"Invalid id\"}");
         }
     }
-    // convert a Subject object to a JSON string
+
+    // convert a Subject object to a JSON string - name/credit hours only,
+    // teacher info is no longer part of Subject (see action=assignments)
     private String toJson(Subject s) {
         StringBuilder json = new StringBuilder();
         json.append("{");
         json.append("\"subId\":").append(s.getSubId()).append(",");
         json.append("\"subName\":\"").append(escapeJson(s.getSubName())).append("\",");
-        json.append("\"creditHours\":").append(s.getCreditHours()).append(",");
-        json.append("\"tId\":").append(s.getTId() == null ? "null" : s.getTId()).append(",");
-        json.append("\"teacherName\":\"").append(escapeJson(s.getTeacherName())).append("\"");
+        json.append("\"creditHours\":").append(s.getCreditHours());
         json.append("}");
         return json.toString();
     }

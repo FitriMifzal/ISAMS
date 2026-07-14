@@ -133,6 +133,37 @@ public class TeacherDAO {
         }
     }
 
+ // get only the teachers created by (belonging to) a specific PI
+    public static List<Teacher> getTeachersByPi(int piId) {
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        try {
+            con = ConnectionManager.getConnection();
+
+            sql = "SELECT * FROM teacher WHERE pi_id=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, piId);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Teacher teacher = new Teacher();
+                teacher.setTId(rs.getInt("t_id"));
+                teacher.setTName(rs.getString("t_name"));
+                teacher.setTIC(rs.getString("t_ic"));
+                teacher.setTPhoneNum(rs.getString("t_phonenum"));
+                teacher.setTEmail(rs.getString("t_email"));
+                teacher.setStatus(rs.getString("status"));
+                teachers.add(teacher);
+            }
+
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return teachers;
+    }
+    
     // get one teacher by id (includes status - used by Profile page)
     public static Teacher getTeacher(int tId) {
         Teacher teacher = null;
