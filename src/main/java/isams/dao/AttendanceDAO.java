@@ -29,10 +29,11 @@ public class AttendanceDAO {
                 classSessId = rs.getInt("CLASS_SESS_ID");
             } else {
                 // T_ID diambil dari baris assignment (SESSION_DATE IS NULL)
+                // NOTE: SESSION_TIME column removed - was dropped from CLASS_SESSION table
                 String insertSql =
                     "INSERT INTO CLASS_SESSION " +
-                    "(SUB_ID, CLASS_ID, SESSION_DATE, SESSION_TIME, T_ID) " +
-                    "VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, " +
+                    "(SUB_ID, CLASS_ID, SESSION_DATE, T_ID) " +
+                    "VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), " +
                     "  (SELECT MIN(T_ID) FROM CLASS_SESSION " +
                     "    WHERE SUB_ID = ? AND CLASS_ID = ? AND SESSION_DATE IS NULL))";
 
@@ -44,9 +45,8 @@ public class AttendanceDAO {
                 ps2.setInt(1, subId);
                 ps2.setInt(2, classId);
                 ps2.setString(3, date);
-                ps2.setString(4, "-");
-                ps2.setInt(5, subId);
-                ps2.setInt(6, classId);
+                ps2.setInt(4, subId);
+                ps2.setInt(5, classId);
 
                 ps2.executeUpdate();
 
@@ -123,8 +123,8 @@ public class AttendanceDAO {
 
             String sql =
                 "INSERT INTO ATTENDANCE " +
-                "(DATE_RECORDED, CLASS_SESS_ID, STU_ID, ATTENDANCERECORD, HOURS) " +
-                "SELECT TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ? " +
+                "(DATE_RECORDED, CLASS_SESS_ID, STU_ID, HOURS) " +
+                "SELECT TO_DATE(?, 'YYYY-MM-DD'), ?, ?,?" +
                 "FROM dual " +
                 "WHERE NOT EXISTS ( " +
                 "SELECT 1 FROM ATTENDANCE " +
@@ -137,11 +137,9 @@ public class AttendanceDAO {
             ps.setString(1, date);
             ps.setInt(2, classSessId);
             ps.setInt(3, studId);
-            ps.setString(4, "Absent");
-            ps.setDouble(5, hours);
-
-            ps.setInt(6, classSessId);
-            ps.setInt(7, studId);
+            ps.setDouble(4, hours);
+            ps.setInt(5, classSessId);
+            ps.setInt(6, studId);
 
             int row = ps.executeUpdate();
             success = row > 0;

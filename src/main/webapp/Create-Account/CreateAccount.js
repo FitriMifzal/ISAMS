@@ -47,11 +47,11 @@ function handleForm(event) {
         return;
     }
 
-    // ✅ VALIDATION 2: IC Number must be numeric only and 10-20 digits
-    if (!/^\d+$/.test(t_ic) || t_ic.length < 10 || t_ic.length > 20) {
-        showError("Error: IC Number must contain only numbers, between 10-20 digits.");
-        return;
-    }
+	// ✅ VALIDATION 2: IC Number must be exactly 12 digits (Malaysian IC format)
+	if (!/^\d{12}$/.test(t_ic)) {
+	    showError("Error: IC Number must be exactly 12 digits (e.g. 900101011234).");
+	    return;
+	}
 
     // ✅ VALIDATION 3: Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
