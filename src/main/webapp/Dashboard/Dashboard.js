@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Render stats cards ikut role, kemudian load data
     renderStatsCards();
     loadDashboardStatistics();
+	renderTrendSection();
 });
 
 /* ── PAPARKAN PERANAN SEBENAR PADA WELCOME CARD (TIDAK DIUBAH) ── */
@@ -129,4 +130,115 @@ function loadDashboardStatistics() {
 function setStat(id, value) {
     var el = document.getElementById(id);
     if (el) el.textContent = value;
+}
+
+function renderTrendSection() {
+    var section = document.getElementById('trendSection');
+    if (!section) return;
+ 
+    var role = (localStorage.getItem('active_role') || 'Teacher').trim();
+ 
+    // PI-only feature - regular teachers don't get this card at all
+    if (role !== 'Penyelaras Intervensi') {
+        section.innerHTML = '';
+        return;
+    }
+ 
+    section.innerHTML = `
+        <div class="content-card">
+            <h2 class="card-title">Attendance Percentage Trend</h2>
+            <p class="card-sub">Percentage of students present, by date, across all teachers under you.</p>
+            <div id="trendChartContainer" class="trend-chart-container">
+                <p class="loading-msg">Loading chart...</p>
+            </div>
+        </div>
+    `;
+ 
+    loadAttendanceTrend();
+}
+ 
+function loadAttendanceTrend() {
+    var container = document.getElementById('trendChartContainer');
+    var piId = localStorage.getItem('active_tId');
+ 
+    if (!piId) {
+        container.innerHTML = `<p class="loading-msg">Session expired. Please log in again.</p>`;
+        return;
+    }
+ 
+    fetch("../DashboardTrendController?piId=" + encodeURIComponent(piId))
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data) || data.length === 0) {
+                container.innerHTML = `<p class="loading-msg">No attendance sessions recorded yet.</p>`;
+                return;
+            }
+            renderAttendanceTrendChart(data);
+        })
+        .catch(error => {
+            console.error("Error loading attendance trend:", error);
+            container.innerHTML = `<p class="loading-msg">Failed to load chart.</p>`;
+        });
+}
+ 
+function renderAttendanceTrendChart(data) {
+    const container = document.getElementById("trendChartContainer");
+ 
+	const width = Math.max(700, data.length * 100);
+	const height = 380;
+    const paddingLeft = 50;
+    const paddingBottom = 40;
+    const paddingTop = 20;
+    const paddingRight = 20;
+ 
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+ 
+    const maxY = 100;
+    const stepX = data.length > 1 ? chartWidth / (data.length - 1) : 0;
+ 
+    function xPos(i) {
+        return paddingLeft + (stepX * i);
+    }
+ 
+    function yPos(percentage) {
+        return paddingTop + chartHeight - ((percentage / maxY) * chartHeight);
+    }
+ 
+    let gridLines = "";
+    let yLabels = "";
+    for (let p = 0; p <= 100; p += 20) {
+        const y = yPos(p);
+        gridLines += `<line class="trend-gridline" x1="${paddingLeft}" y1="${y}" x2="${width - paddingRight}" y2="${y}"></line>`;
+        yLabels += `<text class="trend-axis-label" x="${paddingLeft - 10}" y="${y + 4}" text-anchor="end">${p}%</text>`;
+    }
+ 
+    let linePoints = "";
+    let pointsAndLabels = "";
+ 
+    data.forEach((d, i) => {
+        const x = xPos(i);
+        const y = yPos(d.percentage);
+ 
+        linePoints += (i === 0 ? "M" : "L") + x + "," + y + " ";
+ 
+        pointsAndLabels += `
+            <circle class="trend-point" cx="${x}" cy="${y}" r="4">
+                <title>${d.date}: ${d.percentage}% (${d.presentCount}/${d.totalStudents} present)</title>
+            </circle>
+            <text class="trend-axis-label" x="${x}" y="${height - paddingBottom + 20}" text-anchor="middle">${d.date}</text>
+            <text class="trend-tooltip" x="${x}" y="${y - 10}" text-anchor="middle">${d.percentage}%</text>
+        `;
+    });
+ 
+    const svg = `
+        <svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+            ${gridLines}
+            ${yLabels}
+            <path class="trend-line" d="${linePoints}"></path>
+            ${pointsAndLabels}
+        </svg>
+    `;
+ 
+    container.innerHTML = svg;
 }

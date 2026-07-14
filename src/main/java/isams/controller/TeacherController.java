@@ -26,7 +26,7 @@ public class TeacherController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("list".equals(action)) {
-            handleList(out);
+            handleList(request, out);
         } else if ("get".equals(action)) {
             handleGet(request, out);
         } else {
@@ -58,9 +58,24 @@ public class TeacherController extends HttpServlet {
         out.flush();
     }
 
-    // return all teachers
-    private void handleList(PrintWriter out) {
-        List<Teacher> teachers = TeacherDAO.getTeachers();
+    // return only the teachers belonging to the given PI
+    private void handleList(HttpServletRequest request, PrintWriter out) {
+        String piIdParam = request.getParameter("piId");
+
+        if (piIdParam == null || piIdParam.isEmpty()) {
+            out.print("{\"status\":\"error\", \"message\":\"Missing piId parameter\"}");
+            return;
+        }
+
+        int piId;
+        try {
+            piId = Integer.parseInt(piIdParam);
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid piId parameter\"}");
+            return;
+        }
+
+        List<Teacher> teachers = TeacherDAO.getTeachersByPi(piId);
 
         StringBuilder json = new StringBuilder();
         json.append("[");

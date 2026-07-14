@@ -16,22 +16,22 @@
         <div class="logo-container">
             <img src="../image/Logo Kolej Vokasional.jpeg" alt="KV Logo">
         </div>
-     
+
         <div class="role-badge">Subject Teacher</div>
-     
+
         <div class="nav-menu">
             <!-- DASHBOARD -->
             <a href="../Dashboard/Dashboard.html" class="nav-item">Dashboard</a>
-     
+
             <!-- TEACHER ACCOUNT -->
             <a href="../Delete-Account/DeleteAccount.html" id="nav-account" class="nav-item" data-role="Penyelaras Intervensi">Teacher Accounts</a>
-     
+
             <!-- STUDENT CLASS -->
             <a href="../Student Class/StudentClass.html" class="nav-item" data-role="Penyelaras Intervensi">Classroom</a>
-     
+
             <!-- STUDENT PROFILE -->
             <a href="../Student-List/StudentList.html" class="nav-item">Student Profile</a>
-     
+
             <!-- SUBJECT -->
             <button class="nav-item" data-submenu>
                 Subject
@@ -42,7 +42,7 @@
                 <a class="sub-nav-item" href="../Enroll-Subject/Enroll-Subject.html" data-role="Teacher">Register Students</a>
                 <a class="sub-nav-item" href="../Subject/Subject.html" data-role="Penyelaras Intervensi">Subject Details</a>
             </div>
-     
+
             <a href="../Create-Student-Attendance/Create-Student-Attendance.html" class="nav-item" data-role="Teacher">Student Attendance</a>
             <a href="../Calculate-Absent-Percentage/Calculate-Absent-Percentage.html" class="nav-item" data-role="Penyelaras Intervensi">Absent Record</a>
         </div>
@@ -56,7 +56,7 @@
                 <span class="menu-icon">☰</span>
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
-            
+
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
@@ -73,6 +73,9 @@
 
             <!-- STATISTICS SECTION — cards di-render oleh Dashboard.js ikut role -->
             <section class="statistics-section" id="statsSection"></section>
+
+            <!-- TREND CHART — moved to the bottom -->
+            <section class="trend-section" id="trendSection"></section>
         </main>
     </div>
 

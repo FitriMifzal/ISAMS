@@ -133,7 +133,7 @@ public class TeacherDAO {
         }
     }
 
- // get only the teachers created by (belonging to) a specific PI
+    // get only the teachers created by (belonging to) a specific PI
     public static List<Teacher> getTeachersByPi(int piId) {
         List<Teacher> teachers = new ArrayList<Teacher>();
         try {
@@ -163,7 +163,7 @@ public class TeacherDAO {
         }
         return teachers;
     }
-    
+
     // get one teacher by id (includes status - used by Profile page)
     public static Teacher getTeacher(int tId) {
         Teacher teacher = null;

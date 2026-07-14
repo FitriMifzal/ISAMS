@@ -127,3 +127,89 @@
         font-size: 28px;
     }
 }
+
+
+.trend-chart-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+ 
+.trend-chart-container svg {
+    display: block;
+}
+ 
+.trend-axis-label {
+    font-size: 11px;
+    fill: #64748b;
+    font-family: Arial, sans-serif;
+}
+ 
+.trend-line {
+    fill: none;
+    stroke: #2563eb;
+    stroke-width: 2;
+}
+ 
+.trend-point {
+    fill: #2563eb;
+    cursor: pointer;
+}
+ 
+.trend-point:hover {
+    fill: #1d4ed8;
+}
+ 
+.trend-gridline {
+    stroke: #e2e8f0;
+    stroke-width: 1;
+}
+ 
+.trend-tooltip {
+    font-size: 11px;
+    font-weight: 600;
+    fill: #1e293b;
+    font-family: Arial, sans-serif;
+}
+
+ 
+.trend-section {
+    margin-top: 30px;
+}
+ 
+.content-card {
+    background: white;
+    padding: 28px 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+ 
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+}
+ 
+.card-sub {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 20px 0;
+}
+ 
+.trend-chart-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+ 
+.loading-msg {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    padding: 40px 0;
+}
+

@@ -22,27 +22,28 @@ function goToCreateAccount() {
 
 /* ────────────────────────────────────────────────────────
    LOAD TEACHER ACCOUNTS FROM DATABASE INTO TABLE STRUCTURE
+   Only teachers created by (belonging to) the logged-in PI
 ────────────────────────────────────────────────────────── */
 function loadTeachers() {
     const tableBody = document.getElementById('tableBody');
-    
-    // Tunjukkan mesej sedang memuatkan data di dalam badan jadual
+
     tableBody.innerHTML = `<tr><td colspan="4" class="loading-msg" style="text-align:center; padding:40px; color:#64748b;">Loading accounts from database...</td></tr>`;
 
-    fetch("../TeacherController?action=list")
+    const piId = localStorage.getItem('active_tId');
+
+    fetch("../TeacherController?action=list&piId=" + encodeURIComponent(piId))
         .then(response => response.json())
         .then(teachers => {
             tableBody.innerHTML = "";
 
-            if (teachers.length === 0) {
+            if (!Array.isArray(teachers) || teachers.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="4" class="no-results" style="text-align:center; padding:40px; color:#64748b;">No accounts found in the system.</td></tr>`;
                 return;
             }
 
-            // Bina baris jadual secara dinamik mengekalkan reka bentuk VS Code (Gambar 1)
             teachers.forEach((t, index) => {
                 const row = document.createElement("tr");
-                
+
                 const teacherId = t.tId || 'N/A';
                 const teacherName = t.tName || 'Unknown';
                 const isArchived = t.status === "ARCHIVED";
@@ -50,7 +51,6 @@ function loadTeachers() {
                 row.className = "account-row" + (isArchived ? " archived" : "");
                 row.id = "row-" + teacherId;
 
-                // Tentukan keadaan butang "Archive" mengikut status database
                 let actionButtonHTML = '';
                 if (isArchived) {
                     actionButtonHTML = `<button class="btn-table-action btn-archive-row" style="background-color: #cbd5e1; color: #64748b; cursor: not-allowed; pointer-events: none;" disabled>Archived</button>`;
@@ -70,7 +70,7 @@ function loadTeachers() {
                         </div>
                     </td>
                 `;
-                
+
                 tableBody.appendChild(row);
             });
         })
@@ -132,8 +132,6 @@ function executeArchive() {
 
         if (data.status === "success") {
             successMsg.style.display = 'block';
-            
-            // Segarkan semula senarai dari database untuk kemas kini reka bentuk terbaharu
             loadTeachers();
 
             setTimeout(() => {
@@ -161,15 +159,13 @@ window.onclick = function(event) {
    PENAWAR UTK ISU REDIRECT PADA KLIK KEDUA (HANYA INI SAHAJA DITAMBAH)
 ────────────────────────────────────────────────────────── */
 function toggleProfile(event) {
-    // Menghalang sebarang aksi limpahan (bubbling/redirect) lalai daripada browser
     if (event) {
         event.preventDefault();
         event.stopPropagation();
     }
-    
-    // Cari dropdown menu profil anda (tukar 'profile-dropdown' ke ID container dropdown profil sebenar jika ada)
+
     var profileSection = document.getElementById('profile-section') || document.querySelector('.profile-dropdown');
-    
+
     if (profileSection) {
         var isHidden = profileSection.style.display === 'none' || profileSection.style.display === '';
         profileSection.style.display = isHidden ? 'block' : 'none';
