@@ -18,7 +18,7 @@ function loadProfileData() {
     const tId = localStorage.getItem('active_tId');
 
     if (!tId) {
-        alert("Teacher ID not found. Please login again.");
+        showError("Teacher ID not found. Please login again.");
         return;
     }
 
@@ -26,7 +26,7 @@ function loadProfileData() {
         .then(response => response.json())
         .then(data => {
             if (data.status === "error") {
-                alert(data.message);
+                showError(data.message);
                 return;
             }
 
@@ -68,7 +68,7 @@ function loadProfileData() {
         })
         .catch(error => {
             console.error("Error loading profile:", error);
-            alert("Failed to load profile data. Please try again.");
+            showError("Failed to load profile data. Please try again.");
         });
 }
 
@@ -115,16 +115,17 @@ function updateProfile() {
     const email = document.getElementById('T_Email').value.trim();
     const phone = document.getElementById('T_PhoneNum').value.trim();
 
+    // Validation menggunakan showError (modal) BUKAN alert
     if (!name || !email || !phone) {
-        alert('Please fill all required fields');
+        showError('Please fill all required fields');
         return;
     }
     if (!isValidEmail(email)) {
-        alert('Please enter a valid email address');
+        showError('Please enter a valid email address');
         return;
     }
     if (!isValidPhone(phone)) {
-        alert('Please enter a valid phone number');
+        showError('Please enter a valid phone number');
         return;
     }
 
@@ -147,15 +148,17 @@ function updateProfile() {
             const userNameEl = document.getElementById('user-fullname');
             if (userNameEl) userNameEl.textContent = name;
 
-            alert('Profile updated successfully!');
-            disableEdit();
+            // GUNA MODAL SUCCESS (bukan alert)
+            showSuccess('Profile updated successfully!');
+            // disableEdit() akan dipanggil dalam closeSuccessModal() 
+            // supaya user nampak update sebelum modal tutup
         } else {
-            alert("Something went wrong: " + data.message);
+            showError("Something went wrong: " + data.message);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Failed to connect to server. Please try again.");
+        showError("Failed to connect to server. Please try again.");
     });
 }
 
@@ -166,4 +169,23 @@ function goBack() {
     } else {
         window.location.href = '../Dashboard/Dashboard.html';
     }
+}
+
+/* ════════════════════════════════════════════════════════════
+   MESSAGE MODALS (Success / Error) — SAMA MACAM CREATE ACCOUNT
+   ════════════════════════════════════════════════════════════ */
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    // Lepas success, disable edit mode dan refresh data
+    disableEdit();
 }

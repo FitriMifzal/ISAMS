@@ -147,4 +147,68 @@ public class ClassroomDAO {
         }
         return classes;
     }
+
+    // ============================================================
+    // BARU TAMBAH: Check if classroom already exists (by classCode or className)
+    // ============================================================
+    public static boolean isClassroomExists(String classCode, String className, Integer excludeClassId) {
+        boolean exists = false;
+        try {
+            con = ConnectionManager.getConnection();
+            
+            // Build SQL dynamically based on what fields are provided
+            StringBuilder sqlBuilder = new StringBuilder();
+            sqlBuilder.append("SELECT COUNT(*) FROM classroom WHERE ");
+            
+            boolean hasCondition = false;
+            
+            // Check by classCode (case-insensitive)
+            if (classCode != null && !classCode.trim().isEmpty()) {
+                sqlBuilder.append("LOWER(classcode) = LOWER(?)");
+                hasCondition = true;
+            }
+            
+            // Check by className (case-insensitive)
+            if (className != null && !className.trim().isEmpty()) {
+                if (hasCondition) {
+                    sqlBuilder.append(" OR ");
+                }
+                sqlBuilder.append("LOWER(class_name) = LOWER(?)");
+                hasCondition = true;
+            }
+            
+            // Add exclude condition
+            if (excludeClassId != null) {
+                sqlBuilder.append(" AND class_id != ?");
+            }
+            
+            sql = sqlBuilder.toString();
+            ps = con.prepareStatement(sql);
+            
+            int paramIndex = 1;
+            
+            // Set parameters
+            if (classCode != null && !classCode.trim().isEmpty()) {
+                ps.setString(paramIndex++, classCode.trim());
+            }
+            
+            if (className != null && !className.trim().isEmpty()) {
+                ps.setString(paramIndex++, className.trim());
+            }
+            
+            if (excludeClassId != null) {
+                ps.setInt(paramIndex++, excludeClassId);
+            }
+            
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                exists = count > 0;
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
 }

@@ -213,6 +213,9 @@
     border-top: 1px solid #e2e8f0;
     background-color: #f8fafc;
 }
+
+/* MENGUBAH WARNA FONT TITLE PADA SEMUA MODAL MENJADI PUTIH */
+#deleteModal .modal-title,
 #successModal .modal-title,
 #errorModal .modal-title {
     color: #ffffff !important;

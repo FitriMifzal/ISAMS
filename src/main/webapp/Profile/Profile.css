@@ -326,32 +326,6 @@
     transform: translateY(-2px);
 }
 
-/* ── TOAST NOTIFICATION ── */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #1e293b;
-    color: white;
-    padding: 14px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.35s ease;
-    pointer-events: none;
-    z-index: 9999;
-    font-family: var(--font-family-main);
-    max-width: 450px;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     #main-wrapper,
@@ -412,15 +386,6 @@
         width: 100%;
         justify-content: center;
     }
-
-    .toast {
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
-        padding: 12px 18px;
-        font-size: 13px;
-        max-width: 100%;
-    }
 }
 
 /* ── SMALL SCREENS ── */
@@ -467,4 +432,37 @@
         padding: 10px 16px;
         font-size: 13px;
     }
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODAL STYLES (Sama macam Create Account)
+   ════════════════════════════════════════════════════════════ */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-family-main);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header.bg-danger {
+    background-color: #dc2626 !important;
+}
+
+.modal-body {
+    color: #334155;
+    font-family: var(--font-family-main);
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
 }

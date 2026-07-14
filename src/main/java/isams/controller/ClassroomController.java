@@ -29,6 +29,11 @@ public class ClassroomController extends HttpServlet {
             handleList(out);
         } else if ("get".equals(action)) {
             handleGet(request, out);
+        } else if ("checkDuplicate".equals(action)) {
+            // ============================================================
+            // BARU TAMBAH: Check duplicate classroom
+            // ============================================================
+            handleCheckDuplicate(request, out);
         } else {
             out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
         }
@@ -93,6 +98,41 @@ public class ClassroomController extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             out.print("{\"status\":\"error\", \"message\":\"Invalid id parameter\"}");
+        }
+    }
+
+    // ============================================================
+    // BARU TAMBAH: Check duplicate classroom
+    // ============================================================
+    private void handleCheckDuplicate(HttpServletRequest request, PrintWriter out) {
+        String classCode = request.getParameter("classCode");
+        String className = request.getParameter("className");
+        String excludeClassIdParam = request.getParameter("excludeClassId");
+
+        // Validation: at least one field must be provided
+        if ((classCode == null || classCode.trim().isEmpty()) && 
+            (className == null || className.trim().isEmpty())) {
+            out.print("{\"status\":\"error\", \"message\":\"Class code or class name is required\"}");
+            return;
+        }
+
+        try {
+            Integer excludeClassId = null;
+            if (excludeClassIdParam != null && !excludeClassIdParam.trim().isEmpty()) {
+                excludeClassId = Integer.parseInt(excludeClassIdParam);
+            }
+
+            boolean exists = ClassroomDAO.isClassroomExists(
+                classCode != null ? classCode.trim() : null,
+                className != null ? className.trim() : null,
+                excludeClassId
+            );
+            
+            // Response: { "status": "success", "isDuplicate": true/false }
+            out.print("{\"status\":\"success\", \"isDuplicate\":" + exists + "}");
+            
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid excludeClassId parameter\"}");
         }
     }
 

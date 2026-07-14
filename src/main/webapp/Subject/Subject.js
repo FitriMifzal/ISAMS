@@ -163,52 +163,107 @@ function showForm(subId) {
 }
 
 // ============================================================
-// SAVE SUBJECT (Create/Update)
+// CHECK DUPLICATE SUBJECT (BARU TAMBAH)
+// ============================================================
+function checkDuplicateSubject(subName, excludeSubId = null) {
+    return new Promise((resolve, reject) => {
+        // Buat URLSearchParams untuk hantar ke backend
+        const params = new URLSearchParams();
+        params.append("action", "checkDuplicate");
+        params.append("subName", subName);
+        if (excludeSubId) {
+            params.append("excludeSubId", excludeSubId);
+        }
+
+        fetch("../SubjectController?" + params.toString())
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    resolve(data.isDuplicate);
+                } else {
+                    reject(data.message || "Failed to check duplicate");
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+// ============================================================
+// SAVE SUBJECT (Create/Update) - WITH DUPLICATE CHECK
 // ============================================================
 function saveData() {
     const name = document.getElementById('subName').value.trim();
     const credit = document.getElementById('subCredit').value.trim();
     const subId = document.getElementById('editIdx').value;
 
+    // ============================================================
+    // VALIDATION ASAS (SAMA MACAM SEBELUM)
+    // ============================================================
     if (!name || !credit) {
         showError("Please fill in all fields!");
         return;
     }
 
-    const formData = new URLSearchParams();
-    formData.append("subName", name);
-    formData.append("creditHours", credit);
+    // ============================================================
+    // VALIDATION DUPLICATE SUBJECT (BARU TAMBAH)
+    // ============================================================
+    // Jika edit (subId ada), exclude subject sendiri dari check duplicate
+    const excludeId = subId !== "" ? subId : null;
 
-    let url, successMsg;
+    checkDuplicateSubject(name, excludeId)
+        .then(isDuplicate => {
+            if (isDuplicate) {
+                // ============================================================
+                // PAPAR ERROR MESSAGE GUNA MODAL YANG SEDIA ADA
+                // ============================================================
+                showError("Subject '" + name + "' already exists in the system! Please use a different subject name.");
+                return;
+            }
 
-    if (subId === "") {
-        url = "../SubjectController?action=create";
-        successMsg = "New subject added.";
-    } else {
-        formData.append("subId", subId);
-        url = "../SubjectController?action=update";
-        successMsg = "Subject updated.";
-    }
+            // ============================================================
+            // TIADA DUPLICATE — TERUSKAN SAVE (CREATE / UPDATE)
+            // ============================================================
+            const formData = new URLSearchParams();
+            formData.append("subName", name);
+            formData.append("creditHours", credit);
 
-    fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            document.getElementById('successMsg').innerText = successMsg;
-            document.getElementById('formPage').classList.add('hidden');
-            new bootstrap.Modal(document.getElementById('successModal')).show();
-        } else {
-            showError(data.message || "Operation failed.");
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        showError("Failed to connect to server.");
-    });
+            let url, successMsg;
+
+            if (subId === "") {
+                url = "../SubjectController?action=create";
+                successMsg = "New subject added.";
+            } else {
+                formData.append("subId", subId);
+                url = "../SubjectController?action=update";
+                successMsg = "Subject updated.";
+            }
+
+            return fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: formData.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById('successMsg').innerText = successMsg;
+                    document.getElementById('formPage').classList.add('hidden');
+                    new bootstrap.Modal(document.getElementById('successModal')).show();
+                } else {
+                    showError(data.message || "Operation failed.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showError("Failed to connect to server.");
+            });
+        })
+        .catch(error => {
+            console.error("Error checking duplicate:", error);
+            showError("Failed to check duplicate subject. Please try again.");
+        });
 }
 
 // ============================================================
