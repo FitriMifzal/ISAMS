@@ -16,6 +16,24 @@ function toggleProfile() {
 }
 
 /* ────────────────────────────────────────────────────────
+   MESSAGE MODALS (Success / Error)
+────────────────────────────────────────────────────────── */
+function showSuccess(message) {
+    document.getElementById('successMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+function showError(message) {
+    document.getElementById('errorMsg').innerText = message;
+    new bootstrap.Modal(document.getElementById('errorModal')).show();
+}
+
+function closeSuccessModal() {
+    bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
+    window.location.href = "../Student Class/StudentClass.html";
+}
+
+/* ────────────────────────────────────────────────────────
    HANDLE FORM SUBMISSION - Send to Database
 ────────────────────────────────────────────────────────── */
 
@@ -27,33 +45,33 @@ function handleForm(event) {
 
     // ✅ VALIDATION 1: Check if all fields are filled
     if (!classCode || !className) {
-        alert("Please fill in all the information!");
+        showError("Please fill in all the information!");
         return;
     }
 
     // ✅ VALIDATION 2: Class Code must be at least 3 characters
     if (classCode.length < 3) {
-        alert("Class Code must be at least 3 characters long!");
+        showError("Class Code must be at least 3 characters long!");
         return;
     }
 
     // ✅ VALIDATION 3: Class Code cannot contain special characters
     const classCodeRegex = /^[a-zA-Z0-9\s\-_]+$/;
     if (!classCodeRegex.test(classCode)) {
-        alert("Class Code can only contain letters, numbers, spaces, hyphens (-), and underscores (_)!");
+        showError("Class Code can only contain letters, numbers, spaces, hyphens (-), and underscores (_)!");
         return;
     }
 
     // ✅ VALIDATION 4: Class Name must be at least 3 characters
     if (className.length < 3) {
-        alert("Class Name must be at least 3 characters long!");
+        showError("Class Name must be at least 3 characters long!");
         return;
     }
 
     // ✅ VALIDATION 5: Class Name cannot contain special characters
     const classNameRegex = /^[a-zA-Z0-9\s\-_'.]+$/;
     if (!classNameRegex.test(className)) {
-        alert("Class Name can only contain letters, numbers, spaces, hyphens (-), underscores (_), apostrophes ('), and periods (.)!");
+        showError("Class Name can only contain letters, numbers, spaces, hyphens (-), underscores (_), apostrophes ('), and periods (.)!");
         return;
     }
 
@@ -82,16 +100,15 @@ function handleForm(event) {
         submitBtn.textContent = 'Confirm';
 
         if (data.status === "success") {
-            alert("Classroom successfully registered!");
-            window.location.href = "../Student Class/StudentClass.html";
+            showSuccess("Classroom successfully registered!");
         } else {
-            alert("Something went wrong: " + (data.message || "Unknown error"));
+            showError("Something went wrong: " + (data.message || "Unknown error"));
         }
     })
     .catch(error => {
         console.error("Error:", error);
         submitBtn.disabled = false;
         submitBtn.textContent = 'Confirm';
-        alert("Failed to connect to server. Please try again.");
+        showError("Failed to connect to server. Please try again.");
     });
 }

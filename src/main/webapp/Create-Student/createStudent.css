@@ -227,6 +227,10 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     font-family: var(--font-family-main);
 }
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
+}
 
 .modal-header {
     border-bottom: 1px solid #e2e8f0;

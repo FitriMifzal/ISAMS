@@ -269,7 +269,11 @@
     align-items: center;
     justify-content: center;
 }
-
+/* ── MODAL TITLE WHITE FOR BOTH SUCCESS & ERROR ── */
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
+}
 .modal.show {
     display: flex;
 }

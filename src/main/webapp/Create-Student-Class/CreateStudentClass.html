@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom | KV Student Management</title>
     
+    <!-- Bootstrap (untuk modal) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../Sidebar/Sidebar.css">
     <link rel="stylesheet" href="CreateStudentClass.css">
 </head>
@@ -68,7 +71,7 @@
                 <p class="page-description">Create a new classroom by entering the class code and class name.</p>
                 <div class="title-underline"></div>
 
-                <form id="createForm" onsubmit="handleForm(event)">
+                <form id="createForm" onsubmit="handleForm(event)" novalidate>
                     <div class="form-group">
                         <label for="classCode">Class Code</label>
                         <input type="text" id="classCode" placeholder="Example: 1 SVM KPD" required>
@@ -88,7 +91,46 @@
         </main>
     </div>
 
+    <!-- ════════════════════════════════════════════════════════
+         SUCCESS MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white">Success!</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="successMsg">Classroom created successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="closeSuccessModal()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         ERROR MODAL
+         ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Error!</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMsg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
     <script src="CreateStudentClass.js"></script>

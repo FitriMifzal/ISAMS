@@ -339,6 +339,10 @@ tbody tr td[colspan] {
 .modal-header.bg-danger {
     background-color: #dc2626 !important;
 }
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
+}
 
 .modal-body {
     color: #334155;

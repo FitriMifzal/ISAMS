@@ -301,14 +301,42 @@ body {
     color: #003366;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-family: var(--font-family-main);
 }
 
 .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.summary-grid .summary-item {
+    flex: 1 1 180px;
+    min-width: 180px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #F15A29;
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: box-shadow .15s;
+}
+
+.summary-grid .summary-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.summary-grid .summary-item .subject-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.summary-grid .summary-item .student-count {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
 }
 
 /* ── TOAST NOTIFICATION ── */
@@ -359,6 +387,11 @@ body {
 .modal-footer {
     border-top: 1px solid #e2e8f0;
     background-color: #f8fafc;
+}
+
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
 }
 /* ── RESPONSIVE STYLES ── */
 @media (max-width: 1024px) {

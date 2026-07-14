@@ -244,3 +244,7 @@
     border-top: 1px solid #e2e8f0;
     background-color: #f8fafc;
 }
+#successModal .modal-title,
+#errorModal .modal-title {
+    color: #ffffff !important;
+}
