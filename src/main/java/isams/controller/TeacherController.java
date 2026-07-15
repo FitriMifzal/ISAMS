@@ -117,36 +117,65 @@ public class TeacherController extends HttpServlet {
     // must be called by a logged-in PI - the PI's own T_ID is sent as "piId"
     // and stored as the new teacher's PI_ID (who created them)
     private void handleRegister(HttpServletRequest request, PrintWriter out) {
-        String tName = request.getParameter("tName");
-        String tIC = request.getParameter("tIC");
-        String tPhoneNum = request.getParameter("tPhoneNum");
-        String tEmail = request.getParameter("tEmail");
-        String tPass = request.getParameter("tPass");
-        String piIdParam = request.getParameter("piId");
-
-        if (TeacherDAO.icExists(tIC)) {
-            out.print("{\"status\":\"error\", \"message\":\"This IC Number is already registered\"}");
-            return;
-        }
-
-        int creatorPiId;
         try {
-            creatorPiId = Integer.parseInt(piIdParam);
-        } catch (NumberFormatException e) {
-            out.print("{\"status\":\"error\", \"message\":\"Missing or invalid PI id\"}");
-            return;
+            String tName = request.getParameter("tName");
+            String tIC = request.getParameter("tIC");
+            String tPhoneNum = request.getParameter("tPhoneNum");
+            String tEmail = request.getParameter("tEmail");
+            String tPass = request.getParameter("tPass");
+            String piIdParam = request.getParameter("piId");
+
+            // ============================================================
+            // FIX: LOG INPUT PARAMETERS
+            // ============================================================
+            System.out.println("=== REGISTER TEACHER ===");
+            System.out.println("tName: " + tName);
+            System.out.println("tIC: " + tIC);
+            System.out.println("tEmail: " + tEmail);
+            System.out.println("tPhoneNum: " + tPhoneNum);
+            System.out.println("piIdParam: " + piIdParam);
+
+            // Check if IC already exists
+            if (TeacherDAO.icExists(tIC)) {
+                System.out.println("IC already exists: " + tIC);
+                out.print("{\"status\":\"error\", \"message\":\"This IC Number is already registered\"}");
+                return;
+            }
+
+            int creatorPiId;
+            try {
+                creatorPiId = Integer.parseInt(piIdParam);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid PI ID: " + piIdParam);
+                out.print("{\"status\":\"error\", \"message\":\"Missing or invalid PI id\"}");
+                return;
+            }
+
+            Teacher teacher = new Teacher();
+            teacher.setTName(tName);
+            teacher.setTIC(tIC);
+            teacher.setTPhoneNum(tPhoneNum);
+            teacher.setTEmail(tEmail);
+            teacher.setTPass(tPass);
+
+            // ============================================================
+            // FIX: TRY-CATCH UNTUK CAPTURE SQL ERROR
+            // ============================================================
+            try {
+                TeacherDAO.addTeacher(teacher, creatorPiId);
+                System.out.println("Teacher registered successfully!");
+                out.print("{\"status\":\"success\", \"message\":\"Account created successfully\"}");
+            } catch (Exception e) {
+                System.err.println("SQL Error while registering teacher:");
+                e.printStackTrace();
+                out.print("{\"status\":\"error\", \"message\":\"Database error: " + e.getMessage() + "\"}");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Unexpected error in handleRegister:");
+            e.printStackTrace();
+            out.print("{\"status\":\"error\", \"message\":\"Server error: " + e.getMessage() + "\"}");
         }
-
-        Teacher teacher = new Teacher();
-        teacher.setTName(tName);
-        teacher.setTIC(tIC);
-        teacher.setTPhoneNum(tPhoneNum);
-        teacher.setTEmail(tEmail);
-        teacher.setTPass(tPass);
-
-        TeacherDAO.addTeacher(teacher, creatorPiId);
-
-        out.print("{\"status\":\"success\", \"message\":\"Account created successfully\"}");
     }
 
     // update a teacher's own profile (name, phone, email)

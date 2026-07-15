@@ -34,6 +34,31 @@ function closeSuccessModal() {
 }
 
 /* ────────────────────────────────────────────────────────
+   CHECK DUPLICATE CLASSROOM (BARU TAMBAH)
+────────────────────────────────────────────────────────── */
+function checkDuplicateClassroom(classCode, className) {
+    return new Promise((resolve, reject) => {
+        const params = new URLSearchParams();
+        params.append("action", "checkDuplicate");
+        if (classCode) params.append("classCode", classCode);
+        if (className) params.append("className", className);
+
+        fetch("../ClassroomController?" + params.toString())
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    resolve(data.isDuplicate);
+                } else {
+                    reject(data.message || "Failed to check duplicate");
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+/* ────────────────────────────────────────────────────────
    HANDLE FORM SUBMISSION - Send to Database
 ────────────────────────────────────────────────────────── */
 
@@ -75,40 +100,79 @@ function handleForm(event) {
         return;
     }
 
-    // ── SEND TO DATABASE VIA CLASSROOMCONTROLLER ──
-    const formData = new URLSearchParams();
-    formData.append("action", "create");
-    formData.append("classCode", classCode);
-    formData.append("className", className);
-
-    // Disable submit button
+    // ============================================================
+    // VALIDATION DUPLICATE CLASSROOM (BARU TAMBAH)
+    // ============================================================
+    // Disable submit button to prevent double submission
     const submitBtn = document.querySelector('.btn-submit');
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving...';
+    submitBtn.textContent = 'Checking...';
 
-    fetch("../ClassroomController", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData.toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Confirm';
+    checkDuplicateClassroom(classCode, className)
+        .then(isDuplicate => {
+            if (isDuplicate) {
+                // ============================================================
+                // PAPAR ERROR MESSAGE GUNA MODAL YANG SEDIA ADA
+                // ============================================================
+                let errorMsg = "";
+                if (classCode) {
+                    errorMsg += "Class Code '" + classCode + "' ";
+                }
+                if (className) {
+                    if (errorMsg) errorMsg += "or ";
+                    errorMsg += "Class Name '" + className + "' ";
+                }
+                errorMsg += "already exists in the system! Please use a different class code or class name.";
+                
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Confirm';
+                
+                showError(errorMsg);
+                return;
+            }
 
-        if (data.status === "success") {
-            showSuccess("Classroom successfully registered!");
-        } else {
-            showError("Something went wrong: " + (data.message || "Unknown error"));
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Confirm';
-        showError("Failed to connect to server. Please try again.");
-    });
+            // ============================================================
+            // TIADA DUPLICATE — TERUSKAN SAVE (CREATE)
+            // ============================================================
+            // Update button text
+            submitBtn.textContent = 'Saving...';
+
+            const formData = new URLSearchParams();
+            formData.append("action", "create");
+            formData.append("classCode", classCode);
+            formData.append("className", className);
+
+            return fetch("../ClassroomController", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Confirm';
+
+                if (data.status === "success") {
+                    showSuccess("Classroom successfully registered!");
+                } else {
+                    showError("Something went wrong: " + (data.message || "Unknown error"));
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Confirm';
+                showError("Failed to connect to server. Please try again.");
+            });
+        })
+        .catch(error => {
+            console.error("Error checking duplicate:", error);
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Confirm';
+            showError("Failed to check duplicate classroom. Please try again.");
+        });
 }

@@ -80,12 +80,23 @@ function handleForm(event) {
     formData.append("tPhoneNum", t_phonenum || "");
     formData.append("tEmail", t_email);
     formData.append("tPass", t_pass);
-	formData.append("piId", localStorage.getItem('active_tId'));
+    formData.append("piId", localStorage.getItem('active_tId'));
 
     // Disable submit button to prevent double submission
     const submitBtn = document.querySelector('.btn-submit');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Registering...';
+
+    // ============================================================
+    // FIX: TAMBAH LOGGING UNTUK DEBUG
+    // ============================================================
+    console.log("Sending data to server:", {
+        tName: t_name,
+        tIC: t_ic,
+        tEmail: t_email,
+        tPhoneNum: t_phonenum,
+        piId: localStorage.getItem('active_tId')
+    });
 
     fetch("../TeacherController", {
         method: "POST",
@@ -94,8 +105,13 @@ function handleForm(event) {
         },
         body: formData.toString()
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log("Response status:", response.status);
+        return response.json();
+    })
     .then(data => {
+        console.log("Response data:", data);
+        
         // Re-enable submit button
         submitBtn.disabled = false;
         submitBtn.textContent = 'Confirm';
@@ -103,14 +119,24 @@ function handleForm(event) {
         if (data.status === "success") {
             showSuccess("Teacher account created successfully!");
         } else {
-            showError("Error: " + (data.message || "Failed to create account"));
+            // ============================================================
+            // FIX: PAPAR ERROR YANG LEBIH DETAIL
+            // ============================================================
+            let errorMsg = data.message || "Failed to create account";
+            
+            // Check if it's a duplicate IC error
+            if (errorMsg.includes("IC Number") || errorMsg.includes("already registered")) {
+                errorMsg = "This IC Number is already registered in the system!";
+            }
+            
+            showError("Error: " + errorMsg);
         }
     })
     .catch(error => {
-        console.error("Error:", error);
+        console.error("Fetch Error:", error);
         // Re-enable submit button
         submitBtn.disabled = false;
         submitBtn.textContent = 'Confirm';
-        showError("Failed to connect to server. Please make sure the server is running.");
+        showError("Failed to connect to server. Please make sure the server is running.\n\nError: " + error.message);
     });
 }

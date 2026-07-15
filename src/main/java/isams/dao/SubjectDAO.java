@@ -96,6 +96,42 @@ public class SubjectDAO {
         return subjects;
     }
 
+    // ============================================================
+    // BARU TAMBAH: Check if subject name already exists
+    // ============================================================
+    public static boolean isSubjectExists(String subName, Integer excludeSubId) {
+        boolean exists = false;
+        try {
+            con = ConnectionManager.getConnection();
+            
+            // Build SQL dengan excludeSubId jika ada
+            StringBuilder sqlBuilder = new StringBuilder();
+            sqlBuilder.append("SELECT COUNT(*) FROM subject WHERE LOWER(sub_name) = LOWER(?)");
+            
+            if (excludeSubId != null) {
+                sqlBuilder.append(" AND sub_id != ?");
+            }
+            
+            sql = sqlBuilder.toString();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, subName);
+            
+            if (excludeSubId != null) {
+                ps.setInt(2, excludeSubId);
+            }
+            
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                exists = count > 0;
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
     // teacher enrolls to teach a subject for a specific class
     // creates an assignment row in class_session (session_date = NULL)
     public static boolean enrollTeacher(int subId, int classId, int tId) {

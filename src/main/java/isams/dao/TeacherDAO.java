@@ -21,9 +21,22 @@ public class TeacherDAO {
     public static void addTeacher(Teacher teacher, int creatorPiId) {
         try {
             con = ConnectionManager.getConnection();
+            
+            // ============================================================
+            // FIX: LOG SQL DAN PARAMETERS
+            // ============================================================
+            System.out.println("=== TEACHERDAO.addTeacher ===");
+            System.out.println("teacher.getTName(): " + teacher.getTName());
+            System.out.println("teacher.getTIC(): " + teacher.getTIC());
+            System.out.println("teacher.getTPhoneNum(): " + teacher.getTPhoneNum());
+            System.out.println("teacher.getTEmail(): " + teacher.getTEmail());
+            System.out.println("creatorPiId: " + creatorPiId);
 
             sql = "INSERT INTO teacher(t_name, t_ic, t_phonenum, t_email, t_pass, pi_id, status) "
                 + "VALUES(?, ?, ?, ?, ?, ?, 'ACTIVE')";
+            
+            System.out.println("SQL: " + sql);
+            
             ps = con.prepareStatement(sql);
 
             ps.setString(1, teacher.getTName());
@@ -33,12 +46,17 @@ public class TeacherDAO {
             ps.setString(5, teacher.getTPass());
             ps.setInt(6, creatorPiId);
 
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
 
             con.close();
+            System.out.println("Connection closed successfully");
 
         } catch (Exception e) {
+            System.err.println("ERROR in TeacherDAO.addTeacher:");
             e.printStackTrace();
+            // Rethrow exception so controller can catch it
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
     }
 
@@ -233,6 +251,7 @@ public class TeacherDAO {
                 teacher.setStatus(rs.getString("status"));
                 teachers.add(teacher);
             }
+
 
             con.close();
 

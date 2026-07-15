@@ -30,6 +30,11 @@ public class SubjectController extends HttpServlet {
             handleAssignments(out);
         } else if ("get".equals(action)) {
             handleGet(request, out);
+        } else if ("checkDuplicate".equals(action)) {
+            // ============================================================
+            // BARU TAMBAH: Check duplicate subject
+            // ============================================================
+            handleCheckDuplicate(request, out);
         } else {
             out.print("{\"status\":\"error\", \"message\":\"Unknown or missing action\"}");
         }
@@ -58,6 +63,7 @@ public class SubjectController extends HttpServlet {
 
         out.flush();
     }
+    
     // return all subjects
     private void handleList(PrintWriter out) {
         List<Subject> subjects = SubjectDAO.getSubjects();
@@ -95,6 +101,34 @@ public class SubjectController extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             out.print("{\"status\":\"error\", \"message\":\"Invalid id parameter\"}");
+        }
+    }
+
+    // ============================================================
+    // BARU TAMBAH: Check duplicate subject
+    // ============================================================
+    private void handleCheckDuplicate(HttpServletRequest request, PrintWriter out) {
+        String subName = request.getParameter("subName");
+        String excludeSubIdParam = request.getParameter("excludeSubId");
+
+        if (subName == null || subName.trim().isEmpty()) {
+            out.print("{\"status\":\"error\", \"message\":\"Subject name is required\"}");
+            return;
+        }
+
+        try {
+            Integer excludeSubId = null;
+            if (excludeSubIdParam != null && !excludeSubIdParam.trim().isEmpty()) {
+                excludeSubId = Integer.parseInt(excludeSubIdParam);
+            }
+
+            boolean exists = SubjectDAO.isSubjectExists(subName.trim(), excludeSubId);
+            
+            // Response: { "status": "success", "isDuplicate": true/false }
+            out.print("{\"status\":\"success\", \"isDuplicate\":" + exists + "}");
+            
+        } catch (NumberFormatException e) {
+            out.print("{\"status\":\"error\", \"message\":\"Invalid excludeSubId parameter\"}");
         }
     }
 
