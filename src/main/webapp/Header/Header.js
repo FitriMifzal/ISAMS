@@ -37,28 +37,27 @@
     window.toggleProfile = function () {
         var currentPage = window.location.pathname.toLowerCase();
         
-        // Mengesan root projek secara automatik
-        var pathSegments = window.location.pathname.split('/');
-        var contextPath = pathSegments[1] ? '/' + pathSegments[1] : '';
+        // Tetapkan nama projek Eclipse anda secara tetap untuk mengelakkan ralat path
+        var contextPath = '/ISAMS';
 
-        // Check jika user berada di page Profile
-        var isOnProfilePage = currentPage.endsWith('/profile/profile.html') || currentPage.endsWith('/profile.html');
+        // Semak sama ada pengguna sedang berada di halaman Profile
+        var isOnProfilePage = currentPage.includes('/profile/profile.html');
 
         if (isOnProfilePage) {
-            // ── JALAN PULANG 100% DINAMIK (TANPA HARDCODE NAMA PAGE) ──
+            // ── JALAN PULANG ──
+            // Menggunakan kunci sessionStorage yang seragam ('profile_return_url')
             var returnUrl = sessionStorage.getItem('profile_return_url');
             
             if (returnUrl) {
                 window.location.href = returnUrl; 
             } else {
-                // Jika memori kosong, sistem automatik undur ke belakang mengikut history pelayar
                 window.history.back(); 
             }
         } else {
-            // User berada di page biasa → Simpan URL penuh secara automatik
+            // Pengguna di halaman biasa → Simpan URL semasa
             sessionStorage.setItem('profile_return_url', window.location.href);
             
-            // Pergi ke Profile page mengikut root projek
+            // Halakan ke halaman Profile dengan laluan yang tepat
             window.location.href = window.location.origin + contextPath + '/Profile/Profile.html';
         }
     };

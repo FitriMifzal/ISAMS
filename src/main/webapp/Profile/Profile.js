@@ -1,9 +1,3 @@
-/* ============================================================
-   PROFILE.JS — Profile page logic
-   Nota: toggleProfile() & logoutUser() adalah GLOBAL dari
-   Sidebar.js. JANGAN declare semula di sini.
-   ============================================================ */
-
 document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "../Create-Account/CreateAccount.html";
@@ -13,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadProfileData();
 });
 
-// load this teacher's real data from the database
 function loadProfileData() {
     const tId = localStorage.getItem('active_tId');
 
@@ -30,6 +23,8 @@ function loadProfileData() {
                 return;
             }
 
+            // Memasukkan nilai ID dari database Oracle ke dalam input T_ID
+            document.getElementById('T_ID').value = data.tId || tId;
             document.getElementById('T_Name').value = data.tName;
             document.getElementById('T_IC').value = data.tIC;
             document.getElementById('T_Email').value = data.tEmail;
@@ -37,23 +32,17 @@ function loadProfileData() {
 
             document.getElementById('profileDisplayName').textContent = data.tName;
             
-            // ============================================================
-            // FIX AREA: KEMASKINI SETIAP PARAMETER ROLE BADGE IKUT LOGIN
-            // ============================================================
             const currentRole = localStorage.getItem('active_role') || 'Teacher';
             
-            // 1. Selesaikan highlight biru pada kad maklumat utama profile
             const profileDisplayRoleEl = document.getElementById('profileDisplayRole');
             if (profileDisplayRoleEl) {
                 profileDisplayRoleEl.textContent = currentRole;
             }
             
-            // 2. Kunci kedudukan role badge di sidebar agar sentiasa sync
             const sidebarRoleBadgeEl = document.querySelector('.role-badge');
             if (sidebarRoleBadgeEl) {
                 sidebarRoleBadgeEl.textContent = currentRole;
             }
-            // ============================================================
 
             const isActive = data.status === "ACTIVE";
             document.getElementById('statusText').textContent = isActive ? "Active" : "Archived";
@@ -72,7 +61,6 @@ function loadProfileData() {
         });
 }
 
-// enable edit mode
 function enableEdit() {
     document.querySelectorAll('.profile-input').forEach(function (input) {
         input.disabled = false;
@@ -84,7 +72,6 @@ function enableEdit() {
     document.getElementById('btn-cancel-profile').style.display = 'inline-flex';
 }
 
-// disable edit mode, discard unsaved changes
 function disableEdit() {
     document.querySelectorAll('.profile-input').forEach(function (input) {
         input.disabled = true;
@@ -108,14 +95,12 @@ function isValidPhone(phone) {
     return regex.test(phone.replace(/[\s\-()]/g, ''));
 }
 
-// save changes to the real database
 function updateProfile() {
     const tId = localStorage.getItem('active_tId');
     const name = document.getElementById('T_Name').value.trim();
     const email = document.getElementById('T_Email').value.trim();
     const phone = document.getElementById('T_PhoneNum').value.trim();
 
-    // Validation menggunakan showError (modal) BUKAN alert
     if (!name || !email || !phone) {
         showError('Please fill all required fields');
         return;
@@ -148,10 +133,7 @@ function updateProfile() {
             const userNameEl = document.getElementById('user-fullname');
             if (userNameEl) userNameEl.textContent = name;
 
-            // GUNA MODAL SUCCESS (bukan alert)
             showSuccess('Profile updated successfully!');
-            // disableEdit() akan dipanggil dalam closeSuccessModal() 
-            // supaya user nampak update sebelum modal tutup
         } else {
             showError("Something went wrong: " + data.message);
         }
@@ -171,9 +153,6 @@ function goBack() {
     }
 }
 
-/* ════════════════════════════════════════════════════════════
-   MESSAGE MODALS (Success / Error) — SAMA MACAM CREATE ACCOUNT
-   ════════════════════════════════════════════════════════════ */
 function showSuccess(message) {
     document.getElementById('successMsg').innerText = message;
     new bootstrap.Modal(document.getElementById('successModal')).show();
@@ -186,6 +165,5 @@ function showError(message) {
 
 function closeSuccessModal() {
     bootstrap.Modal.getInstance(document.getElementById('successModal')).hide();
-    // Lepas success, disable edit mode dan refresh data
     disableEdit();
 }

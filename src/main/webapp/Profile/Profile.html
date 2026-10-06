@@ -60,7 +60,7 @@
                 <span class="header-text">Intervention: Student Management System</span>
             </button>
             
-            <!-- USER PROFILE AREA (icon + name) — tekan untuk kembali ke page asal -->
+            <!-- USER PROFILE AREA -->
             <div class="user-profile" onclick="toggleProfile()">
                 <span id="user-fullname">User Name</span>
                 <div id="user-initial" class="user-initial-icon">?</div>
@@ -73,10 +73,8 @@
                 <!-- Profile Header with Avatar -->
                 <div class="profile-header">
                     <div class="profile-avatar-container">
-                        <!-- Avatar shows initials from T_Name (database) -->
                         <div class="profile-avatar" id="profileAvatar">?</div>
                         <div class="profile-status">
-                            <!-- Status from database (archive status, etc) -->
                             <span class="status-dot" id="statusDot"></span>
                             <span class="status-text" id="statusText">Loading...</span>
                         </div>
@@ -94,6 +92,14 @@
                     </div>
 
                     <div class="profile-details-grid">
+                        <!-- Kotak Teacher ID (Read-only / Disabled) -->
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <label>Teacher ID</label>
+                                <input type="text" id="T_ID" disabled>
+                            </div>
+                        </div>
+
                         <div class="detail-item">
                             <div class="detail-content">
                                 <label>Full Name</label>
@@ -123,7 +129,7 @@
                         </div>
                     </div>
 
-                    <!-- ACTION BUTTONS — di bawah, dekat dengan tangan user (UX: Fitts's Law) -->
+                    <!-- ACTION BUTTONS -->
                     <div class="profile-actions">
                         <button id="btn-edit-profile" class="btn btn-edit" onclick="enableEdit()">Edit Profile</button>
                         <button id="btn-cancel-profile" class="btn btn-cancel" onclick="disableEdit()" style="display:none;">Discard Changes</button>
@@ -135,9 +141,7 @@
         </main>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SUCCESS MODAL (sama macam Create Account)
-         ════════════════════════════════════════════════════════ -->
+    <!-- SUCCESS MODAL -->
     <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -154,9 +158,7 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         ERROR MODAL (sama macam Create Account)
-         ════════════════════════════════════════════════════════ -->
+    <!-- ERROR MODAL -->
     <div class="modal fade" id="errorModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
