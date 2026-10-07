@@ -68,11 +68,9 @@
         <!-- MAIN CONTENT -->
         <main id="content">
             <div class="content-card">
-                <div id="successMsg"><strong>Success!</strong> Account has been archived.</div>
-                
                 <!-- Layout Header -->
                 <h2 class="page-title">Teacher Accounts</h2>
-                <p class="page-description">View teacher details or archive inactive accounts. Click "Archive" to disable an account.</p>
+                <p class="page-description">View teacher account details.</p>
                 <div class="title-underline"></div>
 
                 <!-- Create Button -->
@@ -86,9 +84,8 @@
                         <thead>
                             <tr>
                                 <th style="width: 10%;">No.</th>
-                                <th style="width: 50%;">Teacher Name</th>
-                                <th style="width: 20%;">IC Number</th>
-                                <th style="width: 20%;">Actions</th>
+                                <th style="width: 60%;">Teacher Name</th>
+                                <th style="width: 30%;">IC Number</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
@@ -100,30 +97,8 @@
         </main>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         ARCHIVE MODAL
-         ════════════════════════════════════════════════════════ -->
-    <div id="archiveModal" class="modal">
-        <div class="modal-content">
-            <div class="archive-icon-big">
-                <i class="fa-solid fa-box-archive"></i>
-            </div>
-            <h3>Archive Account?</h3>
-            <p>This will disable the teacher's access but keep their data in the system.</p>
-            <div style="font-size: 13px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 5px;" id="targetAccount">
-                Account Details: -
-            </div>
-            
-            <div class="btn-group">
-            	<button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-confirm" onclick="executeArchive()">Archive</button>
-               
-            </div>
-        </div>
-    </div>
-
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="../Header/Header.js"></script>
-    <script src="DeleteAccount.js"></script>
+    <script src="DeleteAccount.js?v=2"></script>
 </body>
 </html>

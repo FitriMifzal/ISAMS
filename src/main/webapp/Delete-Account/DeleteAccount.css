@@ -108,21 +108,6 @@
     font-weight: 500;
 }
 
-/* ── SUCCESS MESSAGE ── */
-#successMsg {
-    display: none;
-    background: #e6ffed;
-    color: #28a745;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #28a745;
-    text-align: center;
-    margin-bottom: 20px;
-    font-family: var(--font-family-main);
-    font-weight: 600;
-    font-size: 15px;
-}
-
 /* ── TABLE CONTAINER ── */
 .table-container {
     width: 100%;
@@ -186,67 +171,6 @@
     font-size: 15px;
 }
 
-/* ── ACTION BUTTONS ── */
-.action-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn-table-action {
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.btn-archive-row {
-    background-color: #FFD700;
-    color: #000000;
-}
-
-.btn-archive-row:hover {
-    background-color: #FFC700;
-}
-
-/* ── ARCHIVED ROW STATE ── */
-.account-row.archived {
-    background-color: #f1f5f9;
-    opacity: 0.6;
-}
-
-.account-row.archived .acc-name {
-    color: #94a3b8;
-    text-decoration: line-through;
-}
-
-.account-row.archived .btn-archive-row {
-    background-color: #cbd5e1;
-    color: #64748b;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.badge-archived {
-    display: none;
-    font-size: 10px;
-    background: #64748b;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-family: var(--font-family-main);
-    vertical-align: middle;
-}
-
-.account-row.archived .badge-archived {
-    display: inline-block;
-}
-
 /* ── NO RESULTS MESSAGE ── */
 .no-results {
     text-align: center;
@@ -256,94 +180,13 @@
     font-weight: 500;
 }
 
-/* ── MODAL STYLES ── */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    align-items: center;
-    justify-content: center;
-}
 /* ── MODAL TITLE WHITE FOR BOTH SUCCESS & ERROR ── */
 #successModal .modal-title,
 #errorModal .modal-title {
     color: #ffffff !important;
 }
-.modal.show {
-    display: flex;
-}
-
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    font-family: var(--font-family-main);
-}
-
-.modal-content h3 {
-    color: #0f172a;
-    margin: 15px 0;
-    font-size: 18px;
-}
-
-.modal-content p {
-    color: #64748b;
-    margin: 10px 0;
-    font-size: 15px;
-}
-
-.archive-icon-big {
-    font-size: 50px;
-    color: #ff5722;
-    margin-bottom: 15px;
-}
-
-.btn-group {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.btn-confirm {
-    background: #ff5722;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    border: none;
-    font-size: 14px;
-}
-
-.btn-cancel {
-    background: #cbd5e1;
-    color: #334155;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    border: none;
-    font-size: 14px;
-}
 
 @media (max-width: 768px) {
-    .action-buttons {
-        flex-direction: column;
-        gap: 5px;
-    }
-    .btn-table-action {
-        width: 100%;
-    }
-    
     .teacher-table th,
     .teacher-table td {
         padding: 12px;
